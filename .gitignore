@@ -1,0 +1,12 @@
+# Ignore the backend node_modules folder
+/backend/node_modules
+
+# Ignore the frontend node_modules folder if you use one later (e.g., React, Vue)
+/frontend/node_modules
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore environment variables file
+.env
