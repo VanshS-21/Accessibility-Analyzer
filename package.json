@@ -5,10 +5,11 @@
   "devDependencies": {
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.10"
+    "tailwindcss": "^3.4.3",
+    "tailwindcss-animate": "^1.0.7"
   },
   "scripts": {
-    "css:build": "npx tailwindcss -i ./frontend/src/css/style.css -o ./frontend/dist/css/output.css --minify",
-    "css:watch": "npx tailwindcss -i ./frontend/src/css/style.css -o ./frontend/dist/css/output.css --watch"
+    "css:build": "npx tailwindcss -i ./frontend/src/css/globals.css -o ./frontend/dist/css/output.css --minify",
+    "css:watch": "npx tailwindcss -i ./frontend/src/css/globals.css -o ./frontend/dist/css/output.css --watch"
   }
 }
