@@ -5,519 +5,334 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Symphony: Where Every Voice is Heard</title>
     <link rel="stylesheet" href="dist/css/output.css" />
-    <style>
-      body {
-        font-family: Arial, Helvetica, sans-serif;
-        background-color: rgb(2 6 23); /* slate-950 */
-        color: white;
-        min-height: 100vh;
-        margin: 0;
-        padding: 0;
-      }
-      /* Spotlight Movement Animations */
-      @keyframes spotlightMove {
-        0% {
-          left: 5%;
-          top: 10%;
-          transform: scale(0.5);
-          opacity: 0.8;
-        }
-        25% {
-          left: 65%;
-          top: 10%;
-          transform: scale(2.5);
-          opacity: 1;
-        }
-        50% {
-          left: 75%;
-          top: 70%;
-          transform: scale(0.3);
-          opacity: 0.9;
-        }
-        75% {
-          left: 20%;
-          top: 75%;
-          transform: scale(2);
-          opacity: 0.95;
-        }
-        100% {
-          left: 5%;
-          top: 10%;
-          transform: scale(0.5);
-          opacity: 0.8;
-        }
-      }
-      @keyframes spotlightMove2 {
-        0% {
-          left: 60%;
-          top: 30%;
-          transform: scale(0.4);
-          opacity: 0.6;
-        }
-        30% {
-          left: 15%;
-          top: 20%;
-          transform: scale(2.2);
-          opacity: 0.8;
-        }
-        60% {
-          left: 10%;
-          top: 70%;
-          transform: scale(0.6);
-          opacity: 0.7;
-        }
-        90% {
-          left: 70%;
-          top: 80%;
-          transform: scale(1.8);
-          opacity: 0.75;
-        }
-        100% {
-          left: 60%;
-          top: 30%;
-          transform: scale(0.4);
-          opacity: 0.6;
-        }
-      }
-      @keyframes spotlightFocus {
-        0% {
-          left: 40%;
-          top: 30%;
-          transform: scale(0.3) rotate(0deg);
-          opacity: 0.9;
-        }
-        33% {
-          left: 60%;
-          top: 20%;
-          transform: scale(2.8) rotate(120deg);
-          opacity: 1;
-        }
-        66% {
-          left: 25%;
-          top: 60%;
-          transform: scale(0.2) rotate(240deg);
-          opacity: 0.8;
-        }
-        100% {
-          left: 40%;
-          top: 30%;
-          transform: scale(0.3) rotate(360deg);
-          opacity: 0.9;
-        }
-      }
-      @keyframes flowDiagonal1 {
-        0%,
-        100% {
-          transform: rotate(15deg) translateX(10px);
-          opacity: 0.2;
-        }
-        50% {
-          transform: rotate(15deg) translateX(-10px);
-          opacity: 0.8;
-        }
-      }
-      @keyframes flowDiagonal2 {
-        0%,
-        100% {
-          transform: rotate(-15deg) translateX(10px);
-          opacity: 0.2;
-        }
-        50% {
-          transform: rotate(-15deg) translateX(-10px);
-          opacity: 0.6;
-        }
-      }
-      @keyframes flowCurve1 {
-        0%,
-        100% {
-          transform: translateX(0) scaleY(1);
-        }
-        50% {
-          transform: translateX(20px) scaleY(1.1);
-        }
-      }
-      @keyframes flowCurve2 {
-        0%,
-        100% {
-          transform: translateX(0) scaleY(1);
-        }
-        50% {
-          transform: translateX(-15px) scaleY(0.9);
-        }
-      }
-      @keyframes flowCurve3 {
-        0%,
-        100% {
-          transform: translateX(0) scaleY(1);
-        }
-        50% {
-          transform: translateX(10px) scaleY(1.05);
-        }
-      }
-      @keyframes subtlePulse {
-        0%,
-        100% {
-          opacity: 0.2;
-          transform: scale(0.8);
-        }
-        50% {
-          opacity: 0.6;
-          transform: scale(1.2);
-        }
-      }
-      @keyframes slideRight {
-        0% {
-          transform: translateX(-100%);
-        }
-        100% {
-          transform: translateX(100vw);
-        }
-      }
-      @keyframes slideDown {
-        0% {
-          transform: translateY(-100%);
-        }
-        100% {
-          transform: translateY(100vh);
-        }
-      }
-      .spotlight-main {
-        animation: spotlightMove 20s ease-in-out infinite;
-      }
-      .spotlight-secondary {
-        animation: spotlightMove2 25s ease-in-out infinite;
-      }
-      .spotlight-focus {
-        animation: spotlightFocus 18s ease-in-out infinite;
-      }
-      .diagonal-line-1 {
-        animation: flowDiagonal1 8s ease-in-out infinite;
-      }
-      .diagonal-line-2 {
-        animation: flowDiagonal2 10s ease-in-out infinite;
-      }
-      .curve-line-1 {
-        animation: flowCurve1 12s ease-in-out infinite;
-      }
-      .curve-line-2 {
-        animation: flowCurve2 15s ease-in-out infinite;
-      }
-      .curve-line-3 {
-        animation: flowCurve3 18s ease-in-out infinite;
-      }
-      .curve-line-4 {
-        animation: flowCurve1 20s ease-in-out infinite reverse;
-      }
-      .pulse-dot {
-        animation: subtlePulse 4s ease-in-out infinite;
-      }
-      .slide-right {
-        animation: slideRight 15s linear infinite;
-      }
-      .slide-down {
-        animation: slideDown 18s linear infinite;
-      }
-    </style>
   </head>
 
   <body>
+    <!-- Main Container -->
     <div class="min-h-screen bg-gray-950 relative">
-      <!-- Subtle Mesh Background -->
-      <div class="fixed inset-0 z-0 pointer-events-none">
-        <!-- Very Subtle Base Grid -->
-        <div
-          class="absolute inset-0 opacity-100"
-          style="
-            background-image: linear-gradient(
-                rgba(147, 51, 234, 0.08) 1px,
-                transparent 1px
-              ),
-              linear-gradient(
-                90deg,
-                rgba(147, 51, 234, 0.08) 1px,
-                transparent 1px
-              ),
-              linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
-              linear-gradient(
-                90deg,
-                rgba(59, 130, 246, 0.05) 1px,
-                transparent 1px
-              );
-            background-size: 3vw 3vw, 3vw 3vw, 6vw 6vw, 6vw 6vw;
-          "
-        ></div>
-        <!-- Dynamic Spotlight Effect -->
-        <div class="absolute inset-0">
-          <!-- Main Spotlight -->
-          <div
-            class="absolute pointer-events-none spotlight-main"
-            style="
-              width: clamp(8rem, 40vw, 28rem);
-              height: clamp(8rem, 40vw, 28rem);
-              background: radial-gradient(
-                circle,
-                rgba(147, 51, 234, 0.4) 0%,
-                rgba(147, 51, 234, 0.3) 20%,
-                rgba(147, 51, 234, 0.15) 40%,
-                rgba(147, 51, 234, 0.05) 60%,
-                transparent 80%
-              );
-              filter: blur(2px);
-              transform-origin: center;
-            "
-          ></div>
-          <!-- Secondary Spotlight -->
-          <div
-            class="absolute pointer-events-none spotlight-secondary"
-            style="
-              width: clamp(5rem, 28vw, 20rem);
-              height: clamp(5rem, 28vw, 20rem);
-              background: radial-gradient(
-                circle,
-                rgba(59, 130, 246, 0.3) 0%,
-                rgba(59, 130, 246, 0.2) 25%,
-                rgba(59, 130, 246, 0.1) 50%,
-                rgba(59, 130, 246, 0.03) 70%,
-                transparent 85%
-              );
-              filter: blur(1px);
-              transform-origin: center;
-            "
-          ></div>
-          <!-- Focused Beam Effect -->
-          <div
-            class="absolute pointer-events-none spotlight-focus"
-            style="
-              width: clamp(2.5rem, 12vw, 8rem);
-              height: clamp(2.5rem, 12vw, 8rem);
-              background: radial-gradient(
-                circle,
-                rgba(255, 255, 255, 0.1) 0%,
-                rgba(147, 51, 234, 0.2) 30%,
-                rgba(147, 51, 234, 0.1) 60%,
-                transparent 80%
-              );
-              filter: blur(0.5px);
-              transform-origin: center;
-            "
-          ></div>
+      
+      <!-- ========================================
+           ANIMATED BACKGROUND LAYERS
+      ========================================= -->
+      <div class="background-container">
+        
+        <!-- Base Grid Pattern -->
+        <div class="absolute inset-0 opacity-100 grid-pattern"
+             style="background-image: 
+                    linear-gradient(rgba(147, 51, 234, 0.08) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(147, 51, 234, 0.08) 1px, transparent 1px),
+                    linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+                    background-size: 40px 40px, 40px 40px, 80px 80px, 80px 80px;">
         </div>
-        <!-- Enhanced Mesh Lines with Spotlight Interaction -->
+        
+        <!-- Dynamic Spotlight Effects -->
         <div class="absolute inset-0">
-          <!-- Diagonal Mesh Lines -->
+          
+          <!-- Main Purple Spotlight -->
+          <div class="absolute pointer-events-none spotlight-main"
+               style="background: radial-gradient(
+                        circle,
+                        rgba(147, 51, 234, 0.4) 0%,
+                        rgba(147, 51, 234, 0.3) 20%,
+                        rgba(147, 51, 234, 0.15) 40%,
+                        rgba(147, 51, 234, 0.05) 60%,
+                        transparent 80%
+                      );
+                      filter: blur(2px);
+                      transform-origin: center;">
+          </div>
+          
+          <!-- Secondary Blue Spotlight -->
+          <div class="absolute pointer-events-none spotlight-secondary"
+               style="background: radial-gradient(
+                        circle,
+                        rgba(59, 130, 246, 0.3) 0%,
+                        rgba(59, 130, 246, 0.2) 25%,
+                        rgba(59, 130, 246, 0.1) 50%,
+                        rgba(59, 130, 246, 0.03) 70%,
+                        transparent 85%
+                      );
+                      filter: blur(1px);
+                      transform-origin: center;">
+          </div>
+          
+          <!-- Focused White Beam Effect -->
+          <div class="absolute pointer-events-none spotlight-focus"
+               style="background: radial-gradient(
+                        circle,
+                        rgba(255, 255, 255, 0.1) 0%,
+                        rgba(147, 51, 234, 0.2) 30%,
+                        rgba(147, 51, 234, 0.1) 60%,
+                        transparent 80%
+                      );
+                      filter: blur(0.5px);
+                      transform-origin: center;">
+          </div>
+        </div>
+        
+        <!-- Mesh Lines and Patterns -->
+        <div class="absolute inset-0">
+          
+          <!-- Diagonal Mesh Lines (Generated by JS) -->
           <div id="diagonal-lines-1"></div>
           <div id="diagonal-lines-2"></div>
-          <!-- Curved Mesh Lines -->
-          <svg
-            class="absolute inset-0 w-full h-full opacity-30"
-            viewBox="0 0 1600 500"
-            preserveAspectRatio="none"
-          >
+          
+          <!-- Curved Mesh Lines SVG -->
+          <svg class="absolute inset-0 w-full h-full opacity-30 mesh-svg">
             <defs>
+              <!-- Purple Gradient -->
               <linearGradient id="meshGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stop-color="rgba(147, 51, 234, 0)" />
                 <stop offset="50%" stop-color="rgba(147, 51, 234, 0.3)" />
                 <stop offset="100%" stop-color="rgba(147, 51, 234, 0)" />
               </linearGradient>
+              
+              <!-- Blue Gradient -->
               <linearGradient id="meshGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stop-color="rgba(59, 130, 246, 0)" />
                 <stop offset="50%" stop-color="rgba(59, 130, 246, 0.2)" />
                 <stop offset="100%" stop-color="rgba(59, 130, 246, 0)" />
               </linearGradient>
             </defs>
+            
             <!-- Flowing Curved Lines -->
-            <path
-              d="M0,100 Q400,50 800,100 T1600,100"
-              fill="none"
-              stroke="url(#meshGrad1)"
-              stroke-width="1"
-              class="curve-line-1"
-            />
-            <path
-              d="M0,200 Q400,250 800,200 T1600,200"
-              fill="none"
-              stroke="url(#meshGrad2)"
-              stroke-width="1"
-              class="curve-line-2"
-            />
-            <path
-              d="M0,300 Q400,250 800,300 T1600,300"
-              fill="none"
-              stroke="url(#meshGrad1)"
-              stroke-width="1"
-              class="curve-line-3"
-            />
-            <path
-              d="M0,400 Q400,450 800,400 T1600,400"
-              fill="none"
-              stroke="url(#meshGrad2)"
-              stroke-width="1"
-              class="curve-line-4"
-            />
+            <path d="M0,100 Q400,50 800,100 T1600,100"
+                  fill="none"
+                  stroke="url(#meshGrad1)"
+                  stroke-width="1"
+                  class="curve-line-1" />
+            
+            <path d="M0,200 Q400,250 800,200 T1600,200"
+                  fill="none"
+                  stroke="url(#meshGrad2)"
+                  stroke-width="1"
+                  class="curve-line-2" />
+            
+            <path d="M0,300 Q400,250 800,300 T1600,300"
+                  fill="none"
+                  stroke="url(#meshGrad1)"
+                  stroke-width="1"
+                  class="curve-line-3" />
+            
+            <path d="M0,400 Q400,450 800,400 T1600,400"
+                  fill="none"
+                  stroke="url(#meshGrad2)"
+                  stroke-width="1"
+                  class="curve-line-4" />
           </svg>
-          <!-- Subtle Moving Horizontal Lines -->
+          
+          <!-- Moving Lines (Generated by JS) -->
           <div id="horizontal-lines"></div>
-          <!-- Subtle Moving Vertical Lines -->
           <div id="vertical-lines"></div>
         </div>
-        <!-- Enhanced Intersection Points with Spotlight Response -->
+        
+        <!-- Intersection Points (Generated by JS) -->
         <div class="absolute inset-0">
           <div id="intersection-points"></div>
         </div>
       </div>
-      <!-- Content Overlay -->
-      <div
-        class="relative z-10 min-h-screen flex flex-col items-center justify-center"
-      >
+      
+      <!-- ========================================
+           MAIN CONTENT
+      ========================================= -->
+      <div class="relative z-10 min-h-screen flex flex-col items-center justify-center pt-16">
+        
+        <!-- Navbar -->
+        <nav class="fixed top-0 left-0 right-0 z-50 bg-gray-950 border-gray-800/30">
+          <div class="w-full px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center h-16">
+              <!-- Logo Section - Fixed Width -->
+              <div class="flex items-center space-x-2 w-80">
+                <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-md flex items-center justify-center">
+                  <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" />
+                  </svg>
+                </div>
+                <span class="text-xl font-semibold text-white whitespace-nowrap">Symphony</span>
+              </div>
+
+              <!-- Nav Links -->
+              <div class="hidden md:flex flex-1 justify-center">
+                <div class="flex items-center space-x-8">
+                  <button onclick="scrollToSection('how-it-works')" type="button" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">How it Works</button>
+                  <button onclick="scrollToSection('features')" type="button" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">Features</button>
+                  <button onclick="scrollToSection('cta')" type="button" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">Get Started</button>
+                </div>
+              </div>
+              
+              <!-- Authentication Buttons - Fixed Width -->
+              <div class="hidden md:flex items-center justify-end space-x-4 w-80">
+                <button type="button" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">Sign In</button>
+                <button type="button" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white text-sm font-medium px-6 py-2 rounded-md transition-all duration-200 shadow-lg hover:shadow-purple-500/25 hover:scale-105">Sign Up</button>
+              </div>
+              
+              <!-- Mobile menu button -->
+              <div class="md:hidden ml-auto">
+                <button onclick="toggleMenu()" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-200">
+                  <span class="sr-only">Open main menu</span>
+                  <svg id="menu-icon" class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Mobile Menu -->
+          <div id="mobile-menu" class="md:hidden transition-all duration-300 ease-in-out max-h-0 opacity-0 overflow-hidden">
+            <div class="px-4 pt-2 pb-3 space-y-1 bg-gray-950 border-t border-gray-800/50">
+              <div class="space-y-1">
+                <button onclick="scrollToSection('features')" type="button" class="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium w-full text-left transition-colors duration-200 rounded-lg hover:bg-gray-800/30">Features</button>
+                <button onclick="scrollToSection('how-it-works')" type="button" class="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium w-full text-left transition-colors duration-200 rounded-lg hover:bg-gray-800/30">How it works</button>
+                <button onclick="scrollToSection('cta')" type="button" class="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium w-full text-left transition-colors duration-200 rounded-lg hover:bg-gray-800/30">Get Started</button>
+              </div>
+              
+              <div class="pt-4 pb-2 space-y-2 border-t border-gray-800/50">
+                <button type="button" class="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium w-full text-left transition-colors duration-200 rounded-lg hover:bg-gray-800/30">Sign In</button>
+                <button type="button" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white text-sm font-medium px-6 py-2 rounded-md transition-all duration-200 shadow-lg hover:shadow-purple-500/25 hover:scale-105">Sign Up</button> 
+              </div>
+            </div>
+          </div>
+        </nav>
+
+
+        <!-- Hero Section -->
         <div class="text-center mt-24">
-          <h1
-            class="text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent"
-          >
+          <h1 class="text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
             Symphony
           </h1>
+          
           <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
-            Welcome to Symphony – The next generation accessibility analyzer for
-            your website.
+            Welcome to Symphony – The next generation accessibility analyzer for your website.
           </p>
-          <a
-            href="#"
-            class="inline-block px-8 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold shadow-lg hover:scale-105 transition-transform"
-            >Get Started</a
-          >
+          
+          <a href="#"
+             class="inline-block px-8 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold shadow-lg hover:scale-105 transition-transform">
+            Get Started
+          </a>
         </div>
+        
         <!-- Features Section -->
-        <section class="mt-32 w-full max-w-5xl px-4" id="features">
+        <section id="features" class="mt-32 w-full max-w-5xl px-4" id="features">
           <h2 class="text-3xl font-bold text-center text-white mb-12">
             Features
           </h2>
+          
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div
-              class="bg-white/5 rounded-xl p-8 shadow-lg border border-white/10 text-center"
-            >
+            
+            <!-- Feature Card 1 -->
+            <div class="bg-white/5 rounded-xl p-8 shadow-lg border border-white/10 text-center">
               <h3 class="text-xl font-semibold mb-2 text-white">
                 Instant Analysis
               </h3>
               <p class="text-gray-300">
-                Get real-time accessibility reports for any website with a
-                single click.
+                Get real-time accessibility reports for any website with a single click.
               </p>
             </div>
-            <div
-              class="bg-white/5 rounded-xl p-8 shadow-lg border border-white/10 text-center"
-            >
+            
+            <!-- Feature Card 2 -->
+            <div class="bg-white/5 rounded-xl p-8 shadow-lg border border-white/10 text-center">
               <h3 class="text-xl font-semibold mb-2 text-white">
                 Privacy First
               </h3>
               <p class="text-gray-300">
-                Your data stays secure. We never store your website content or
-                results.
+                Your data stays secure. We never store your website content or results.
               </p>
             </div>
-            <div
-              class="bg-white/5 rounded-xl p-8 shadow-lg border border-white/10 text-center"
-            >
+            
+            <!-- Feature Card 3 -->
+            <div class="bg-white/5 rounded-xl p-8 shadow-lg border border-white/10 text-center">
               <h3 class="text-xl font-semibold mb-2 text-white">
                 Universal Support
               </h3>
               <p class="text-gray-300">
-                Works with any website, any platform, and any device.
+                Works with any website, any framework, and any technology stack.
               </p>
             </div>
           </div>
         </section>
+        
         <!-- How It Works Section -->
-        <section class="mt-32 w-full max-w-4xl px-4" id="how-it-works">
+        <section id="how-it-works" class="mt-32 w-full max-w-4xl px-4">
           <h2 class="text-3xl font-bold text-center text-white mb-12">
             How It Works
           </h2>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="flex flex-col items-center">
-              <div
-                class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white text-2xl mb-4"
-              >
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            
+            <!-- Step 1 -->
+            <div class="text-center">
+              <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
                 1
               </div>
-              <h4 class="text-lg font-semibold text-white mb-2">Enter URL</h4>
-              <p class="text-gray-300 text-center">
-                Paste your website URL to start the analysis.
+              <h3 class="text-xl font-semibold mb-2 text-white">
+                Enter URL
+              </h3>
+              <p class="text-gray-300">
+                Simply paste your website URL into our analyzer.
               </p>
             </div>
-            <div class="flex flex-col items-center">
-              <div
-                class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-2xl mb-4"
-              >
+            
+            <!-- Step 2 -->
+            <div class="text-center">
+              <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
                 2
               </div>
-              <h4 class="text-lg font-semibold text-white mb-2">Analyze</h4>
-              <p class="text-gray-300 text-center">
-                Our AI scans your site for accessibility issues in seconds.
+              <h3 class="text-xl font-semibold mb-2 text-white">
+                Instant Scan
+              </h3>
+              <p class="text-gray-300">
+                Our AI-powered system scans your entire website in seconds.
               </p>
             </div>
-            <div class="flex flex-col items-center">
-              <div
-                class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white text-2xl mb-4"
-              >
+            
+            <!-- Step 3 -->
+            <div class="text-center">
+              <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
                 3
               </div>
-              <h4 class="text-lg font-semibold text-white mb-2">Get Report</h4>
-              <p class="text-gray-300 text-center">
-                Receive a detailed, actionable accessibility report instantly.
+              <h3 class="text-xl font-semibold mb-2 text-white">
+                Detailed Report
+              </h3>
+              <p class="text-gray-300">
+                Get comprehensive accessibility insights and recommendations.
+              </p>
+            </div>
+            
+            <!-- Step 4 -->
+            <div class="text-center">
+              <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
+                4
+              </div>
+              <h3 class="text-xl font-semibold mb-2 text-white">
+                Take Action
+              </h3>
+              <p class="text-gray-300">
+                Implement suggested improvements to make your site accessible.
               </p>
             </div>
           </div>
         </section>
-        <!-- Testimonials Section -->
-        <section class="mt-32 w-full max-w-5xl px-4 mb-32" id="testimonials">
-          <h2 class="text-3xl font-bold text-center text-white mb-12">
-            What Our Users Say
+        
+        <!-- CTA Section -->
+        <section id="cta" class="mt-32 w-full max-w-3xl px-4 text-center">
+          <h2 class="text-3xl font-bold text-white mb-6">
+            Ready to Make Your Website Accessible?
           </h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div
-              class="bg-white/5 rounded-xl p-8 shadow-lg border border-white/10"
-            >
-              <p class="text-lg text-gray-200 mb-4">
-                “Symphony made our website accessible in minutes. The report was
-                clear and actionable!”
-              </p>
-              <div class="flex items-center gap-4">
-                <div
-                  class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold"
-                >
-                  A
-                </div>
-                <div>
-                  <div class="font-semibold text-white">Alex Morgan</div>
-                  <div class="text-gray-400 text-sm">Web Developer</div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="bg-white/5 rounded-xl p-8 shadow-lg border border-white/10"
-            >
-              <p class="text-lg text-gray-200 mb-4">
-                “A must-have tool for any modern website. Fast, private, and
-                super easy to use.”
-              </p>
-              <div class="flex items-center gap-4">
-                <div
-                  class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold"
-                >
-                  J
-                </div>
-                <div>
-                  <div class="font-semibold text-white">Jamie Lee</div>
-                  <div class="text-gray-400 text-sm">UI Designer</div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <p class="text-xl text-gray-300 mb-8">
+            Join thousands of developers who are making the web more inclusive.
+          </p>
+          <a href="#"
+             class="inline-block px-10 py-4 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold text-lg shadow-lg hover:scale-105 transition-transform">
+            Start Free Analysis
+          </a>
         </section>
-        <!-- Footer -->
-        <footer class="mt-24 mb-8 text-gray-500 text-sm text-center w-full">
-          &copy; 2024 Symphony. All rights reserved.
-        </footer>
       </div>
     </div>
-    <script src="js/mesh-background.js"></script>
+    
+    <!-- JavaScript -->
+    <script src="js/background.js"></script>
+    <script src="js/script.js"></script>
   </body>
 </html>

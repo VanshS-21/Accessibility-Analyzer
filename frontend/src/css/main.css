@@ -1,6 +1,7 @@
+@import './globals.css';
+@import './background.css'; 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Import custom styles */
-@import './globals.css'; 
