@@ -1,12 +1,25 @@
-# Ignore the backend node_modules folder
-/backend/node_modules
+# Node modules
+node_modules/
 
-# Ignore the frontend node_modules folder if you use one later (e.g., React, Vue)
-/frontend/node_modules
+# Build output
+dist/
+frontend/dist/
 
-# Ignore OS files
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
 .DS_Store
 Thumbs.db
 
-# Ignore environment variables file
+# Env files
 .env
+.env.*
+
+# VSCode settings
+.vscode/
+
+# Optional: Ignore output CSS
+frontend/src/css/output.css

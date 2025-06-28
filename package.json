@@ -9,7 +9,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "scripts": {
-    "css:build": "npx tailwindcss -i ./frontend/src/css/globals.css -o ./frontend/dist/css/output.css --minify",
-    "css:watch": "npx tailwindcss -i ./frontend/src/css/globals.css -o ./frontend/dist/css/output.css --watch"
+    "css:build": "npx tailwindcss -i ./frontend/src/css/main.css -o ./frontend/dist/css/output.css --minify",
+    "css:watch": "npx tailwindcss -i ./frontend/src/css/main.css -o ./frontend/dist/css/output.css --watch"
   }
 }
