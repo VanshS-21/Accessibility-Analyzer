@@ -1,48 +1,358 @@
-// AccessiScan - Web Accessibility Analyzer
-// Main JavaScript application file
+/**
+ * AccessiScan - Web Accessibility Analyzer
+ * A comprehensive client-side accessibility testing tool powered by axe-core
+ * 
+ * Features:
+ * - HTML code analysis with real-time feedback
+ * - URL analysis with CORS handling
+ * - WCAG 2.1 Level A/AA compliance testing
+ * - Detailed reporting with actionable insights
+ * - Mobile-responsive design with full keyboard support
+ * 
+ * @author Computer Science Student Project
+ * @version 1.0
+ */
 
 class AccessiScan {
+    /**
+     * Initialize the AccessiScan application
+     * Sets up page-specific functionality and error handling
+     */
     constructor() {
         this.currentResults = null;
+        this.isAnalyzing = false;
+        this.errorCount = 0;
+        this.maxRetries = 3;
+        
+        // Set up global error handling
+        this.setupGlobalErrorHandling();
+        
+        // Initialize application based on current page
         this.initializeApp();
     }
 
+    /**
+     * Initialize the application based on the current page
+     * Sets up page-specific event listeners and functionality
+     */
     initializeApp() {
-        // Initialize based on current page
-        const currentPage = this.getCurrentPage();
-        
-        switch (currentPage) {
-            case 'analyze-html':
-                this.initializeHTMLAnalysis();
-                break;
-            case 'analyze-url':
-                this.initializeURLAnalysis();
-                break;
-            case 'results':
-                this.initializeResults();
-                break;
-            case 'index':
-            default:
-                // No specific initialization needed for homepage
-                break;
+        try {
+            // Initialize based on current page
+            const currentPage = this.getCurrentPage();
+            console.log(`Initializing AccessiScan for page: ${currentPage}`);
+            
+            switch (currentPage) {
+                case 'analyze-html':
+                    this.initializeHTMLAnalysis();
+                    break;
+                case 'analyze-url':
+                    this.initializeURLAnalysis();
+                    break;
+                case 'results':
+                    this.initializeResults();
+                    break;
+                case 'index':
+                default:
+                    this.initializeHomepage();
+                    break;
+            }
+
+            // Initialize common functionality
+            this.initializeNavigation();
+            this.setupKeyboardNavigation();
+            
+        } catch (error) {
+            console.error('Failed to initialize application:', error);
+            this.showCriticalError('Application failed to load properly. Please refresh the page.');
         }
-
-        // Initialize common functionality
-        this.initializeNavigation();
     }
 
+    /**
+     * Determine the current page based on URL
+     * @returns {string} Current page identifier
+     */
     getCurrentPage() {
-        const path = window.location.pathname;
-        const filename = path.split('/').pop().split('.')[0];
-        return filename || 'index';
+        try {
+            const path = window.location.pathname;
+            const filename = path.split('/').pop().split('.')[0];
+            return filename || 'index';
+        } catch (error) {
+            console.warn('Could not determine current page, defaulting to index');
+            return 'index';
+        }
     }
 
+    /**
+     * Set up global error handling for unhandled errors
+     */
+    setupGlobalErrorHandling() {
+        // Handle uncaught errors
+        window.addEventListener('error', (event) => {
+            console.error('Global error caught:', event.error);
+            this.handleGlobalError(event.error);
+        });
+        
+        // Handle unhandled promise rejections
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('Unhandled promise rejection:', event.reason);
+            this.handleGlobalError(event.reason);
+            event.preventDefault(); // Prevent console error
+        });
+    }
+    
+    /**
+     * Handle global application errors with user-friendly messages
+     * @param {Error} error - The error that occurred
+     */
+    handleGlobalError(error) {
+        this.errorCount++;
+        
+        // Don't overwhelm user with too many error messages
+        if (this.errorCount > 5) {
+            console.error('Too many errors, suppressing further notifications');
+            return;
+        }
+        
+        let message = 'An unexpected error occurred.';
+        let recovery = 'Please try refreshing the page.';
+        
+        if (error.message) {
+            if (error.message.includes('axe')) {
+                message = 'Accessibility analysis engine failed to load.';
+                recovery = 'Please check your internet connection and refresh the page.';
+            } else if (error.message.includes('fetch') || error.message.includes('network')) {
+                message = 'Network connection issue detected.';
+                recovery = 'Please check your internet connection and try again.';
+            } else if (error.message.includes('parse') || error.message.includes('syntax')) {
+                message = 'Invalid HTML or data format detected.';
+                recovery = 'Please check your input and try again.';
+            }
+        }
+        
+        this.showRecoverableError(message, recovery);
+    }
+    
+    /**
+     * Initialize homepage functionality
+     */
+    initializeHomepage() {
+        try {
+            // Add smooth scrolling for anchor links
+            const links = document.querySelectorAll('a[href^="#"]');
+            links.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const target = document.querySelector(link.getAttribute('href'));
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+            
+            // Add hover effects for feature cards
+            const featureCards = document.querySelectorAll('.bg-white.p-6.rounded-lg');
+            featureCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-2px)';
+                    card.style.transition = 'transform 0.2s ease';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                });
+            });
+            
+        } catch (error) {
+            console.warn('Homepage initialization had issues:', error);
+        }
+    }
+    
+    /**
+     * Initialize navigation functionality including mobile menu
+     */
     initializeNavigation() {
-        // Mobile navigation toggle (if implemented later)
-        // For now, just ensure navigation links work properly
+        try {
+            // Create mobile menu toggle if not exists
+            this.createMobileMenuToggle();
+            
+            // Add active state to current page nav link
+            this.updateActiveNavigation();
+            
+            // Handle navigation link focus states
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('focus', () => {
+                    link.style.outline = '2px solid #6366f1';
+                    link.style.outlineOffset = '2px';
+                });
+                link.addEventListener('blur', () => {
+                    link.style.outline = '';
+                    link.style.outlineOffset = '';
+                });
+            });
+            
+        } catch (error) {
+            console.warn('Navigation initialization had issues:', error);
+        }
+    }
+    
+    /**
+     * Set up comprehensive keyboard navigation support
+     */
+    setupKeyboardNavigation() {
+        try {
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                // Alt + H for HTML analysis
+                if (e.altKey && e.key === 'h') {
+                    e.preventDefault();
+                    window.location.href = 'analyze-html.html';
+                }
+                // Alt + U for URL analysis
+                if (e.altKey && e.key === 'u') {
+                    e.preventDefault();
+                    window.location.href = 'analyze-url.html';
+                }
+                // Alt + R for results (if available)
+                if (e.altKey && e.key === 'r' && sessionStorage.getItem('analysisResults')) {
+                    e.preventDefault();
+                    window.location.href = 'results.html';
+                }
+                // Escape to clear modals/notifications
+                if (e.key === 'Escape') {
+                    this.hideAllNotifications();
+                }
+            });
+            
+            // Ensure all interactive elements are keyboard accessible
+            this.enhanceKeyboardAccessibility();
+            
+        } catch (error) {
+            console.warn('Keyboard navigation setup had issues:', error);
+        }
     }
 
+    /**
+     * Create mobile menu toggle button and functionality
+     */
+    createMobileMenuToggle() {
+        const header = document.querySelector('header');
+        const nav = document.querySelector('nav');
+        
+        if (!header || !nav) return;
+        
+        // Check if mobile toggle already exists
+        if (document.getElementById('mobile-menu-toggle')) return;
+        
+        // Create mobile menu toggle button
+        const mobileToggle = document.createElement('button');
+        mobileToggle.id = 'mobile-menu-toggle';
+        mobileToggle.className = 'md:hidden p-2 text-gray-600 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500';
+        mobileToggle.setAttribute('aria-label', 'Toggle mobile menu');
+        mobileToggle.setAttribute('aria-expanded', 'false');
+        
+        // Hamburger icon
+        mobileToggle.innerHTML = `
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        `;
+        
+        // Add to header
+        const headerContent = header.querySelector('.flex.justify-between');
+        if (headerContent) {
+            headerContent.appendChild(mobileToggle);
+        }
+        
+        // Create mobile menu
+        const mobileMenu = document.createElement('div');
+        mobileMenu.id = 'mobile-menu';
+        mobileMenu.className = 'hidden md:hidden bg-white border-t border-gray-200';
+        
+        // Clone navigation links for mobile
+        const navLinks = nav.querySelectorAll('a');
+        const mobileNavHTML = Array.from(navLinks).map(link => {
+            return `<a href="${link.href}" class="block px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">${link.textContent}</a>`;
+        }).join('');
+        
+        mobileMenu.innerHTML = `<div class="py-2">${mobileNavHTML}</div>`;
+        header.appendChild(mobileMenu);
+        
+        // Toggle functionality
+        mobileToggle.addEventListener('click', () => {
+            const isExpanded = mobileToggle.getAttribute('aria-expanded') === 'true';
+            mobileToggle.setAttribute('aria-expanded', !isExpanded);
+            
+            if (isExpanded) {
+                mobileMenu.classList.add('hidden');
+            } else {
+                mobileMenu.classList.remove('hidden');
+            }
+        });
+    }
+    
+    /**
+     * Update active navigation state based on current page
+     */
+    updateActiveNavigation() {
+        const currentPage = this.getCurrentPage();
+        const navLinks = document.querySelectorAll('nav a');
+        
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            const linkPage = href ? href.split('/').pop().split('.')[0] : '';
+            
+            if ((currentPage === 'index' && (href === 'index.html' || href === '/')) ||
+                (currentPage === linkPage)) {
+                link.classList.add('text-indigo-600', 'font-medium');
+                link.classList.remove('text-gray-700');
+                link.setAttribute('aria-current', 'page');
+            } else {
+                link.classList.remove('text-indigo-600', 'font-medium');
+                link.classList.add('text-gray-700');
+                link.removeAttribute('aria-current');
+            }
+        });
+    }
+    
+    /**
+     * Enhance keyboard accessibility for all interactive elements
+     */
+    enhanceKeyboardAccessibility() {
+        // Add keyboard support for sample buttons
+        const sampleButtons = document.querySelectorAll('[id*="sample"][id*="btn"]');
+        sampleButtons.forEach(button => {
+            button.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    button.click();
+                }
+            });
+        });
+        
+        // Ensure all buttons have proper focus styles
+        const allButtons = document.querySelectorAll('button');
+        allButtons.forEach(button => {
+            if (!button.style.outline) {
+                button.addEventListener('focus', () => {
+                    button.style.outline = '2px solid #6366f1';
+                    button.style.outlineOffset = '2px';
+                });
+                button.addEventListener('blur', () => {
+                    button.style.outline = '';
+                    button.style.outlineOffset = '';
+                });
+            }
+        });
+    }
+    
+    // ================================================================
     // HTML Analysis Page Functions
+    // ================================================================
+    
+    /**
+     * Initialize HTML analysis page functionality
+     * Sets up form handlers, sample loading, and analysis controls
+     */
     initializeHTMLAnalysis() {
         const form = document.getElementById('html-analysis-form');
         const analyzeBtn = document.getElementById('analyze-btn');
@@ -218,11 +528,30 @@ class AccessiScan {
         };
     }
 
+    /**
+     * Load sample HTML with error handling and user feedback
+     * @param {string} type - Type of sample to load (problematic, clean, educational)
+     */
     loadSampleHTML(type = 'problematic') {
-        const textarea = document.getElementById('html-input');
-        const samples = this.getSampleHTMLs();
-        
-        if (textarea && samples[type]) {
+        try {
+            const textarea = document.getElementById('html-input');
+            if (!textarea) {
+                this.showNotification('HTML input field not found.', 'error');
+                return;
+            }
+            
+            const samples = this.getSampleHTMLs();
+            
+            if (!samples[type]) {
+                this.showNotification(`Sample type "${type}" not found.`, 'error');
+                return;
+            }
+            
+            // Clear any existing errors
+            this.hideError();
+            this.hideAllNotifications();
+            
+            // Load the sample
             textarea.value = samples[type];
             
             // Show notification about which sample was loaded
@@ -232,20 +561,106 @@ class AccessiScan {
                 educational: 'Educational Sample'
             };
             
-            this.showNotification(`${sampleNames[type]} loaded successfully!`, 'info');
+            this.showNotification(`${sampleNames[type]} loaded successfully!`, 'success');
             
             // Update sample indicator
             this.updateSampleIndicator(sampleNames[type]);
+            
+            // Focus the textarea for immediate editing
+            textarea.focus();
+            
+        } catch (error) {
+            console.error('Error loading sample HTML:', error);
+            this.showNotification('Failed to load sample HTML. Please try again.', 'error');
         }
     }
 
+    /**
+     * Clear textarea with confirmation for large content
+     */
     clearTextarea() {
-        const textarea = document.getElementById('html-input');
-        if (textarea) {
+        try {
+            const textarea = document.getElementById('html-input');
+            if (!textarea) {
+                this.showNotification('HTML input field not found.', 'error');
+                return;
+            }
+            
+            // Ask for confirmation if there's substantial content
+            if (textarea.value.length > 100) {
+                const shouldClear = confirm('Are you sure you want to clear all the HTML content?');
+                if (!shouldClear) return;
+            }
+            
             textarea.value = '';
-            this.showNotification('Textarea cleared!', 'info');
+            this.showNotification('Content cleared successfully!', 'success');
             this.updateSampleIndicator('');
+            this.hideError();
+            this.hideAllNotifications();
+            
+            // Focus the textarea
+            textarea.focus();
+            
+        } catch (error) {
+            console.error('Error clearing textarea:', error);
+            this.showNotification('Failed to clear content. Please try again.', 'error');
         }
+    }
+    
+    /**
+     * Validate HTML content for basic syntax
+     * @param {string} html - HTML content to validate
+     * @returns {boolean} Whether HTML appears valid
+     */
+    isValidHTML(html) {
+        try {
+            // Basic checks for HTML structure
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            // Check for parser errors
+            const parserErrors = doc.querySelectorAll('parsererror');
+            if (parserErrors.length > 0) {
+                console.warn('HTML parser found errors:', parserErrors);
+                return false;
+            }
+            
+            // Check for basic HTML structure
+            const hasHtml = html.toLowerCase().includes('<html') || html.toLowerCase().includes('<!doctype');
+            const hasBody = html.toLowerCase().includes('<body') || html.toLowerCase().includes('<main') || html.toLowerCase().includes('<div');
+            
+            return hasHtml || hasBody;
+        } catch (error) {
+            console.warn('HTML validation error:', error);
+            return true; // Assume valid if validation fails
+        }
+    }
+    
+    /**
+     * Handle analysis errors with user-friendly messages and recovery options
+     * @param {Error} error - The error that occurred during analysis
+     */
+    handleAnalysisError(error) {
+        let message = 'Analysis failed unexpectedly.';
+        let recovery = 'Please try again or use a different HTML sample.';
+        
+        if (error.message) {
+            if (error.message.includes('axe')) {
+                message = 'Accessibility testing engine encountered an issue.';
+                recovery = 'This may be due to invalid HTML. Try using one of our sample HTMLs or check your HTML syntax.';
+            } else if (error.message.includes('parse') || error.message.includes('DOM')) {
+                message = 'Unable to parse the HTML content.';
+                recovery = 'Please check your HTML syntax and ensure it\'s well-formed. You can try our sample HTMLs for testing.';
+            } else if (error.message.includes('memory') || error.message.includes('quota')) {
+                message = 'The HTML content is too complex for analysis.';
+                recovery = 'Please try with smaller HTML content or remove complex elements like large embedded scripts.';
+            } else if (error.message.includes('timeout')) {
+                message = 'Analysis took too long to complete.';
+                recovery = 'The HTML might be too large. Please try with smaller content or simpler structure.';
+            }
+        }
+        
+        this.showRecoverableError(message, recovery);
     }
 
     updateSampleIndicator(sampleName) {
@@ -261,24 +676,61 @@ class AccessiScan {
         }
     }
 
+    /**
+     * Perform HTML analysis with comprehensive error handling
+     * Validates input, shows loading states, and handles all error scenarios
+     */
     async analyzeHTML() {
-        const htmlInput = document.getElementById('html-input');
-        const htmlContent = htmlInput.value.trim();
-
-        if (!htmlContent) {
-            this.showNotification('Please enter some HTML code to analyze.', 'warning');
+        // Prevent multiple simultaneous analyses
+        if (this.isAnalyzing) {
+            this.showNotification('Analysis already in progress. Please wait...', 'info');
             return;
         }
+        
+        const htmlInput = document.getElementById('html-input');
+        if (!htmlInput) {
+            this.showCriticalError('HTML input field not found. Please refresh the page.');
+            return;
+        }
+        
+        const htmlContent = htmlInput.value.trim();
 
+        // Comprehensive input validation
+        if (!htmlContent) {
+            this.showNotification('Please enter some HTML code to analyze.', 'warning');
+            htmlInput.focus();
+            return;
+        }
+        
+        if (htmlContent.length < 10) {
+            this.showNotification('HTML content seems too short. Please enter a complete HTML document.', 'warning');
+            htmlInput.focus();
+            return;
+        }
+        
+        if (htmlContent.length > 500000) { // 500KB limit
+            this.showNotification('HTML content is too large. Please limit to 500KB for better performance.', 'warning');
+            return;
+        }
+        
+        // Basic HTML validation
+        if (!this.isValidHTML(htmlContent)) {
+            const shouldContinue = confirm('The HTML appears to have syntax issues. Continue with analysis anyway?');
+            if (!shouldContinue) return;
+        }
+
+        this.isAnalyzing = true;
         this.showLoading('analyze-btn', 'analyze-btn-text', 'analyze-spinner');
         this.hideError();
+        this.hideAllNotifications();
 
         try {
             await this.analyzeHTMLCode(htmlContent);
         } catch (error) {
             console.error('Analysis error:', error);
-            this.showNotification('Analysis failed: ' + error.message, 'error');
+            this.handleAnalysisError(error);
         } finally {
+            this.isAnalyzing = false;
             this.hideLoading('analyze-btn', 'analyze-btn-text', 'analyze-spinner');
         }
     }
@@ -422,48 +874,93 @@ class AccessiScan {
         return options;
     }
 
+    /**
+     * Display HTML analysis results with enhanced error handling
+     * @param {Object} results - Axe analysis results
+     */
     showHTMLResults(results) {
-        const resultsPreview = document.getElementById('results-preview');
-        const resultsSummary = document.getElementById('results-summary');
+        try {
+            const resultsPreview = document.getElementById('results-preview');
+            const resultsSummary = document.getElementById('results-summary');
 
-        if (resultsPreview && resultsSummary) {
-            const violationsCount = results.violations.length;
-            const incompleteCount = results.incomplete.length;
-            const passesCount = results.passes.length;
+            if (!resultsPreview || !resultsSummary) {
+                console.error('Results display elements not found');
+                this.showNotification('Unable to display results. Please try again.', 'error');
+                return;
+            }
+            
+            if (!results) {
+                this.showNotification('No analysis results available.', 'error');
+                return;
+            }
+
+            const violationsCount = results.violations?.length || 0;
+            const incompleteCount = results.incomplete?.length || 0;
+            const passesCount = results.passes?.length || 0;
+            const inapplicableCount = results.inapplicable?.length || 0;
 
             resultsSummary.innerHTML = `
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                    <div class="bg-red-50 p-3 rounded-lg">
-                        <div class="text-2xl font-bold text-red-600">${violationsCount}</div>
+                    <div class="bg-red-50 p-3 rounded-lg border border-red-200">
+                        <div class="text-2xl font-bold text-red-600" aria-label="${violationsCount} accessibility violations">${violationsCount}</div>
                         <div class="text-sm text-red-600">Violations</div>
                     </div>
-                    <div class="bg-yellow-50 p-3 rounded-lg">
-                        <div class="text-2xl font-bold text-yellow-600">${incompleteCount}</div>
+                    <div class="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                        <div class="text-2xl font-bold text-yellow-600" aria-label="${incompleteCount} incomplete tests">${incompleteCount}</div>
                         <div class="text-sm text-yellow-600">Incomplete</div>
                     </div>
-                    <div class="bg-green-50 p-3 rounded-lg">
-                        <div class="text-2xl font-bold text-green-600">${passesCount}</div>
+                    <div class="bg-green-50 p-3 rounded-lg border border-green-200">
+                        <div class="text-2xl font-bold text-green-600" aria-label="${passesCount} passed tests">${passesCount}</div>
                         <div class="text-sm text-green-600">Passes</div>
                     </div>
-                    <div class="bg-blue-50 p-3 rounded-lg">
-                        <div class="text-2xl font-bold text-blue-600">${results.inapplicable.length}</div>
+                    <div class="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                        <div class="text-2xl font-bold text-blue-600" aria-label="${inapplicableCount} inapplicable tests">${inapplicableCount}</div>
                         <div class="text-sm text-blue-600">Inapplicable</div>
                     </div>
                 </div>
             `;
 
             resultsPreview.classList.remove('hidden');
+            
+            // Announce results to screen readers
+            this.announceToScreenReader(`Analysis complete. Found ${violationsCount} violations, ${passesCount} passed tests.`);
+            
+        } catch (error) {
+            console.error('Error displaying HTML results:', error);
+            this.showNotification('Failed to display results. Please try the analysis again.', 'error');
         }
     }
 
+    /**
+     * Reset HTML form with comprehensive cleanup
+     */
     resetHTMLForm() {
-        const htmlInput = document.getElementById('html-input');
-        const resultsPreview = document.getElementById('results-preview');
-        
-        if (htmlInput) htmlInput.value = '';
-        if (resultsPreview) resultsPreview.classList.add('hidden');
-        
-        this.hideError();
+        try {
+            const htmlInput = document.getElementById('html-input');
+            const resultsPreview = document.getElementById('results-preview');
+            
+            if (htmlInput) {
+                htmlInput.value = '';
+                htmlInput.focus();
+            }
+            if (resultsPreview) {
+                resultsPreview.classList.add('hidden');
+            }
+            
+            this.hideError();
+            this.hideAllNotifications();
+            this.updateSampleIndicator('');
+            
+            // Reset analysis state
+            this.isAnalyzing = false;
+            this.currentResults = null;
+            
+            this.showNotification('Form reset successfully!', 'success');
+            
+        } catch (error) {
+            console.error('Error resetting HTML form:', error);
+            this.showNotification('Failed to reset form completely. Please refresh the page.', 'error');
+        }
     }
 
     // URL Analysis Page Functions
@@ -687,41 +1184,231 @@ class AccessiScan {
         window.location.href = 'results.html';
     }
 
-    // Utility Functions
-    showLoading(btnId, textId, spinnerId) {
-        const btn = document.getElementById(btnId);
-        const text = document.getElementById(textId);
-        const spinner = document.getElementById(spinnerId);
-
-        if (btn) {
-            btn.disabled = true;
-            btn.classList.add('opacity-75', 'cursor-not-allowed', 'loading-disabled');
-            // Add haptic feedback on mobile devices
-            if ('vibrate' in navigator) {
-                navigator.vibrate(50);
-            }
-        }
-        if (text) text.textContent = 'Analyzing...';
-        if (spinner) spinner.classList.remove('hidden');
+    // ================================================================
+    // Error Handling and Notification System
+    // ================================================================
+    
+    /**
+     * Show critical error that requires page refresh
+     * @param {string} message - Error message to display
+     */
+    showCriticalError(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-4 rounded-lg shadow-lg z-50 max-w-md text-center';
+        errorDiv.innerHTML = `
+            <div class="flex items-center space-x-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                </svg>
+                <div>
+                    <div class="font-semibold">Critical Error</div>
+                    <div class="text-sm">${message}</div>
+                </div>
+            </div>
+            <button onclick="window.location.reload()" class="mt-3 bg-white text-red-600 px-4 py-2 rounded font-medium hover:bg-gray-100 transition-colors">
+                Refresh Page
+            </button>
+        `;
+        document.body.appendChild(errorDiv);
+    }
+    
+    /**
+     * Show recoverable error with recovery suggestions
+     * @param {string} message - Error message
+     * @param {string} recovery - Recovery instructions
+     */
+    showRecoverableError(message, recovery) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-50 border-l-4 border-red-400 p-4 rounded-lg shadow-lg z-50 max-w-lg';
+        errorDiv.innerHTML = `
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-red-800">Error</h3>
+                    <div class="mt-1 text-sm text-red-700">
+                        <p>${message}</p>
+                        <p class="mt-2 font-medium">How to fix: ${recovery}</p>
+                    </div>
+                    <div class="mt-3">
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" class="bg-red-100 text-red-800 px-3 py-1 rounded text-sm hover:bg-red-200 transition-colors">
+                            Dismiss
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(errorDiv);
         
-        // Add progress feedback
-        this.showProgressMessage(btnId.includes('url') ? 'Fetching website content...' : 'Parsing HTML content...');
+        // Auto-remove after 10 seconds
+        setTimeout(() => {
+            if (errorDiv.parentNode) {
+                errorDiv.remove();
+            }
+        }, 10000);
+    }
+    
+    /**
+     * Show success message with positive feedback
+     * @param {string} message - Success message
+     */
+    showSuccessMessage(message) {
+        this.showNotification(message, 'success');
+    }
+    
+    /**
+     * Hide all notifications
+     */
+    hideAllNotifications() {
+        const notifications = document.querySelectorAll('[class*="notification-"], .fixed[class*="bg-red-"], .fixed[class*="bg-green-"], .fixed[class*="bg-yellow-"], .fixed[class*="bg-blue-"]');
+        notifications.forEach(notification => {
+            if (notification.id !== 'progress-message') {
+                notification.style.transform = 'translateY(-100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            }
+        });
+    }
+    
+    /**
+     * Announce message to screen readers
+     * @param {string} message - Message to announce
+     */
+    announceToScreenReader(message) {
+        const announcement = document.createElement('div');
+        announcement.setAttribute('aria-live', 'polite');
+        announcement.setAttribute('aria-atomic', 'true');
+        announcement.className = 'sr-only';
+        announcement.textContent = message;
+        document.body.appendChild(announcement);
+        
+        // Remove after announcement
+        setTimeout(() => {
+            announcement.remove();
+        }, 1000);
+    }
+    
+    // ================================================================
+    // Utility Functions
+    // ================================================================
+    
+    /**
+     * Show loading state for buttons with spinner
+     * @param {string} btnId - Button element ID
+     * @param {string} textId - Text element ID
+     * @param {string} spinnerId - Spinner element ID
+     */
+    showLoading(btnId, textId, spinnerId) {
+        try {
+            const btn = document.getElementById(btnId);
+            const text = document.getElementById(textId);
+            const spinner = document.getElementById(spinnerId);
+
+            if (btn) {
+                btn.disabled = true;
+                btn.classList.add('opacity-75', 'cursor-not-allowed', 'loading-disabled');
+                btn.setAttribute('aria-busy', 'true');
+                btn.setAttribute('aria-describedby', 'loading-status');
+                
+                // Add haptic feedback on mobile devices
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(50);
+                }
+            }
+            
+            if (text) {
+                const isUrl = btnId.includes('url');
+                text.textContent = isUrl ? 'Connecting...' : 'Analyzing...';
+            }
+            
+            if (spinner) {
+                spinner.classList.remove('hidden');
+                spinner.setAttribute('aria-label', 'Loading in progress');
+            }
+            
+            // Create loading status for screen readers
+            this.updateLoadingStatus('Analysis in progress, please wait...');
+            
+            // Enhanced progress feedback
+            requestAnimationFrame(() => {
+                this.showProgressMessage(btnId.includes('url') ? 'Connecting to website...' : 'Preparing analysis...');
+            });
+            
+        } catch (error) {
+            console.warn('Error setting loading state:', error);
+        }
+    }
+    
+    /**
+     * Update loading status for screen readers
+     * @param {string} message - Status message
+     */
+    updateLoadingStatus(message) {
+        let statusEl = document.getElementById('loading-status');
+        if (!statusEl) {
+            statusEl = document.createElement('div');
+            statusEl.id = 'loading-status';
+            statusEl.className = 'sr-only';
+            statusEl.setAttribute('aria-live', 'polite');
+            statusEl.setAttribute('aria-atomic', 'true');
+            document.body.appendChild(statusEl);
+        }
+        statusEl.textContent = message;
     }
 
     hideLoading(btnId, textId, spinnerId) {
-        const btn = document.getElementById(btnId);
-        const text = document.getElementById(textId);
-        const spinner = document.getElementById(spinnerId);
+        try {
+            const btn = document.getElementById(btnId);
+            const text = document.getElementById(textId);
+            const spinner = document.getElementById(spinnerId);
 
-        if (btn) {
-            btn.disabled = false;
-            btn.classList.remove('opacity-75', 'cursor-not-allowed', 'loading-disabled');
+            if (btn) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed', 'loading-disabled');
+                btn.removeAttribute('aria-busy');
+                btn.removeAttribute('aria-describedby');
+                
+                // Add completion animation
+                btn.classList.add('loading-complete');
+                setTimeout(() => {
+                    btn.classList.remove('loading-complete');
+                }, 300);
+            }
+            
+            if (text) {
+                const isUrl = btnId.includes('url');
+                const originalText = isUrl ? 'Analyze Website' : 'Analyze HTML';
+                
+                // Smooth text transition
+                text.style.opacity = '0';
+                setTimeout(() => {
+                    text.textContent = originalText;
+                    text.style.opacity = '1';
+                }, 150);
+            }
+            
+            if (spinner) {
+                spinner.classList.add('hidden');
+                spinner.removeAttribute('aria-label');
+            }
+            
+            // Clear loading status
+            this.updateLoadingStatus('');
+            
+            // Hide progress message with delay
+            setTimeout(() => {
+                this.hideProgressMessage();
+            }, 200);
+            
+        } catch (error) {
+            console.warn('Error hiding loading state:', error);
         }
-        if (text) text.textContent = btnId.includes('url') ? 'Analyze Website' : 'Analyze HTML';
-        if (spinner) spinner.classList.add('hidden');
-        
-        // Hide progress message
-        this.hideProgressMessage();
     }
 
     showError(message) {
@@ -734,10 +1421,18 @@ class AccessiScan {
         }
     }
 
+    /**
+     * Hide error message elements
+     */
     hideError() {
         const errorDiv = document.getElementById('error-message');
         if (errorDiv) {
             errorDiv.classList.add('hidden');
+        }
+        
+        const urlErrorDiv = document.getElementById('url-error-message');
+        if (urlErrorDiv) {
+            urlErrorDiv.classList.add('hidden');
         }
     }
 
@@ -751,11 +1446,11 @@ class AccessiScan {
         }
     }
 
+    /**
+     * Hide URL-specific error messages
+     */
     hideURLError() {
-        const errorDiv = document.getElementById('url-error-message');
-        if (errorDiv) {
-            errorDiv.classList.add('hidden');
-        }
+        this.hideError();
     }
 
     showProgressMessage(message) {

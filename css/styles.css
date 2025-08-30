@@ -43,18 +43,62 @@
     border-left: 4px solid #65a30d;
 }
 
-/* Results card styling */
+/* Enhanced results card styling with professional hover effects */
 .result-card {
     background: white;
     border: 1px solid #e5e7eb;
     border-radius: 0.5rem;
     padding: 1.5rem;
     margin-bottom: 1rem;
-    transition: box-shadow 0.2s ease;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.result-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.04), transparent);
+    transition: left 0.6s ease;
 }
 
 .result-card:hover {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+    border-color: #c7d2fe;
+}
+
+.result-card:hover::before {
+    left: 100%;
+}
+
+/* Enhanced feature card hover effects */
+.feature-card {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.12), 0 4px 8px -4px rgba(0, 0, 0, 0.08);
+}
+
+.feature-card .icon-container {
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover .icon-container {
+    transform: scale(1.1);
+    background-color: #6366f1;
+}
+
+.feature-card:hover .icon-container svg {
+    color: white;
 }
 
 /* Help text styling */
@@ -80,19 +124,39 @@
     margin: 0.25rem 0;
 }
 
-/* Collapsible sections */
+/* Enhanced collapsible sections with smooth animations */
 .collapsible-header {
     cursor: pointer;
     user-select: none;
-    transition: background-color 0.2s ease;
+    transition: all 0.3s ease;
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+    margin: -0.75rem;
 }
 
 .collapsible-header:hover {
-    background-color: #f9fafb;
+    background-color: #f8fafc;
+    transform: translateX(4px);
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.collapsible-header:focus {
+    background-color: #f1f5f9;
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
 }
 
 .collapsible-content {
-    transition: max-height 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.collapsible-arrow {
+    transition: transform 0.3s ease;
+}
+
+.collapsible-expanded .collapsible-arrow {
+    transform: rotate(180deg);
 }
 
 /* Mobile responsive adjustments */
@@ -110,6 +174,8 @@
         min-height: 44px;
         padding: 12px 16px;
         font-size: 16px; /* Prevents zoom on iOS */
+        border-radius: 8px;
+        transition: all 0.3s ease;
     }
     
     /* Better textarea handling on mobile */
@@ -117,6 +183,8 @@
         font-size: 16px; /* Prevents zoom on iOS */
         resize: vertical;
         min-height: 120px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
     }
     
     /* Mobile-specific spacing */
@@ -169,12 +237,42 @@
     }
 }
 
-/* Focus styles for better accessibility */
+/* Enhanced focus styles for better accessibility and professional appearance */
 button:focus,
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus,
+a:focus {
     outline: 2px solid #6366f1;
     outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    transition: all 0.2s ease;
+}
+
+/* High contrast focus for keyboard users */
+.focus-visible:focus {
+    outline: 3px solid #6366f1;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.15);
+}
+
+/* Focus styles for buttons with different states */
+button:focus:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Focus styles for form elements */
+input:focus,
+textarea:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Remove focus for mouse users but keep for keyboard */
+.js-focus-visible :focus:not(.focus-visible) {
+    outline: none;
+    box-shadow: none;
 }
 
 /* Success state styling */
@@ -198,43 +296,91 @@ textarea:focus {
     color: #991b1b;
 }
 
-/* Custom scrollbar for better UX */
+/* Enhanced scrollbar with hover effects */
 .custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-    background: #f1f5f9;
+    background: #f8fafc;
+    border-radius: 5px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
+    background: linear-gradient(180deg, #cbd5e1, #94a3b8);
+    border-radius: 5px;
+    border: 2px solid #f8fafc;
+    transition: all 0.3s ease;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: linear-gradient(180deg, #6366f1, #4f46e5);
+    border-color: #e2e8f0;
+    transform: scale(1.1);
 }
 
-/* Touch device optimizations */
+/* Firefox scrollbar styling */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f8fafc;
+}
+
+.custom-scrollbar:hover {
+    scrollbar-color: #6366f1 #e2e8f0;
+}
+
+/* Touch device optimizations with enhanced interactions */
 @media (hover: none) and (pointer: coarse) {
-    /* Remove hover effects on touch devices */
+    /* Remove hover effects on touch devices but keep focus effects */
     .result-card:hover {
-        box-shadow: none;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        transform: none;
+    }
+    
+    .feature-card:hover {
+        transform: none;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
     
     .collapsible-header:hover {
         background-color: transparent;
+        transform: none;
+    }
+    
+    button:hover {
+        transform: none;
     }
     
     /* Better touch targets */
-    button, a, input, textarea {
+    button, a, input, textarea, select {
         min-height: 44px;
+        min-width: 44px;
+        touch-action: manipulation;
     }
     
     /* Improve touch scrolling */
     .overflow-auto {
         -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+    
+    /* Touch-specific button styles */
+    button:active {
+        background-color: rgba(99, 102, 241, 0.1);
+        transform: scale(0.98);
+        transition-duration: 0.1s;
+    }
+    
+    /* Larger touch targets for mobile */
+    @media (max-width: 640px) {
+        button, a, input {
+            min-height: 48px;
+            padding: 12px 16px;
+        }
+        
+        textarea {
+            min-height: 120px;
+        }
     }
 }
 
@@ -249,16 +395,257 @@ textarea:focus {
     }
 }
 
-/* Loading state improvements */
+/* Enhanced loading states with professional animations */
 .loading-disabled {
     pointer-events: none;
     opacity: 0.7;
-    transition: opacity 0.2s ease;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
-/* Better mobile keyboard handling */
+.loading-disabled::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Button hover effects */
+button {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+button:not(:disabled):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.15);
+}
+
+button:not(:disabled):active {
+    transform: translateY(0);
+    transition-duration: 0.1s;
+}
+
+/* Primary button enhancements */
+.btn-primary {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    border: none;
+    color: white;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+    box-shadow: 0 8px 25px -8px rgba(99, 102, 241, 0.5);
+}
+
+/* Secondary button enhancements */
+.btn-secondary {
+    background: white;
+    border: 2px solid #e5e7eb;
+    color: #374151;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    border-color: #6366f1;
+    color: #6366f1;
+    background: #f8fafc;
+    box-shadow: 0 4px 12px -4px rgba(99, 102, 241, 0.2);
+}
+
+/* Link hover effects */
+a {
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a.link-with-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: currentColor;
+    transition: width 0.3s ease;
+}
+
+a.link-with-underline:hover::after {
+    width: 100%;
+}
+
+/* Input field enhancements */
+input, textarea {
+    transition: all 0.3s ease;
+    background: white;
+}
+
+input:hover, textarea:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+input:focus, textarea:focus {
+    background: #fefefe;
+    transform: translateY(-1px);
+}
+
+/* Enhanced mobile experience with keyboard handling */
 @media (max-width: 768px) {
     .viewport-adjusted {
         height: calc(100vh - env(keyboard-inset-height, 0px));
     }
+    
+    /* Prevent zoom on input focus for iOS */
+    input[type="text"],
+    input[type="email"],
+    input[type="url"],
+    input[type="password"],
+    textarea {
+        font-size: 16px !important;
+    }
+    
+    /* Better modal positioning on mobile */
+    .modal-mobile {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+    }
+    
+    /* Improved notification positioning */
+    .notification-mobile {
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        right: 1rem;
+        transform: none !important;
+    }
+}
+
+/* Dark mode support for system preference */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-primary: #1f2937;
+        --bg-secondary: #111827;
+        --text-primary: #f9fafb;
+        --text-secondary: #d1d5db;
+        --border-color: #374151;
+    }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .loading-disabled::after {
+        animation: none;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    button, input, textarea {
+        border-width: 2px;
+    }
+    
+    .result-card {
+        border-width: 2px;
+    }
+    
+    a {
+        text-decoration: underline;
+    }
+    
+    button:focus,
+    input:focus,
+    textarea:focus,
+    a:focus {
+        outline: 3px solid #000 !important;
+        outline-offset: 2px !important;
+    }
+    
+    .btn-primary {
+        background: #000 !important;
+        border: 2px solid #000 !important;
+        color: #fff !important;
+    }
+    
+    .btn-secondary {
+        background: #fff !important;
+        border: 2px solid #000 !important;
+        color: #000 !important;
+    }
+}
+
+/* Additional loading animations */
+.loading-shimmer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.2), transparent);
+    animation: shimmer 2s infinite;
+    z-index: 1;
+}
+
+.loading-complete {
+    animation: loadingComplete 0.3s ease;
+}
+
+@keyframes loadingComplete {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); background-color: rgba(34, 197, 94, 0.1); }
+    100% { transform: scale(1); }
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: #6366f1;
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    border-radius: 4px;
+    z-index: 9999;
+    transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+    top: 6px;
 }

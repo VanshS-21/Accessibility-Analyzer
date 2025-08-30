@@ -10,15 +10,15 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
     <!-- Header -->
-    <header class="bg-white shadow-sm border-b border-gray-200">
+    <header class="bg-white shadow-sm border-b border-gray-200" role="banner">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-6">
                 <div class="flex items-center">
                     <h1 class="text-3xl font-bold text-indigo-600">AccessiScan</h1>
-                    <span class="ml-2 text-gray-500 text-sm">Web Accessibility Analyzer</span>
+                    <span class="ml-2 text-gray-500 text-sm" aria-label="Tagline">Web Accessibility Analyzer</span>
                 </div>
-                <nav class="hidden md:flex space-x-8">
-                    <a href="index.html" class="text-indigo-600 font-medium">Home</a>
+                <nav class="hidden md:flex space-x-8" role="navigation" aria-label="Main navigation">
+                    <a href="index.html" class="text-indigo-600 font-medium" aria-current="page">Home</a>
                     <a href="analyze-html.html" class="text-gray-700 hover:text-indigo-600 transition-colors">HTML Analysis</a>
                     <a href="analyze-url.html" class="text-gray-700 hover:text-indigo-600 transition-colors">URL Analysis</a>
                 </nav>
@@ -27,10 +27,10 @@
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" role="main">
         <!-- Hero Section -->
-        <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold text-gray-900 mb-6">
+        <section class="text-center mb-16" aria-labelledby="hero-heading">
+            <h2 id="hero-heading" class="text-4xl font-bold text-gray-900 mb-6">
                 Make the Web More Accessible
             </h2>
             <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
@@ -39,21 +39,28 @@
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="analyze-html.html" 
-                   class="bg-indigo-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                   class="bg-indigo-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors btn-primary"
+                   aria-describedby="html-analysis-desc">
                     Analyze HTML Code
                 </a>
                 <a href="analyze-url.html" 
-                   class="bg-white text-indigo-600 border-2 border-indigo-600 px-8 py-3 rounded-lg font-medium hover:bg-indigo-50 transition-colors">
+                   class="bg-white text-indigo-600 border-2 border-indigo-600 px-8 py-3 rounded-lg font-medium hover:bg-indigo-50 transition-colors btn-secondary"
+                   aria-describedby="url-analysis-desc">
                     Analyze Live Website
                 </a>
             </div>
-        </div>
+            <div class="sr-only">
+                <p id="html-analysis-desc">Test HTML code snippets for accessibility issues</p>
+                <p id="url-analysis-desc">Analyze live websites for accessibility compliance</p>
+            </div>
+        </section>
 
         <!-- Features Section -->
-        <div class="grid md:grid-cols-3 gap-8 mb-16">
-            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-                    <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <section class="grid md:grid-cols-3 gap-8 mb-16" aria-labelledby="features-heading">
+            <h2 id="features-heading" class="sr-only">Key Features</h2>
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 feature-card">
+                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4 icon-container">
+                    <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
@@ -61,9 +68,9 @@
                 <p class="text-gray-600">Test against WCAG 2.1 Level AA standards to ensure your content is accessible to everyone.</p>
             </div>
 
-            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-                    <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 feature-card">
+                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4 icon-container">
+                    <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                     </svg>
                 </div>
@@ -71,51 +78,51 @@
                 <p class="text-gray-600">Get instant results with detailed reports highlighting accessibility issues and solutions.</p>
             </div>
 
-            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-                    <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 feature-card">
+                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4 icon-container">
+                    <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C20.832 18.477 19.246 18 17.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                     </svg>
                 </div>
                 <h3 class="text-xl font-semibold text-gray-900 mb-2">Learning Resources</h3>
                 <p class="text-gray-600">Understand accessibility principles and learn how to create inclusive web experiences.</p>
             </div>
-        </div>
+        </section>
 
         <!-- Getting Started -->
-        <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
-            <h3 class="text-2xl font-bold text-gray-900 mb-4">Getting Started</h3>
+        <section class="bg-white p-8 rounded-lg shadow-sm border border-gray-200" aria-labelledby="getting-started-heading">
+            <h2 id="getting-started-heading" class="text-2xl font-bold text-gray-900 mb-4">Getting Started</h2>
             <div class="grid md:grid-cols-2 gap-8">
-                <div>
-                    <h4 class="text-lg font-semibold text-gray-900 mb-3">HTML Analysis</h4>
+                <article>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">HTML Analysis</h3>
                     <p class="text-gray-600 mb-4">
                         Paste your HTML code directly into our analyzer to check for accessibility issues. 
                         Perfect for testing components or pages during development.
                     </p>
-                    <a href="analyze-html.html" class="text-indigo-600 font-medium hover:text-indigo-700">
+                    <a href="analyze-html.html" class="text-indigo-600 font-medium hover:text-indigo-700 link-with-underline" aria-label="Start HTML code analysis">
                         Start HTML Analysis →
                     </a>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold text-gray-900 mb-3">URL Analysis</h4>
+                </article>
+                <article>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">URL Analysis</h3>
                     <p class="text-gray-600 mb-4">
                         Enter a website URL to analyze live web pages. Great for auditing existing sites 
                         and monitoring accessibility compliance.
                     </p>
-                    <a href="analyze-url.html" class="text-indigo-600 font-medium hover:text-indigo-700">
+                    <a href="analyze-url.html" class="text-indigo-600 font-medium hover:text-indigo-700 link-with-underline" aria-label="Start website URL analysis">
                         Start URL Analysis →
                     </a>
-                </div>
+                </article>
             </div>
-        </div>
+        </section>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8 mt-16">
+    <footer class="bg-gray-900 text-white py-8 mt-16" role="contentinfo">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <p class="text-gray-400 mb-2">
-                    Powered by <a href="https://github.com/dequelabs/axe-core" class="text-indigo-400 hover:text-indigo-300">axe-core</a>
+                    Powered by <a href="https://github.com/dequelabs/axe-core" class="text-indigo-400 hover:text-indigo-300" target="_blank" rel="noopener noreferrer" aria-label="axe-core accessibility testing engine (opens in new tab)">axe-core</a>
                 </p>
                 <p class="text-sm text-gray-500">
                     A computer science student project for web accessibility education

@@ -10,16 +10,18 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
     <!-- Header -->
-    <header class="bg-white shadow-sm border-b border-gray-200">
+    <header class="bg-white shadow-sm border-b border-gray-200" role="banner">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-6">
                 <div class="flex items-center">
-                    <h1 class="text-3xl font-bold text-indigo-600">AccessiScan</h1>
-                    <span class="ml-2 text-gray-500 text-sm">Web Accessibility Analyzer</span>
+                    <h1 class="text-3xl font-bold text-indigo-600">
+                        <a href="index.html" class="hover:text-indigo-700 transition-colors" aria-label="AccessiScan homepage">AccessiScan</a>
+                    </h1>
+                    <span class="ml-2 text-gray-500 text-sm" aria-label="Tagline">Web Accessibility Analyzer</span>
                 </div>
-                <nav class="hidden md:flex space-x-8">
+                <nav class="hidden md:flex space-x-8" role="navigation" aria-label="Main navigation">
                     <a href="index.html" class="text-gray-700 hover:text-indigo-600 transition-colors">Home</a>
-                    <a href="analyze-html.html" class="text-indigo-600 font-medium">HTML Analysis</a>
+                    <a href="analyze-html.html" class="text-indigo-600 font-medium" aria-current="page">HTML Analysis</a>
                     <a href="analyze-url.html" class="text-gray-700 hover:text-indigo-600 transition-colors">URL Analysis</a>
                 </nav>
             </div>
@@ -27,49 +29,59 @@
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="mb-8">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">HTML Code Analysis</h2>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" role="main">
+        <section class="mb-8" aria-labelledby="page-heading">
+            <h2 id="page-heading" class="text-3xl font-bold text-gray-900 mb-4">HTML Code Analysis</h2>
             <p class="text-lg text-gray-600">
                 Paste your HTML code below to analyze it for accessibility issues. 
                 The analyzer will check against WCAG 2.1 Level AA standards.
             </p>
-        </div>
+        </section>
 
         <!-- HTML Input Form -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-            <form id="html-analysis-form">
+        <section class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8" aria-labelledby="html-form-heading">
+            <h3 id="html-form-heading" class="sr-only">HTML Code Input Form</h3>
+            <form id="html-analysis-form" aria-describedby="form-instructions">
                 <div class="mb-4">
                     <label for="html-input" class="block text-sm font-medium text-gray-700 mb-2">
                         HTML Code
                     </label>
+                    <p id="form-instructions" class="text-sm text-gray-600 mb-2">
+                        Enter your HTML code for accessibility analysis. Use the sample buttons below to load test examples.
+                    </p>
                     <textarea 
                         id="html-input" 
                         name="html-input"
                         rows="12"
-                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-mono text-sm"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-mono text-sm custom-scrollbar"
                         placeholder="Paste your HTML code here...&#10;&#10;Example:&#10;&lt;html&gt;&#10;  &lt;head&gt;&#10;    &lt;title&gt;My Page&lt;/title&gt;&#10;  &lt;/head&gt;&#10;  &lt;body&gt;&#10;    &lt;h1&gt;Welcome&lt;/h1&gt;&#10;    &lt;p&gt;This is my page.&lt;/p&gt;&#10;  &lt;/body&gt;&#10;&lt;/html&gt;"
+                        aria-describedby="form-instructions sample-info"
                         required></textarea>
                 </div>
                 
                 <!-- Analysis Options -->
-                <div class="mb-6">
-                    <h3 class="text-sm font-medium text-gray-700 mb-3">Analysis Options</h3>
-                    <div class="space-y-2">
-                        <label class="flex items-center">
-                            <input type="checkbox" id="check-wcag-a" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
-                            <span class="ml-2 text-sm text-gray-700">WCAG 2.1 Level A</span>
-                        </label>
-                        <label class="flex items-center">
-                            <input type="checkbox" id="check-wcag-aa" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
-                            <span class="ml-2 text-sm text-gray-700">WCAG 2.1 Level AA</span>
-                        </label>
-                        <label class="flex items-center">
-                            <input type="checkbox" id="check-best-practices" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
-                            <span class="ml-2 text-sm text-gray-700">Best Practices</span>
-                        </label>
+                <fieldset class="mb-6">
+                    <legend class="text-sm font-medium text-gray-700 mb-3">Analysis Options</legend>
+                    <div class="space-y-2" role="group" aria-labelledby="analysis-options-legend">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="check-wcag-a" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked aria-describedby="wcag-a-desc">
+                            <label for="check-wcag-a" class="ml-2 text-sm text-gray-700">WCAG 2.1 Level A</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="check-wcag-aa" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked aria-describedby="wcag-aa-desc">
+                            <label for="check-wcag-aa" class="ml-2 text-sm text-gray-700">WCAG 2.1 Level AA</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="check-best-practices" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked aria-describedby="best-practices-desc">
+                            <label for="check-best-practices" class="ml-2 text-sm text-gray-700">Best Practices</label>
+                        </div>
                     </div>
-                </div>
+                    <div class="sr-only">
+                        <p id="wcag-a-desc">Tests for basic accessibility requirements</p>
+                        <p id="wcag-aa-desc">Tests for enhanced accessibility compliance</p>
+                        <p id="best-practices-desc">Tests for accessibility best practices and recommendations</p>
+                    </div>
+                </fieldset>
 
                 <!-- Sample Indicator -->
                 <div class="mb-4">
@@ -78,25 +90,30 @@
 
                 <!-- Sample Loading Buttons -->
                 <div class="mb-6">
-                    <h3 class="text-sm font-medium text-gray-700 mb-3">📝 Testing Samples</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3" id="samples-heading">
+                        <span aria-hidden="true">📝</span> Testing Samples
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4" role="group" aria-labelledby="samples-heading">
                         <button 
                             type="button" 
                             id="sample-problematic-btn"
-                            class="bg-red-50 text-red-700 border border-red-200 px-4 py-2 rounded-lg font-medium hover:bg-red-100 transition-colors text-sm">
-                            🚨 Load Sample with Issues
+                            class="bg-red-50 text-red-700 border border-red-200 px-4 py-2 rounded-lg font-medium hover:bg-red-100 transition-colors text-sm"
+                            aria-describedby="sample-problematic-desc">
+                            <span aria-hidden="true">🚨</span> Load Sample with Issues
                         </button>
                         <button 
                             type="button" 
                             id="sample-clean-btn"
-                            class="bg-green-50 text-green-700 border border-green-200 px-4 py-2 rounded-lg font-medium hover:bg-green-100 transition-colors text-sm">
-                            ✅ Load Clean Sample
+                            class="bg-green-50 text-green-700 border border-green-200 px-4 py-2 rounded-lg font-medium hover:bg-green-100 transition-colors text-sm"
+                            aria-describedby="sample-clean-desc">
+                            <span aria-hidden="true">✅</span> Load Clean Sample
                         </button>
                         <button 
                             type="button" 
                             id="sample-educational-btn"
-                            class="bg-blue-50 text-blue-700 border border-blue-200 px-4 py-2 rounded-lg font-medium hover:bg-blue-100 transition-colors text-sm">
-                            📚 Load Educational Sample
+                            class="bg-blue-50 text-blue-700 border border-blue-200 px-4 py-2 rounded-lg font-medium hover:bg-blue-100 transition-colors text-sm"
+                            aria-describedby="sample-educational-desc">
+                            <span aria-hidden="true">📚</span> Load Educational Sample
                         </button>
                     </div>
                     <div class="text-xs text-gray-600 bg-gray-50 p-3 rounded border">
@@ -104,14 +121,22 @@
                     </div>
                 </div>
 
+                <!-- Sample Descriptions -->
+                <div class="sr-only" id="sample-info">
+                    <p id="sample-problematic-desc">Loads HTML with multiple accessibility violations for testing detection</p>
+                    <p id="sample-clean-desc">Loads HTML with proper accessibility implementation as reference</p>
+                    <p id="sample-educational-desc">Loads HTML with mixed accessibility examples for learning</p>
+                </div>
+                
                 <!-- Action Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4">
                     <button 
                         type="submit" 
                         id="analyze-btn"
-                        class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors flex items-center justify-center">
-                        <span id="analyze-btn-text">🔍 Analyze HTML</span>
-                        <svg id="analyze-spinner" class="hidden animate-spin ml-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors flex items-center justify-center btn-primary"
+                        aria-describedby="analyze-btn-desc">
+                        <span id="analyze-btn-text"><span aria-hidden="true">🔍</span> Analyze HTML</span>
+                        <svg id="analyze-spinner" class="hidden animate-spin ml-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
@@ -119,12 +144,17 @@
                     <button 
                         type="button" 
                         id="clear-btn"
-                        class="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-300 transition-colors">
-                        🗑️ Clear
+                        class="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-300 transition-colors btn-secondary"
+                        aria-describedby="clear-btn-desc">
+                        <span aria-hidden="true">🗑️</span> Clear
                     </button>
                 </div>
+                <div class="sr-only">
+                    <p id="analyze-btn-desc">Starts accessibility analysis of the HTML code</p>
+                    <p id="clear-btn-desc">Clears all content from the HTML input field</p>
+                </div>
             </form>
-        </div>
+        </section>
 
         <!-- Error Display -->
         <div id="error-message" class="hidden bg-red-50 border-l-4 border-red-400 p-4 mb-6">
@@ -159,8 +189,10 @@
         </div>
 
         <!-- Testing Instructions -->
-        <div class="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-blue-900 mb-4">🎯 Testing & Demo Instructions</h3>
+        <section class="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6" aria-labelledby="testing-instructions-heading">
+            <h3 id="testing-instructions-heading" class="text-lg font-semibold text-blue-900 mb-4">
+                <span aria-hidden="true">🎯</span> Testing & Demo Instructions
+            </h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -191,16 +223,20 @@
             </div>
         </div>
 
+        </section>
+        
         <!-- HTML Tips -->
-        <div class="mt-8 bg-white border border-gray-200 rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-3">📝 HTML Analysis Tips</h3>
+        <section class="mt-8 bg-white border border-gray-200 rounded-lg p-6" aria-labelledby="tips-heading">
+            <h3 id="tips-heading" class="text-lg font-semibold text-gray-900 mb-3">
+                <span aria-hidden="true">📝</span> HTML Analysis Tips
+            </h3>
             <ul class="text-sm text-gray-700 space-y-2">
                 <li>• Include the complete HTML structure including DOCTYPE, html, head, and body tags</li>
                 <li>• Make sure to include any relevant CSS that affects accessibility (like hiding content)</li>
                 <li>• The analyzer works best with complete, well-formed HTML documents</li>
                 <li>• Check both the structure and semantic markup of your HTML</li>
             </ul>
-        </div>
+        </section>
     </main>
 
     <script src="js/app.js"></script>
