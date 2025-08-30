@@ -776,58 +776,6 @@ function updateSummaryCounts(results) {
     if (inapplicableCount) inapplicableCount.textContent = results.inapplicable.length;
 }
 
-function displayViolations(violations) {
-    const violationsList = document.getElementById('violations-list');
-    const violationsSection = document.getElementById('violations-section');
-
-    if (!violationsList || !violationsSection) return;
-
-    if (violations.length === 0) {
-        violationsSection.innerHTML = `
-            <h3 class="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                <span class="w-3 h-3 bg-green-500 rounded-full mr-3"></span>
-                No Violations Found!
-            </h3>
-            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-                <p class="text-green-800">Congratulations! No accessibility violations were detected in your content.</p>
-            </div>
-        `;
-        return;
-    }
-
-    violationsList.innerHTML = violations.map(violation => `
-        <div class="result-card severity-${violation.impact || 'moderate'}">
-            <div class="flex justify-between items-start mb-3">
-                <h4 class="text-lg font-semibold text-gray-900">${violation.help}</h4>
-                <span class="px-2 py-1 text-xs font-semibold rounded-full ${getSeverityClasses(violation.impact)}">
-                    ${violation.impact || 'moderate'}
-                </span>
-            </div>
-            
-            <p class="text-gray-600 mb-3">${violation.description}</p>
-            
-            <div class="mb-3">
-                <strong class="text-sm text-gray-700">Affected Elements: ${violation.nodes.length}</strong>
-            </div>
-            
-            ${violation.nodes.slice(0, 3).map(node => `
-                <div class="target-element mb-2">
-                    <strong>Target:</strong> ${node.target.join(', ')}<br>
-                    <strong>HTML:</strong> ${escapeHtml(node.html.substring(0, 100))}${node.html.length > 100 ? '...' : ''}
-                </div>
-            `).join('')}
-            
-            ${violation.nodes.length > 3 ? `<p class="text-sm text-gray-500">... and ${violation.nodes.length - 3} more elements</p>` : ''}
-            
-            <div class="help-text">
-                <strong>How to fix:</strong> ${violation.helpUrl ? 
-                    `<a href="${violation.helpUrl}" target="_blank" class="text-indigo-600 hover:text-indigo-800">View detailed guidance</a>` :
-                    'Check WCAG guidelines for specific requirements'
-                }
-            </div>
-        </div>
-    `).join('');
-}
 
 function displayIncompleteItems(incomplete) {
     const incompleteList = document.getElementById('incomplete-list');
@@ -919,11 +867,6 @@ function getSeverityClasses(impact) {
     }
 }
 
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
