@@ -1,0 +1,87 @@
+Implement URL analysis with proper CORS limitation handling:
+
+URL Analysis Function:
+javascriptconst analyzeURL = async (url) => {
+    try {
+        console.log('Attempting URL analysis for:', url);
+        
+        // Show loading state
+        const btn = document.querySelector('[data-analyze-btn]');
+        btn.textContent = 'Analyzing...';
+        btn.disabled = true;
+        
+        try {
+            // Attempt to fetch URL (will likely fail due to CORS)
+            const response = await fetch(url, { 
+                mode: 'cors',
+                method: 'GET'
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const html = await response.text();
+            
+            // If successful, analyze the HTML
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const results = await axe.run(doc);
+            
+            sessionStorage.setItem('analysisResults', JSON.stringify({
+                type: 'url',
+                url: url,
+                results: results
+            }));
+            
+            window.location.href = 'results.html';
+            
+        } catch (fetchError) {
+            // Handle CORS/fetch errors gracefully
+            handleCORSError(url, fetchError);
+        }
+        
+    } catch (error) {
+        console.error('URL analysis error:', error);
+        alert('Analysis failed: ' + error.message);
+    } finally {
+        // Reset button state
+        const btn = document.querySelector('[data-analyze-btn]');
+        btn.textContent = 'Analyze Website';
+        btn.disabled = false;
+    }
+};
+
+const handleCORSError = (url, error) => {
+    console.log('CORS limitation encountered for:', url);
+    
+    sessionStorage.setItem('analysisResults', JSON.stringify({
+        type: 'url',
+        url: url,
+        corsError: true,
+        results: { violations: [] },
+        message: 'URL analysis blocked by browser security (CORS). This is normal for external websites. Try copying the HTML source code and using "Analyze HTML Code" instead.'
+    }));
+    
+    window.location.href = 'results.html';
+};
+
+Update Results Page:
+
+Handle CORS error display
+Show helpful message about limitations
+Provide guidance on alternative approach
+
+
+Educational Component:
+
+Explain CORS as a learning opportunity
+Show this as understanding web security, not a failure
+
+
+
+Make URL analysis educational even when it hits limitations.
+
+**After this prompt:** Checkpoint. Test URL analysis with various URLs and verify CORS handling.
+
+---

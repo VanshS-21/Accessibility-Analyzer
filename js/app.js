@@ -333,48 +333,77 @@ class AccessiScan {
             return;
         }
 
-        this.showLoading('url-analyze-btn', 'url-analyze-btn-text', 'url-analyze-spinner');
-        this.hideURLError();
-
         try {
-            // Note: Due to CORS restrictions, we'll try to fetch the URL
-            // This will likely fail for most websites, but we'll provide feedback
-            const response = await fetch(url, { 
-                mode: 'cors',
-                method: 'GET'
-            });
+            console.log('Attempting URL analysis for:', url);
             
-            const htmlContent = await response.text();
-            const results = await this.runAxeAnalysis(htmlContent);
+            // Show loading state
+            this.showLoading('url-analyze-btn', 'url-analyze-btn-text', 'url-analyze-spinner');
+            this.hideURLError();
             
-            this.currentResults = {
-                type: 'url',
-                url: url,
-                results: results,
-                timestamp: new Date().toISOString()
-            };
-
-            // Store results in sessionStorage for results page
-            sessionStorage.setItem('accessiscan-results', JSON.stringify(this.currentResults));
-            
-            this.showURLResults(results);
-
-        } catch (error) {
-            console.error('URL analysis error:', error);
-            let errorMessage = 'Unable to analyze the URL due to cross-origin restrictions. ';
-            
-            if (error.name === 'TypeError' && error.message.includes('CORS')) {
-                errorMessage += 'This website blocks cross-origin requests. Please try the manual analysis method described below.';
-            } else if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
-                errorMessage += 'The website cannot be accessed. Please check the URL and try again, or use the manual analysis method.';
-            } else {
-                errorMessage += 'Please try using the HTML analysis feature instead.';
+            try {
+                // Attempt to fetch URL (will likely fail due to CORS)
+                const response = await fetch(url, { 
+                    mode: 'cors',
+                    method: 'GET'
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const html = await response.text();
+                
+                // If successful, analyze the HTML
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const results = await axe.run(doc, {
+                    tags: this.getSelectedTags()
+                });
+                
+                sessionStorage.setItem('analysisResults', JSON.stringify({
+                    type: 'url',
+                    url: url,
+                    results: results,
+                    timestamp: new Date().toISOString()
+                }));
+                
+                window.location.href = 'results.html';
+                
+            } catch (fetchError) {
+                // Handle CORS/fetch errors gracefully
+                this.handleCORSError(url, fetchError);
             }
             
-            this.showURLError(errorMessage);
+        } catch (error) {
+            console.error('URL analysis error:', error);
+            this.showURLError('Analysis failed: ' + error.message);
         } finally {
+            // Reset button state
             this.hideLoading('url-analyze-btn', 'url-analyze-btn-text', 'url-analyze-spinner');
         }
+    }
+
+    handleCORSError(url, error) {
+        console.log('CORS limitation encountered for:', url);
+        
+        sessionStorage.setItem('analysisResults', JSON.stringify({
+            type: 'url',
+            url: url,
+            corsError: true,
+            results: { violations: [], incomplete: [], passes: [], inapplicable: [] },
+            message: 'URL analysis blocked by browser security (CORS). This is normal for external websites. Try copying the HTML source code and using "Analyze HTML Code" instead.',
+            timestamp: new Date().toISOString()
+        }));
+        
+        window.location.href = 'results.html';
+    }
+
+    getSelectedTags() {
+        const tags = [];
+        if (document.getElementById('url-check-wcag-a')?.checked) tags.push('wcag2a');
+        if (document.getElementById('url-check-wcag-aa')?.checked) tags.push('wcag2aa');
+        if (document.getElementById('url-check-best-practices')?.checked) tags.push('best-practice');
+        return tags.length > 0 ? tags : ['wcag2a', 'wcag2aa', 'best-practice'];
     }
 
     isValidURL(string) {
@@ -553,10 +582,8 @@ const displayResults = () => {
     }
     
     const data = JSON.parse(resultsData);
-    const violations = data.results.violations;
     
     console.log('Displaying results:', data);
-    console.log('Violations found:', violations.length);
     
     // Update timestamp
     const timestampEl = document.getElementById('analysis-timestamp');
@@ -565,11 +592,66 @@ const displayResults = () => {
         timestampEl.textContent = `Analyzed on ${date.toLocaleDateString()} at ${date.toLocaleTimeString()}`;
     }
     
+    // Handle CORS error case - turn it into an educational opportunity
+    if (data.corsError) {
+        container.innerHTML = `
+            <div class="space-y-6">
+                <div class="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <svg class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-lg font-medium text-blue-800">Learning Opportunity: Understanding Web Security (CORS)</h3>
+                            <div class="mt-3 text-blue-700">
+                                <p class="mb-3">The website <strong>${data.url}</strong> could not be analyzed due to Cross-Origin Resource Sharing (CORS) restrictions.</p>
+                                
+                                <h4 class="font-semibold mb-2">What is CORS?</h4>
+                                <p class="mb-3">CORS is a browser security feature that prevents websites from making requests to other domains without permission. This protects users from malicious websites trying to access their data on other sites.</p>
+                                
+                                <h4 class="font-semibold mb-2">Why does this happen?</h4>
+                                <p class="mb-3">External websites typically don't allow cross-origin requests for security reasons. This is normal and expected behavior - it means the website is properly secured!</p>
+                                
+                                <h4 class="font-semibold mb-2">Alternative approaches:</h4>
+                                <ul class="list-disc list-inside space-y-1 mb-4">
+                                    <li>Use browser developer tools to view the page source, then copy the HTML and use our "Analyze HTML Code" feature</li>
+                                    <li>Use browser extensions like axe DevTools for direct website analysis</li>
+                                    <li>For your own websites, configure CORS headers to allow cross-origin requests</li>
+                                    <li>Use server-side analysis tools if you need automated website scanning</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+                    <h4 class="text-lg font-semibold text-green-800 mb-3">This isn't a failure - it's web security working as intended!</h4>
+                    <p class="text-green-700 mb-4">Understanding CORS limitations is an important part of web development and security awareness.</p>
+                    
+                    <div class="flex space-x-4">
+                        <a href="analyze-html.html" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                            Try HTML Analysis Instead
+                        </a>
+                        <a href="analyze-url.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                            Try Another URL
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+        return;
+    }
+    
+    const violations = data.results.violations;
+    console.log('Violations found:', violations.length);
+    
     if (violations.length === 0) {
         container.innerHTML = `
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
                 <h3 class="font-bold text-lg">Excellent! 🎉</h3>
-                <p>No accessibility violations found in your ${data.type}.</p>
+                <p>No accessibility violations found in your ${data.type === 'url' ? 'website' : 'HTML code'}.</p>
             </div>
         `;
         return;
