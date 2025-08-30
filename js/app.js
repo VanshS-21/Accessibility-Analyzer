@@ -538,7 +538,185 @@ class AccessiScan {
 }
 
 // Results page specific functions
+const displayResults = () => {
+    const resultsData = sessionStorage.getItem('analysisResults');
+    const container = document.getElementById('resultsContainer');
+    
+    if (!resultsData) {
+        container.innerHTML = `
+            <div class="text-center py-8">
+                <p class="text-gray-600">No analysis results found.</p>
+                <a href="index.html" class="text-blue-600 hover:underline">Go back to homepage</a>
+            </div>
+        `;
+        return;
+    }
+    
+    const data = JSON.parse(resultsData);
+    const violations = data.results.violations;
+    
+    console.log('Displaying results:', data);
+    console.log('Violations found:', violations.length);
+    
+    // Update timestamp
+    const timestampEl = document.getElementById('analysis-timestamp');
+    if (timestampEl) {
+        const date = new Date(data.timestamp);
+        timestampEl.textContent = `Analyzed on ${date.toLocaleDateString()} at ${date.toLocaleTimeString()}`;
+    }
+    
+    if (violations.length === 0) {
+        container.innerHTML = `
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                <h3 class="font-bold text-lg">Excellent! 🎉</h3>
+                <p>No accessibility violations found in your ${data.type}.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    displayViolations(violations, data);
+};
+
+const displayViolations = (violations, data) => {
+    const container = document.getElementById('resultsContainer');
+    
+    // Group violations by severity
+    const severityGroups = {
+        critical: violations.filter(v => v.impact === 'critical'),
+        serious: violations.filter(v => v.impact === 'serious'),
+        moderate: violations.filter(v => v.impact === 'moderate'),
+        minor: violations.filter(v => v.impact === 'minor'),
+        unknown: violations.filter(v => !v.impact || !['critical', 'serious', 'moderate', 'minor'].includes(v.impact))
+    };
+    
+    console.log('Violations by severity:', severityGroups);
+    
+    // Create summary section
+    const totalResults = data.results;
+    const summaryHTML = `
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Analysis Summary</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-red-600">${violations.length}</div>
+                    <div class="text-sm text-gray-600">Violations</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-yellow-600">${totalResults.incomplete?.length || 0}</div>
+                    <div class="text-sm text-gray-600">Incomplete</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-green-600">${totalResults.passes?.length || 0}</div>
+                    <div class="text-sm text-gray-600">Passes</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-blue-600">${totalResults.inapplicable?.length || 0}</div>
+                    <div class="text-sm text-gray-600">Inapplicable</div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Create violations sections
+    let violationsHTML = '';
+    
+    const severityConfig = {
+        critical: { color: 'red', bgColor: 'red-50', borderColor: 'red-500', title: 'Critical Issues' },
+        serious: { color: 'orange', bgColor: 'orange-50', borderColor: 'orange-500', title: 'Serious Issues' },
+        moderate: { color: 'yellow', bgColor: 'yellow-50', borderColor: 'yellow-500', title: 'Moderate Issues' },
+        minor: { color: 'green', bgColor: 'green-50', borderColor: 'green-500', title: 'Minor Issues' },
+        unknown: { color: 'gray', bgColor: 'gray-50', borderColor: 'gray-500', title: 'Other Issues' }
+    };
+    
+    Object.entries(severityGroups).forEach(([severity, severityViolations]) => {
+        if (severityViolations.length > 0) {
+            const config = severityConfig[severity];
+            violationsHTML += `
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                        <span class="w-3 h-3 bg-${config.color}-500 rounded-full mr-3"></span>
+                        ${config.title} (${severityViolations.length})
+                    </h3>
+                    <div class="space-y-4">
+                        ${severityViolations.map(violation => `
+                            <div class="bg-${config.bgColor} border-l-4 border-${config.borderColor} p-6 rounded-r-lg">
+                                <div class="flex justify-between items-start mb-3">
+                                    <h4 class="text-lg font-semibold text-gray-900">${violation.help}</h4>
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-${config.color}-100 text-${config.color}-800">
+                                        ${violation.impact || 'unknown'}
+                                    </span>
+                                </div>
+                                
+                                <p class="text-gray-700 mb-4">${violation.description}</p>
+                                
+                                <div class="mb-4">
+                                    <strong class="text-sm text-gray-700">Why this occurs:</strong>
+                                    <p class="text-sm text-gray-600 mt-1">${getViolationExplanation(violation)}</p>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <strong class="text-sm text-gray-700">Affected Elements: ${violation.nodes.length}</strong>
+                                </div>
+                                
+                                ${violation.nodes.slice(0, 2).map(node => `
+                                    <div class="bg-white border border-gray-200 rounded p-3 mb-2 font-mono text-sm">
+                                        <strong>Target:</strong> ${node.target.join(', ')}<br>
+                                        <strong>HTML:</strong> <code>${escapeHtml(node.html.substring(0, 150))}${node.html.length > 150 ? '...' : ''}</code>
+                                    </div>
+                                `).join('')}
+                                
+                                ${violation.nodes.length > 2 ? `<p class="text-sm text-gray-500">... and ${violation.nodes.length - 2} more elements</p>` : ''}
+                                
+                                <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded">
+                                    <strong class="text-blue-800">How to fix:</strong>
+                                    <p class="text-blue-700 text-sm mt-1">
+                                        ${violation.helpUrl ? 
+                                            `<a href="${violation.helpUrl}" target="_blank" class="text-blue-600 hover:text-blue-800 underline">View detailed WCAG guidance</a>` :
+                                            'Check WCAG guidelines for specific requirements'
+                                        }
+                                    </p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+    });
+    
+    container.innerHTML = summaryHTML + violationsHTML;
+};
+
+const getViolationExplanation = (violation) => {
+    const explanations = {
+        'image-alt': 'Images without alternative text cannot be understood by screen readers or when images fail to load.',
+        'button-name': 'Buttons without accessible names cannot be understood by assistive technologies.',
+        'form-field-multiple-labels': 'Form fields need proper labels so users know what information to enter.',
+        'color-contrast': 'Text with insufficient contrast is difficult to read, especially for users with visual impairments.',
+        'heading-order': 'Proper heading hierarchy helps users navigate and understand page structure.',
+        'link-name': 'Links without descriptive text cannot be understood when taken out of context.',
+        'label': 'Form inputs need associated labels for accessibility.'
+    };
+    
+    // Try to find a match in common violation IDs
+    for (const [key, explanation] of Object.entries(explanations)) {
+        if (violation.id.includes(key) || violation.help.toLowerCase().includes(key.replace('-', ' '))) {
+            return explanation;
+        }
+    }
+    
+    return 'This accessibility issue prevents some users from properly accessing or understanding this content.';
+};
+
+const escapeHtml = (text) => {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+};
+
 function loadResults() {
+    // Legacy function for backward compatibility
     const resultsData = sessionStorage.getItem('accessiscan-results');
     const noResultsDiv = document.getElementById('no-results');
     const resultsContentDiv = document.getElementById('results-content');
