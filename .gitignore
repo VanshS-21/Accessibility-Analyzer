@@ -1,0 +1,32 @@
+# Development files
+.DS_Store
+*.log
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.swp
+*~
+
+# Node modules (if added later)
+node_modules/
+
+# Environment variables
+.env
+.env.local
+
+# Build outputs (if build process added later)
+dist/
+build/
+
+# Replit specific
+.replit
+replit.nix
+
+# Backup files
+*.bak
+*.backup
+
+# OS generated files
+Thumbs.db
