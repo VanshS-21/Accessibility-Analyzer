@@ -643,7 +643,7 @@ class AccessiScan {
     showNotification(message, type = 'info') {
         // Create notification element
         const notificationDiv = document.createElement('div');
-        notificationDiv.className = 'fixed top-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-sm bg-white border border-gray-200 rounded-lg shadow-lg p-4 transition-all duration-300 transform -translate-y-full z-50';
+        notificationDiv.className = 'fixed bottom-4 right-4 bg-white border border-gray-200 rounded-lg shadow-lg px-4 py-3 transition-all duration-300 transform translate-y-full z-50 max-w-xs sm:max-w-sm';
         
         const colors = {
             success: { bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700', icon: 'text-green-400' },
@@ -653,7 +653,7 @@ class AccessiScan {
         };
         
         const color = colors[type] || colors.info;
-        notificationDiv.className = `fixed top-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-sm ${color.bg} ${color.border} border rounded-lg shadow-lg p-4 transition-all duration-300 transform -translate-y-full z-50`;
+        notificationDiv.className = `fixed bottom-4 right-4 ${color.bg} ${color.border} border rounded-lg shadow-lg px-4 py-3 transition-all duration-300 transform translate-y-full z-50 max-w-xs sm:max-w-sm`;
         
         const icons = {
             success: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>`,
@@ -663,18 +663,18 @@ class AccessiScan {
         };
         
         notificationDiv.innerHTML = `
-            <div class="flex items-start">
+            <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 ${color.icon}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="h-4 w-4 ${color.icon}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         ${icons[type] || icons.info}
                     </svg>
                 </div>
-                <div class="ml-3 w-0 flex-1">
-                    <p class="text-sm font-medium ${color.text} break-words">${message}</p>
+                <div class="ml-2 flex-1">
+                    <p class="text-sm font-medium ${color.text}">${message}</p>
                 </div>
-                <div class="ml-4 flex-shrink-0 flex">
+                <div class="ml-2 flex-shrink-0">
                     <button class="inline-flex ${color.text} hover:${color.text.replace('700', '500')} focus:outline-none" onclick="this.parentElement.parentElement.parentElement.remove()">
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
@@ -686,14 +686,14 @@ class AccessiScan {
         
         // Animate in
         setTimeout(() => {
-            notificationDiv.classList.remove('-translate-y-full');
+            notificationDiv.classList.remove('translate-y-full');
         }, 100);
         
         // Auto-hide after 5 seconds (longer on mobile for easier reading)
         const hideDelay = window.innerWidth <= 768 ? 7000 : 5000;
         setTimeout(() => {
             if (document.body.contains(notificationDiv)) {
-                notificationDiv.classList.add('-translate-y-full');
+                notificationDiv.classList.add('translate-y-full');
                 setTimeout(() => {
                     if (document.body.contains(notificationDiv)) {
                         notificationDiv.remove();
