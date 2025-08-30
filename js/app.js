@@ -137,6 +137,9 @@ class AccessiScan {
      */
     initializeHomepage() {
         try {
+            // Initialize animated background
+            this.initializeAnimatedBackground();
+            
             // Add smooth scrolling for anchor links
             const links = document.querySelectorAll('a[href^="#"]');
             links.forEach(link => {
@@ -149,21 +152,165 @@ class AccessiScan {
                 });
             });
             
-            // Add hover effects for feature cards
-            const featureCards = document.querySelectorAll('.bg-white.p-6.rounded-lg');
-            featureCards.forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    card.style.transform = 'translateY(-2px)';
-                    card.style.transition = 'transform 0.2s ease';
+            // Quick URL analysis functionality
+            const quickUrlInput = document.getElementById('quick-url-input');
+            if (quickUrlInput) {
+                // Add URL analysis functionality
+                window.quickAnalyze = () => {
+                    const url = quickUrlInput.value.trim();
+                    if (url) {
+                        sessionStorage.setItem('quickAnalysisUrl', url);
+                        window.location.href = 'analyze-url.html';
+                    } else {
+                        this.showNotification('Please enter a valid URL', 'error');
+                    }
+                };
+                
+                // Handle Enter key in quick input
+                quickUrlInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        window.quickAnalyze();
+                    }
                 });
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = 'translateY(0)';
-                });
-            });
+            }
             
         } catch (error) {
             console.warn('Homepage initialization had issues:', error);
         }
+    }
+    
+    /**
+     * Initialize animated background effects for Symphony design
+     */
+    initializeAnimatedBackground() {
+        try {
+            this.createDiagonalLines();
+            this.createMovingLines();
+            this.createIntersectionPoints();
+        } catch (error) {
+            console.warn('Background animation initialization had issues:', error);
+        }
+    }
+    
+    /**
+     * Create animated diagonal mesh lines
+     */
+    createDiagonalLines() {
+        const container1 = document.getElementById('diagonal-lines-1');
+        const container2 = document.getElementById('diagonal-lines-2');
+        
+        if (!container1 || !container2) return;
+        
+        // Create diagonal lines with CSS-only animation
+        container1.innerHTML = `
+            <div style="
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -50%;
+                left: -50%;
+                background-image: repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 20px,
+                    rgba(147, 51, 234, 0.1) 21px,
+                    rgba(147, 51, 234, 0.1) 22px,
+                    transparent 23px
+                );
+                animation: diagonalMove 30s linear infinite;
+            "></div>
+        `;
+        
+        container2.innerHTML = `
+            <div style="
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -50%;
+                left: -50%;
+                background-image: repeating-linear-gradient(
+                    -45deg,
+                    transparent,
+                    transparent 15px,
+                    rgba(59, 130, 246, 0.08) 16px,
+                    rgba(59, 130, 246, 0.08) 17px,
+                    transparent 18px
+                );
+                animation: diagonalMove 25s linear infinite reverse;
+            "></div>
+        `;
+    }
+    
+    /**
+     * Create animated horizontal and vertical lines
+     */
+    createMovingLines() {
+        const horizontalContainer = document.getElementById('horizontal-lines');
+        const verticalContainer = document.getElementById('vertical-lines');
+        
+        if (horizontalContainer) {
+            for (let i = 0; i < 3; i++) {
+                const line = document.createElement('div');
+                line.style.cssText = `
+                    position: absolute;
+                    width: 100%;
+                    height: 1px;
+                    background: linear-gradient(90deg, transparent, rgba(147, 51, 234, 0.3), transparent);
+                    top: ${20 + i * 30}%;
+                    animation: horizontalMove ${15 + i * 5}s linear infinite;
+                `;
+                horizontalContainer.appendChild(line);
+            }
+        }
+        
+        if (verticalContainer) {
+            for (let i = 0; i < 3; i++) {
+                const line = document.createElement('div');
+                line.style.cssText = `
+                    position: absolute;
+                    width: 1px;
+                    height: 100%;
+                    background: linear-gradient(180deg, transparent, rgba(59, 130, 246, 0.2), transparent);
+                    left: ${15 + i * 25}%;
+                    animation: verticalMove ${20 + i * 5}s linear infinite;
+                `;
+                verticalContainer.appendChild(line);
+            }
+        }
+    }
+    
+    /**
+     * Create animated intersection points
+     */
+    createIntersectionPoints() {
+        const container = document.getElementById('intersection-points');
+        if (!container) return;
+        
+        const points = [
+            { x: 20, y: 30, delay: 0 },
+            { x: 60, y: 20, delay: 2 },
+            { x: 80, y: 70, delay: 4 },
+            { x: 30, y: 80, delay: 6 },
+            { x: 70, y: 50, delay: 8 }
+        ];
+        
+        points.forEach(point => {
+            const dot = document.createElement('div');
+            dot.style.cssText = `
+                position: absolute;
+                width: 4px;
+                height: 4px;
+                background: rgba(147, 51, 234, 0.8);
+                border-radius: 50%;
+                left: ${point.x}%;
+                top: ${point.y}%;
+                animation: pointPulse 3s ease-in-out infinite;
+                animation-delay: ${point.delay}s;
+                box-shadow: 0 0 10px rgba(147, 51, 234, 0.5);
+            `;
+            container.appendChild(dot);
+        });
     }
     
     /**
@@ -2321,6 +2468,36 @@ function getSeverityClasses(impact) {
     }
 }
 
+
+// Mobile menu toggle function
+function toggleMenu() {
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuIcon = document.getElementById('menu-icon');
+    
+    if (mobileMenu && menuIcon) {
+        const isOpen = mobileMenu.classList.contains('open');
+        
+        if (isOpen) {
+            mobileMenu.classList.remove('open');
+            mobileMenu.style.maxHeight = '0';
+            mobileMenu.style.opacity = '0';
+            menuIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />';
+        } else {
+            mobileMenu.classList.add('open');
+            mobileMenu.style.maxHeight = '500px';
+            mobileMenu.style.opacity = '1';
+            menuIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />';
+        }
+    }
+}
+
+// Smooth scroll function for navigation
+function scrollToSection(sectionId) {
+    const element = document.getElementById(sectionId);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+    }
+}
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {

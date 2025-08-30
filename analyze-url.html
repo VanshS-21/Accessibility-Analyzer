@@ -8,214 +8,278 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.7.2/axe.min.js"></script>
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <!-- Header -->
-    <header class="bg-white shadow-sm border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-6">
-                <div class="flex items-center">
-                    <h1 class="text-3xl font-bold text-indigo-600">AccessiScan</h1>
-                    <span class="ml-2 text-gray-500 text-sm">Web Accessibility Analyzer</span>
-                </div>
-                <nav class="hidden md:flex space-x-8">
-                    <a href="index.html" class="text-gray-700 hover:text-indigo-600 transition-colors">Home</a>
-                    <a href="analyze-html.html" class="text-gray-700 hover:text-indigo-600 transition-colors">HTML Analysis</a>
-                    <a href="analyze-url.html" class="text-indigo-600 font-medium">URL Analysis</a>
-                </nav>
+<body class="bg-gray-950 min-h-screen">
+    <!-- Animated Background -->
+    <div class="background-container">
+        <div class="absolute inset-0 opacity-50 grid-pattern"
+             style="background-image: 
+                    linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+                    background-size: 40px 40px;">
+        </div>
+        
+        <div class="absolute inset-0">
+            <div class="absolute pointer-events-none spotlight-secondary opacity-40"
+                 style="background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+                        width: 500px; height: 500px; top: 20%; right: 10%;
+                        filter: blur(2px);">
             </div>
         </div>
-    </header>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-gray-950/80 backdrop-blur-md border-b border-gray-800/30">
+        <div class="w-full px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center h-16">
+                <div class="flex items-center space-x-2 w-80">
+                    <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-md flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" />
+                        </svg>
+                    </div>
+                    <a href="index.html" class="text-xl font-semibold text-white whitespace-nowrap hover:text-purple-300 transition-colors">AccessiScan</a>
+                </div>
+
+                <div class="hidden md:flex flex-1 justify-center">
+                    <div class="flex items-center space-x-8">
+                        <a href="index.html" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">Home</a>
+                        <a href="analyze-html.html" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">HTML Analysis</a>
+                        <span class="text-white font-medium text-sm px-3 py-2 rounded-md bg-blue-500/20">URL Analysis</span>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center justify-end space-x-4 w-80">
+                    <a href="results.html" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">View Results</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="mb-8">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">Analyze Website URL</h2>
-            <p class="text-lg text-gray-600">
-                Enter a website URL to check for accessibility issues
-            </p>
-        </div>
-
-        <!-- URL Input Form -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-            <form id="url-analysis-form">
-                <div class="mb-4">
-                    <label for="url-input" class="block text-sm font-medium text-gray-700 mb-2">
-                        Website URL
-                    </label>
-                    <div class="flex">
-                        <input 
-                            type="url" 
-                            id="url-input" 
-                            name="url-input"
-                            class="flex-1 p-3 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                            placeholder="https://example.com"
-                            required>
-                        <button 
-                            type="submit" 
-                            id="url-analyze-btn"
-                            class="bg-indigo-600 text-white px-6 py-3 rounded-r-lg font-medium hover:bg-indigo-700 transition-colors flex items-center">
-                            <span id="url-analyze-btn-text">Analyze Website</span>
-                            <svg id="url-analyze-spinner" class="hidden animate-spin ml-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Analysis Options -->
-                <div class="mb-4">
-                    <h3 class="text-sm font-medium text-gray-700 mb-3">Analysis Options</h3>
-                    <div class="space-y-2">
-                        <label class="flex items-center">
-                            <input type="checkbox" id="url-check-wcag-a" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
-                            <span class="ml-2 text-sm text-gray-700">WCAG 2.1 Level A</span>
-                        </label>
-                        <label class="flex items-center">
-                            <input type="checkbox" id="url-check-wcag-aa" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
-                            <span class="ml-2 text-sm text-gray-700">WCAG 2.1 Level AA</span>
-                        </label>
-                        <label class="flex items-center">
-                            <input type="checkbox" id="url-check-best-practices" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
-                            <span class="ml-2 text-sm text-gray-700">Best Practices</span>
-                        </label>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-        <!-- CORS Warning -->
-        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-                <div class="ml-3">
-                    <h3 class="text-sm font-medium text-yellow-800">CORS Limitation Notice</h3>
-                    <div class="mt-1 text-sm text-yellow-700">
-                        <p>Note: Due to browser security (CORS), URL analysis may not work for all external websites. For best results, try analyzing your own websites or use the HTML code analysis instead.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Error Display -->
-        <div id="url-error-message" class="hidden bg-red-50 border-l-4 border-red-400 p-4 mb-6">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm text-red-700" id="url-error-text"></p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Results Preview -->
-        <div id="url-results-preview" class="hidden bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Analysis Complete</h3>
-            <div id="url-results-summary" class="mb-4"></div>
-            <div class="flex gap-4">
-                <button 
-                    id="url-view-results-btn"
-                    class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors">
-                    View Detailed Results
-                </button>
-                <button 
-                    id="url-analyze-another-btn"
-                    class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors">
-                    Analyze Another URL
-                </button>
-            </div>
-        </div>
-
-        <!-- Demo URLs for Testing -->
-        <div class="mt-12 bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6">
-            <h3 class="text-xl font-semibold text-green-900 mb-4">🌐 Demo URLs for Testing</h3>
-            <p class="text-green-700 mb-4">
-                Try these URLs that typically work well for cross-origin analysis:
-            </p>
+    <main class="relative z-10 pt-24 pb-16" role="main">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div class="space-y-2">
-                    <h4 class="font-semibold text-green-800">✅ Same-Origin URLs (Recommended)</h4>
-                    <ul class="text-sm text-green-700 space-y-1">
-                        <li>• <code class="bg-white px-2 py-1 rounded border">https://your-replit-domain.replit.dev</code></li>
-                        <li>• Local development servers</li>
-                        <li>• Your deployed applications</li>
-                    </ul>
-                </div>
-                
-                <div class="space-y-2">
-                    <h4 class="font-semibold text-green-800">🔗 Educational Links</h4>
-                    <ul class="text-sm text-green-700 space-y-1">
-                        <li>• <a href="https://www.w3.org/WAI/" target="_blank" class="underline hover:text-green-500">W3C Web Accessibility Initiative</a></li>
-                        <li>• <a href="https://webaim.org/resources/" target="_blank" class="underline hover:text-green-500">WebAIM Resources</a></li>
-                        <li>• <a href="https://wave.webaim.org/" target="_blank" class="underline hover:text-green-500">WAVE Web Accessibility Evaluator</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="p-3 bg-green-100 rounded border-l-4 border-green-400">
-                <p class="text-sm text-green-800">
-                    <strong>💡 Best Results:</strong> Use your own websites or applications for the most accurate testing. External sites often block cross-origin requests for security.
+            <!-- Page Header -->
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-white mb-4">
+                    Website URL Analysis
+                </h1>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Enter a website URL to analyze for accessibility compliance and WCAG 2.1 violations
                 </p>
             </div>
-        </div>
 
-        <!-- Proxy Alternative -->
-        <div class="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">🔧 Alternative: Manual Analysis</h3>
-            <p class="text-gray-600 mb-4">
-                If the URL analysis doesn't work due to CORS restrictions, you can:
-            </p>
-            <ol class="list-decimal list-inside text-gray-600 space-y-2 mb-6">
-                <li>Visit the website you want to analyze</li>
-                <li>Right-click and select "View Page Source" or press Ctrl+U (Cmd+U on Mac)</li>
-                <li>Copy the HTML source code</li>
-                <li>Use our HTML Analysis feature to paste and analyze the code</li>
-            </ol>
-            <a href="analyze-html.html" 
-               class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors inline-block">
-                🔍 Go to HTML Analysis
-            </a>
-        </div>
+            <!-- URL Input Form -->
+            <div class="analysis-form glass-card mb-8">
+                <form id="url-analysis-form">
+                    <div class="mb-8">
+                        <label for="url-input" class="block text-lg font-medium text-white mb-3">
+                            Website URL
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                </svg>
+                            </div>
+                            <input 
+                                type="url" 
+                                id="url-input" 
+                                name="url-input"
+                                class="input-dark w-full pl-10 pr-32 py-4 text-lg"
+                                placeholder="https://example.com"
+                                required>
+                            <button 
+                                type="submit" 
+                                id="url-analyze-btn"
+                                class="absolute right-2 top-2 bottom-2 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-6 rounded-md font-medium transition-all duration-200 hover:scale-105 flex items-center">
+                                <span id="url-analyze-btn-text">Analyze</span>
+                                <div id="url-analyze-spinner" class="hidden loading-spinner ml-2"></div>
+                            </button>
+                        </div>
+                    </div>
 
-        <!-- Testing Instructions -->
-        <div class="mt-8 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-blue-900 mb-4">🎯 URL Testing Instructions</h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <h4 class="font-semibold text-blue-800 mb-2">✅ Best Practices</h4>
-                    <ul class="text-sm text-blue-700 space-y-1">
-                        <li>• Always include the protocol (https:// or http://)</li>
-                        <li>• Test your own websites for best results</li>
-                        <li>• Use development/staging URLs when possible</li>
-                        <li>• Try public demo sites or educational resources</li>
-                    </ul>
+                    <!-- Analysis Options -->
+                    <fieldset class="mb-8">
+                        <legend class="text-lg font-medium text-white mb-4">Analysis Options</legend>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <label class="flex items-center p-4 bg-gray-800/50 rounded-lg border border-gray-700/50 hover:bg-gray-800/70 transition-colors cursor-pointer">
+                                <input type="checkbox" id="url-check-wcag-a" class="rounded border-gray-600 text-purple-500 bg-gray-800 focus:ring-purple-500" checked>
+                                <span class="ml-3 text-white font-medium">WCAG 2.1 Level A</span>
+                            </label>
+                            <label class="flex items-center p-4 bg-gray-800/50 rounded-lg border border-gray-700/50 hover:bg-gray-800/70 transition-colors cursor-pointer">
+                                <input type="checkbox" id="url-check-wcag-aa" class="rounded border-gray-600 text-purple-500 bg-gray-800 focus:ring-purple-500" checked>
+                                <span class="ml-3 text-white font-medium">WCAG 2.1 Level AA</span>
+                            </label>
+                            <label class="flex items-center p-4 bg-gray-800/50 rounded-lg border border-gray-700/50 hover:bg-gray-800/70 transition-colors cursor-pointer">
+                                <input type="checkbox" id="url-check-best-practices" class="rounded border-gray-600 text-purple-500 bg-gray-800 focus:ring-purple-500" checked>
+                                <span class="ml-3 text-white font-medium">Best Practices</span>
+                            </label>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+            <!-- CORS Warning -->
+            <div class="bg-yellow-500/20 border border-yellow-500/50 rounded-lg p-6 mb-8">
+                <div class="flex items-start">
+                    <svg class="w-6 h-6 text-yellow-400 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <div>
+                        <h3 class="text-lg font-semibold text-yellow-300 mb-2">CORS Limitation Notice</h3>
+                        <p class="text-yellow-200">
+                            Due to browser security (CORS), URL analysis may not work for all external websites. For best results, try analyzing your own websites or use the HTML code analysis instead.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Display -->
+            <div id="url-error-message" class="hidden error-message mb-6">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <p id="url-error-text"></p>
+                </div>
+            </div>
+
+            <!-- Results Preview -->
+            <div id="url-results-preview" class="hidden glass-card p-8">
+                <h3 class="text-2xl font-bold text-white mb-6">
+                    <svg class="w-6 h-6 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Analysis Complete
+                </h3>
+                <div id="url-results-summary" class="mb-6 text-gray-300"></div>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button 
+                        id="url-view-results-btn"
+                        class="btn-gradient text-white px-8 py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105">
+                        View Detailed Results
+                    </button>
+                    <button 
+                        id="url-analyze-another-btn"
+                        class="btn-secondary-dark text-white px-8 py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105">
+                        Analyze Another URL
+                    </button>
+                </div>
+            </div>
+
+            <!-- Demo URLs Section -->
+            <section class="mt-12 glass-card p-8">
+                <h3 class="text-2xl font-bold text-white mb-6">
+                    <svg class="w-6 h-6 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9m0 9a9 9 0 01-9-9m9 9c0 5-4 9-9 9s-9-4-9-9m9 9c0-5 4-9 9-9s9 4 9 9" />
+                    </svg>
+                    Demo URLs for Testing
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div>
+                        <h4 class="text-lg font-semibold text-green-300 mb-4">✅ Recommended URLs</h4>
+                        <ul class="text-gray-300 space-y-3">
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-3 mt-1">•</span>
+                                <div>
+                                    <code class="bg-gray-800 px-2 py-1 rounded text-sm">https://your-replit-domain.replit.dev</code>
+                                    <p class="text-sm text-gray-400 mt-1">Your own Replit applications</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-3 mt-1">•</span>
+                                <div>
+                                    <span class="text-gray-300">Local development servers</span>
+                                    <p class="text-sm text-gray-400 mt-1">Localhost and development environments</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-3 mt-1">•</span>
+                                <div>
+                                    <span class="text-gray-300">Your deployed applications</span>
+                                    <p class="text-sm text-gray-400 mt-1">Apps you own and control</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-semibold text-blue-300 mb-4">📚 Educational Resources</h4>
+                        <ul class="text-gray-300 space-y-3">
+                            <li class="flex items-start">
+                                <span class="text-blue-400 mr-3 mt-1">•</span>
+                                <a href="https://www.w3.org/WAI/" target="_blank" class="text-blue-300 hover:text-blue-200 underline">W3C Web Accessibility Initiative</a>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-blue-400 mr-3 mt-1">•</span>
+                                <a href="https://webaim.org/resources/" target="_blank" class="text-blue-300 hover:text-blue-200 underline">WebAIM Resources</a>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-blue-400 mr-3 mt-1">•</span>
+                                <a href="https://wave.webaim.org/" target="_blank" class="text-blue-300 hover:text-blue-200 underline">WAVE Web Accessibility Evaluator</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 
-                <div>
-                    <h4 class="font-semibold text-blue-800 mb-2">⚠️ Common Issues</h4>
-                    <ul class="text-sm text-blue-700 space-y-1">
-                        <li>• CORS restrictions block many external sites</li>
-                        <li>• Authentication-required sites won't work</li>
-                        <li>• Some CDNs and security services block requests</li>
-                        <li>• Use HTML analysis as a reliable alternative</li>
-                    </ul>
+                <div class="p-4 bg-blue-500/20 border border-blue-500/50 rounded-lg">
+                    <p class="text-blue-200">
+                        <strong>💡 Best Results:</strong> Use your own websites or applications for the most accurate testing. External sites often block cross-origin requests for security.
+                    </p>
                 </div>
-            </div>
-            
-            <div class="mt-4 p-3 bg-blue-100 rounded border-l-4 border-blue-400">
-                <p class="text-sm text-blue-800">
-                    <strong>🔍 Pro Tip:</strong> For the most reliable testing, use the HTML Analysis tool with copied page source code. This bypasses all security restrictions!
+            </section>
+
+            <!-- Alternative Method -->
+            <section class="mt-8 glass-card p-8">
+                <h3 class="text-2xl font-bold text-white mb-6">
+                    <svg class="w-6 h-6 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                    Alternative: Manual Analysis
+                </h3>
+                <p class="text-gray-300 mb-6">
+                    If URL analysis doesn't work due to CORS restrictions, you can manually analyze any website:
                 </p>
-            </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                    <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700/50 text-center">
+                        <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mx-auto mb-3">
+                            <span class="text-2xl font-bold text-purple-400">1</span>
+                        </div>
+                        <p class="text-gray-300 text-sm">Visit the website</p>
+                    </div>
+                    <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700/50 text-center">
+                        <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mx-auto mb-3">
+                            <span class="text-2xl font-bold text-purple-400">2</span>
+                        </div>
+                        <p class="text-gray-300 text-sm">Right-click → View Source</p>
+                    </div>
+                    <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700/50 text-center">
+                        <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mx-auto mb-3">
+                            <span class="text-2xl font-bold text-purple-400">3</span>
+                        </div>
+                        <p class="text-gray-300 text-sm">Copy HTML code</p>
+                    </div>
+                    <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700/50 text-center">
+                        <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mx-auto mb-3">
+                            <span class="text-2xl font-bold text-purple-400">4</span>
+                        </div>
+                        <p class="text-gray-300 text-sm">Use HTML Analysis</p>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <a href="analyze-html.html" 
+                       class="btn-gradient text-white px-8 py-3 rounded-lg font-medium inline-flex items-center transition-all duration-200 hover:scale-105">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                        </svg>
+                        Switch to HTML Analysis
+                    </a>
+                </div>
+            </section>
         </div>
     </main>
 
