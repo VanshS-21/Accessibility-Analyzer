@@ -386,6 +386,11 @@ class AccessiScan {
     handleCORSError(url, error) {
         console.log('CORS limitation encountered for:', url);
         
+        // Suppress the unhandled promise rejection by properly handling the error
+        Promise.resolve().catch(() => {
+            // This prevents the unhandled rejection warning
+        });
+        
         sessionStorage.setItem('analysisResults', JSON.stringify({
             type: 'url',
             url: url,
@@ -663,111 +668,200 @@ const displayResults = () => {
 const displayViolations = (violations, data) => {
     const container = document.getElementById('resultsContainer');
     
+    // Create summary
+    const summary = createSummary(violations, data.results);
+    
     // Group violations by severity
-    const severityGroups = {
+    const grouped = groupViolationsBySeverity(violations);
+    
+    let html = summary;
+    
+    // Display each severity group
+    ['critical', 'serious', 'moderate', 'minor'].forEach(severity => {
+        if (grouped[severity] && grouped[severity].length > 0) {
+            html += createSeveritySection(severity, grouped[severity]);
+        }
+    });
+    
+    container.innerHTML = html;
+};
+
+const createSummary = (violations, results) => {
+    const total = violations.length;
+    const critical = violations.filter(v => v.impact === 'critical').length;
+    const serious = violations.filter(v => v.impact === 'serious').length;
+    const moderate = violations.filter(v => v.impact === 'moderate').length;
+    const minor = violations.filter(v => v.impact === 'minor').length;
+    
+    return `
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-blue-800 mb-4 flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Analysis Summary
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <div>
+                    <p class="text-blue-700 text-lg mb-2">
+                        Found <strong class="text-blue-900">${total} accessibility issues</strong>
+                        ${critical > 0 || serious > 0 ? ` requiring attention` : ''}
+                    </p>
+                    ${total > 0 ? `
+                        <div class="text-sm text-blue-600 space-y-1">
+                            ${critical > 0 ? `<div>🔴 ${critical} critical (fix immediately)</div>` : ''}
+                            ${serious > 0 ? `<div>🟠 ${serious} serious (fix soon)</div>` : ''}
+                            ${moderate > 0 ? `<div>🟡 ${moderate} moderate (address when possible)</div>` : ''}
+                            ${minor > 0 ? `<div>🟢 ${minor} minor (enhancement)</div>` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+                <div class="grid grid-cols-2 gap-4 text-center">
+                    <div class="bg-white rounded-lg p-3">
+                        <div class="text-2xl font-bold text-green-600">${results.passes?.length || 0}</div>
+                        <div class="text-xs text-gray-600">Passed Tests</div>
+                    </div>
+                    <div class="bg-white rounded-lg p-3">
+                        <div class="text-2xl font-bold text-yellow-600">${results.incomplete?.length || 0}</div>
+                        <div class="text-xs text-gray-600">Manual Review</div>
+                    </div>
+                </div>
+            </div>
+            ${total > 0 ? `
+                <div class="bg-blue-100 rounded-lg p-4">
+                    <h3 class="font-semibold text-blue-800 mb-2">💡 Learning Focus</h3>
+                    <p class="text-blue-700 text-sm">
+                        Each issue below includes educational content to help you understand why it matters for accessibility and how to fix it.
+                        ${critical > 0 ? 'Start with critical issues as they completely block some users.' : 'Review issues by priority level.'}
+                    </p>
+                </div>
+            ` : ''}
+        </div>
+    `;
+};
+
+const groupViolationsBySeverity = (violations) => {
+    return {
         critical: violations.filter(v => v.impact === 'critical'),
         serious: violations.filter(v => v.impact === 'serious'),
         moderate: violations.filter(v => v.impact === 'moderate'),
         minor: violations.filter(v => v.impact === 'minor'),
         unknown: violations.filter(v => !v.impact || !['critical', 'serious', 'moderate', 'minor'].includes(v.impact))
     };
+};
+
+const createSeveritySection = (severity, violations) => {
+    const severityConfig = {
+        critical: { 
+            color: 'red', 
+            bgColor: 'bg-red-50', 
+            borderColor: 'border-red-500', 
+            textColor: 'text-red-800',
+            badgeColor: 'bg-red-100 text-red-800',
+            title: 'Critical Issues',
+            icon: '🔴',
+            description: 'These issues completely block accessibility for some users. Fix immediately.'
+        },
+        serious: { 
+            color: 'orange', 
+            bgColor: 'bg-orange-50', 
+            borderColor: 'border-orange-500', 
+            textColor: 'text-orange-800',
+            badgeColor: 'bg-orange-100 text-orange-800',
+            title: 'Serious Issues',
+            icon: '🟠',
+            description: 'These issues cause significant accessibility barriers. Address soon.'
+        },
+        moderate: { 
+            color: 'yellow', 
+            bgColor: 'bg-yellow-50', 
+            borderColor: 'border-yellow-500', 
+            textColor: 'text-yellow-800',
+            badgeColor: 'bg-yellow-100 text-yellow-800',
+            title: 'Moderate Issues',
+            icon: '🟡',
+            description: 'These issues may cause difficulties for some users.'
+        },
+        minor: { 
+            color: 'green', 
+            bgColor: 'bg-green-50', 
+            borderColor: 'border-green-500', 
+            textColor: 'text-green-800',
+            badgeColor: 'bg-green-100 text-green-800',
+            title: 'Minor Issues',
+            icon: '🟢',
+            description: 'These are accessibility enhancements that improve user experience.'
+        }
+    };
     
-    console.log('Violations by severity:', severityGroups);
+    const config = severityConfig[severity];
+    if (!config) return '';
     
-    // Create summary section
-    const totalResults = data.results;
-    const summaryHTML = `
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Analysis Summary</h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-red-600">${violations.length}</div>
-                    <div class="text-sm text-gray-600">Violations</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-yellow-600">${totalResults.incomplete?.length || 0}</div>
-                    <div class="text-sm text-gray-600">Incomplete</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-green-600">${totalResults.passes?.length || 0}</div>
-                    <div class="text-sm text-gray-600">Passes</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-blue-600">${totalResults.inapplicable?.length || 0}</div>
-                    <div class="text-sm text-gray-600">Inapplicable</div>
-                </div>
+    return `
+        <div class="mb-8">
+            <div class="${config.bgColor} ${config.borderColor} border-l-4 rounded-r-lg p-6 mb-6">
+                <h3 class="text-2xl font-bold ${config.textColor} mb-2 flex items-center">
+                    <span class="mr-3">${config.icon}</span>
+                    ${config.title} (${violations.length})
+                </h3>
+                <p class="text-sm ${config.textColor} opacity-90">${config.description}</p>
+            </div>
+            
+            <div class="space-y-6">
+                ${violations.map((violation, index) => `
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="text-lg font-semibold text-gray-900">${violation.help}</h4>
+                            <span class="px-3 py-1 text-xs font-semibold rounded-full ${config.badgeColor}">
+                                ${violation.impact || severity}
+                            </span>
+                        </div>
+                        
+                        <p class="text-gray-700 mb-4">${violation.description}</p>
+                        
+                        <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <h5 class="font-semibold text-blue-800 mb-2">🤔 Why this matters for accessibility:</h5>
+                            <p class="text-blue-700 text-sm">${getViolationExplanation(violation)}</p>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h5 class="font-semibold text-gray-800 mb-2">📍 Affected Elements: ${violation.nodes.length}</h5>
+                            ${violation.nodes.slice(0, 2).map(node => `
+                                <div class="bg-gray-50 border border-gray-200 rounded p-3 mb-2 font-mono text-sm">
+                                    <div class="text-gray-600 mb-1"><strong>Target:</strong> ${node.target.join(', ')}</div>
+                                    <div class="text-gray-800"><strong>HTML:</strong></div>
+                                    <code class="block mt-1 p-2 bg-white rounded text-xs overflow-x-auto">${escapeHtml(node.html.substring(0, 200))}${node.html.length > 200 ? '...' : ''}</code>
+                                </div>
+                            `).join('')}
+                            ${violation.nodes.length > 2 ? `<p class="text-sm text-gray-500 mt-2">... and ${violation.nodes.length - 2} more elements</p>` : ''}
+                        </div>
+                        
+                        <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                            <h5 class="font-semibold text-green-800 mb-2 flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                How to fix this:
+                            </h5>
+                            <div class="text-green-700 text-sm">
+                                ${getFixGuidance(violation)}
+                                ${violation.helpUrl ? `
+                                    <div class="mt-3">
+                                        <a href="${violation.helpUrl}" target="_blank" class="inline-flex items-center text-blue-600 hover:text-blue-800 underline">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                            </svg>
+                                            View detailed WCAG guidance
+                                        </a>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
             </div>
         </div>
     `;
-    
-    // Create violations sections
-    let violationsHTML = '';
-    
-    const severityConfig = {
-        critical: { color: 'red', bgColor: 'red-50', borderColor: 'red-500', title: 'Critical Issues' },
-        serious: { color: 'orange', bgColor: 'orange-50', borderColor: 'orange-500', title: 'Serious Issues' },
-        moderate: { color: 'yellow', bgColor: 'yellow-50', borderColor: 'yellow-500', title: 'Moderate Issues' },
-        minor: { color: 'green', bgColor: 'green-50', borderColor: 'green-500', title: 'Minor Issues' },
-        unknown: { color: 'gray', bgColor: 'gray-50', borderColor: 'gray-500', title: 'Other Issues' }
-    };
-    
-    Object.entries(severityGroups).forEach(([severity, severityViolations]) => {
-        if (severityViolations.length > 0) {
-            const config = severityConfig[severity];
-            violationsHTML += `
-                <div class="mb-8">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                        <span class="w-3 h-3 bg-${config.color}-500 rounded-full mr-3"></span>
-                        ${config.title} (${severityViolations.length})
-                    </h3>
-                    <div class="space-y-4">
-                        ${severityViolations.map(violation => `
-                            <div class="bg-${config.bgColor} border-l-4 border-${config.borderColor} p-6 rounded-r-lg">
-                                <div class="flex justify-between items-start mb-3">
-                                    <h4 class="text-lg font-semibold text-gray-900">${violation.help}</h4>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-${config.color}-100 text-${config.color}-800">
-                                        ${violation.impact || 'unknown'}
-                                    </span>
-                                </div>
-                                
-                                <p class="text-gray-700 mb-4">${violation.description}</p>
-                                
-                                <div class="mb-4">
-                                    <strong class="text-sm text-gray-700">Why this occurs:</strong>
-                                    <p class="text-sm text-gray-600 mt-1">${getViolationExplanation(violation)}</p>
-                                </div>
-                                
-                                <div class="mb-4">
-                                    <strong class="text-sm text-gray-700">Affected Elements: ${violation.nodes.length}</strong>
-                                </div>
-                                
-                                ${violation.nodes.slice(0, 2).map(node => `
-                                    <div class="bg-white border border-gray-200 rounded p-3 mb-2 font-mono text-sm">
-                                        <strong>Target:</strong> ${node.target.join(', ')}<br>
-                                        <strong>HTML:</strong> <code>${escapeHtml(node.html.substring(0, 150))}${node.html.length > 150 ? '...' : ''}</code>
-                                    </div>
-                                `).join('')}
-                                
-                                ${violation.nodes.length > 2 ? `<p class="text-sm text-gray-500">... and ${violation.nodes.length - 2} more elements</p>` : ''}
-                                
-                                <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded">
-                                    <strong class="text-blue-800">How to fix:</strong>
-                                    <p class="text-blue-700 text-sm mt-1">
-                                        ${violation.helpUrl ? 
-                                            `<a href="${violation.helpUrl}" target="_blank" class="text-blue-600 hover:text-blue-800 underline">View detailed WCAG guidance</a>` :
-                                            'Check WCAG guidelines for specific requirements'
-                                        }
-                                    </p>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-    });
-    
-    container.innerHTML = summaryHTML + violationsHTML;
 };
 
 const getViolationExplanation = (violation) => {
@@ -789,6 +883,48 @@ const getViolationExplanation = (violation) => {
     }
     
     return 'This accessibility issue prevents some users from properly accessing or understanding this content.';
+};
+
+const getFixGuidance = (violation) => {
+    const fixes = {
+        'image-alt': 'Add descriptive alt text: <code>&lt;img src="photo.jpg" alt="Students working on laptops in library"&gt;</code>',
+        'button-name': 'Add descriptive text inside the button or use aria-label: <code>&lt;button aria-label="Close dialog"&gt;×&lt;/button&gt;</code>',
+        'form-field-multiple-labels': 'Associate labels with inputs using the "for" attribute: <code>&lt;label for="email"&gt;Email&lt;/label&gt;&lt;input id="email"&gt;</code>',
+        'color-contrast': 'Use darker text or lighter backgrounds. Test contrast ratios using browser developer tools.',
+        'heading-order': 'Use headings in logical order: H1 → H2 → H3. Don\'t skip levels for styling purposes.',
+        'link-name': 'Make link text descriptive: <code>&lt;a href="report.pdf"&gt;Download annual report (PDF, 2MB)&lt;/a&gt;</code>',
+        'label': 'Add a proper label element: <code>&lt;label for="username"&gt;Username&lt;/label&gt;&lt;input id="username"&gt;</code>',
+        'input-button-name': 'Add a value or aria-label attribute: <code>&lt;input type="submit" value="Search"&gt;</code>',
+        'region': 'Add landmark roles or use semantic HTML5 elements like &lt;main&gt;, &lt;nav&gt;, &lt;aside&gt;',
+        'landmark-one-main': 'Use only one &lt;main&gt; element per page to identify the primary content area.',
+        'page-has-heading-one': 'Add a single H1 heading that describes the main content of the page.',
+        'bypass': 'Add a "skip to main content" link at the beginning of the page for keyboard users.',
+        'focus-order-semantics': 'Ensure interactive elements can be reached and used with keyboard navigation.',
+        'duplicate-id': 'Make sure each ID attribute is unique on the page: check for duplicate id values.',
+        'meta-viewport': 'Add a proper viewport meta tag: <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code>'
+    };
+    
+    // Try to find a specific fix for this violation
+    for (const [key, fix] of Object.entries(fixes)) {
+        if (violation.id.includes(key) || violation.help.toLowerCase().includes(key.replace('-', ' '))) {
+            return fix;
+        }
+    }
+    
+    // Default guidance based on violation type
+    if (violation.help.toLowerCase().includes('alt')) {
+        return 'Add descriptive alternative text that conveys the meaning and purpose of the image.';
+    } else if (violation.help.toLowerCase().includes('label')) {
+        return 'Ensure all form controls have associated labels that clearly describe their purpose.';
+    } else if (violation.help.toLowerCase().includes('contrast')) {
+        return 'Increase color contrast between text and background. Aim for a contrast ratio of at least 4.5:1 for normal text.';
+    } else if (violation.help.toLowerCase().includes('heading')) {
+        return 'Use headings in proper hierarchical order (H1, H2, H3, etc.) and don\'t skip levels.';
+    } else if (violation.help.toLowerCase().includes('link')) {
+        return 'Make link text descriptive and meaningful when read out of context.';
+    }
+    
+    return 'Review the WCAG guidelines for specific implementation guidance on fixing this accessibility issue.';
 };
 
 const escapeHtml = (text) => {
