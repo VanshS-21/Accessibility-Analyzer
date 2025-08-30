@@ -728,12 +728,37 @@ const createSummary = (violations, results) => {
                 </div>
             </div>
             ${total > 0 ? `
-                <div class="bg-blue-100 rounded-lg p-4">
-                    <h3 class="font-semibold text-blue-800 mb-2">💡 Learning Focus</h3>
-                    <p class="text-blue-700 text-sm">
-                        Each issue below includes educational content to help you understand why it matters for accessibility and how to fix it.
-                        ${critical > 0 ? 'Start with critical issues as they completely block some users.' : 'Review issues by priority level.'}
-                    </p>
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
+                    <h3 class="font-bold text-blue-800 mb-3 flex items-center">
+                        <span class="mr-2">📚</span>
+                        Your Accessibility Learning Plan
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="space-y-2">
+                            <h4 class="font-semibold text-blue-700">🎯 Priority Order:</h4>
+                            <ul class="text-blue-600 space-y-1">
+                                ${critical > 0 ? '<li>🔴 <strong>Start with Critical</strong> - These block users completely</li>' : ''}
+                                ${serious > 0 ? '<li>🟠 <strong>Then Serious</strong> - These create major barriers</li>' : ''}
+                                ${moderate > 0 ? '<li>🟡 <strong>Address Moderate</strong> - These cause difficulties</li>' : ''}
+                                ${minor > 0 ? '<li>🟢 <strong>Finally Minor</strong> - These enhance experience</li>' : ''}
+                            </ul>
+                        </div>
+                        <div class="space-y-2">
+                            <h4 class="font-semibold text-blue-700">📖 What You'll Learn:</h4>
+                            <ul class="text-blue-600 space-y-1">
+                                <li>• WCAG success criteria and compliance levels</li>
+                                <li>• Real-world impact on users with disabilities</li>
+                                <li>• Step-by-step fixes with code examples</li>
+                                <li>• Best practices for inclusive design</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-blue-100 rounded border-l-4 border-blue-400">
+                        <p class="text-blue-700 text-sm">
+                            <strong>💡 Study Tip:</strong> Each issue includes WCAG success criteria badges, real-world impact examples, 
+                            and links to official guidelines. Use this as a learning opportunity to build accessible coding skills!
+                        </p>
+                    </div>
                 </div>
             ` : ''}
         </div>
@@ -812,20 +837,35 @@ const createSeveritySection = (severity, violations) => {
                     <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
                         <div class="flex justify-between items-start mb-4">
                             <h4 class="text-lg font-semibold text-gray-900">${violation.help}</h4>
-                            <span class="px-3 py-1 text-xs font-semibold rounded-full ${config.badgeColor}">
-                                ${violation.impact || severity}
-                            </span>
+                            <div class="flex flex-col items-end space-y-2">
+                                <span class="px-3 py-1 text-xs font-semibold rounded-full ${config.badgeColor}">
+                                    ${violation.impact || severity}
+                                </span>
+                                ${getWCAGBadge(violation)}
+                            </div>
                         </div>
                         
                         <p class="text-gray-700 mb-4">${violation.description}</p>
                         
                         <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                            <h5 class="font-semibold text-blue-800 mb-2">🤔 Why this matters for accessibility:</h5>
-                            <p class="text-blue-700 text-sm">${getViolationExplanation(violation)}</p>
+                            <h5 class="font-semibold text-blue-800 mb-2 flex items-center">
+                                <span class="mr-2">🤔</span>
+                                Why this matters for accessibility:
+                            </h5>
+                            <p class="text-blue-700 text-sm mb-3">${getViolationExplanation(violation)}</p>
+                            <div class="text-blue-600 text-xs">
+                                <strong>Real-world impact:</strong> ${getRealWorldImpact(violation)}
+                            </div>
                         </div>
                         
                         <div class="mb-4">
-                            <h5 class="font-semibold text-gray-800 mb-2">📍 Affected Elements: ${violation.nodes.length}</h5>
+                            <h5 class="font-semibold text-gray-800 mb-2 flex items-center">
+                                <span class="mr-2">📍</span>
+                                <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-sm mr-2">
+                                    ${violation.nodes.length} element${violation.nodes.length !== 1 ? 's' : ''}
+                                </span>
+                                affected by this issue
+                            </h5>
                             ${violation.nodes.slice(0, 2).map(node => `
                                 <div class="bg-gray-50 border border-gray-200 rounded p-3 mb-2 font-mono text-sm">
                                     <div class="text-gray-600 mb-1"><strong>Target:</strong> ${node.target.join(', ')}</div>
@@ -846,12 +886,12 @@ const createSeveritySection = (severity, violations) => {
                             <div class="text-green-700 text-sm">
                                 ${getFixGuidance(violation)}
                                 ${violation.helpUrl ? `
-                                    <div class="mt-3">
-                                        <a href="${violation.helpUrl}" target="_blank" class="inline-flex items-center text-blue-600 hover:text-blue-800 underline">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                    <div class="mt-4 pt-3 border-t border-green-200">
+                                        <a href="${violation.helpUrl}" target="_blank" class="inline-flex items-center bg-blue-100 text-blue-700 px-3 py-2 rounded-lg hover:bg-blue-200 transition-colors text-sm font-medium">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                                             </svg>
-                                            View detailed WCAG guidance
+                                            📖 Study the official WCAG guidelines
                                         </a>
                                     </div>
                                 ` : ''}
@@ -862,6 +902,64 @@ const createSeveritySection = (severity, violations) => {
             </div>
         </div>
     `;
+};
+
+const getWCAGBadge = (violation) => {
+    // Map common violation IDs to WCAG success criteria
+    const wcagMap = {
+        'image-alt': { criteria: '1.1.1', level: 'A', name: 'Non-text Content' },
+        'button-name': { criteria: '4.1.2', level: 'A', name: 'Name, Role, Value' },
+        'color-contrast': { criteria: '1.4.3', level: 'AA', name: 'Contrast (Minimum)' },
+        'heading-order': { criteria: '1.3.1', level: 'A', name: 'Info and Relationships' },
+        'link-name': { criteria: '2.4.4', level: 'A', name: 'Link Purpose (In Context)' },
+        'label': { criteria: '1.3.1', level: 'A', name: 'Info and Relationships' },
+        'form-field-multiple-labels': { criteria: '3.3.2', level: 'A', name: 'Labels or Instructions' },
+        'region': { criteria: '1.3.1', level: 'A', name: 'Info and Relationships' },
+        'landmark-one-main': { criteria: '2.4.1', level: 'A', name: 'Bypass Blocks' },
+        'page-has-heading-one': { criteria: '2.4.6', level: 'AA', name: 'Headings and Labels' },
+        'bypass': { criteria: '2.4.1', level: 'A', name: 'Bypass Blocks' },
+        'duplicate-id': { criteria: '4.1.1', level: 'A', name: 'Parsing' },
+        'meta-viewport': { criteria: '1.4.4', level: 'AA', name: 'Resize text' }
+    };
+
+    // Try to find matching WCAG criteria
+    for (const [key, wcag] of Object.entries(wcagMap)) {
+        if (violation.id.includes(key)) {
+            const levelColor = wcag.level === 'A' ? 'bg-green-100 text-green-700' : 
+                              wcag.level === 'AA' ? 'bg-blue-100 text-blue-700' : 
+                              'bg-purple-100 text-purple-700';
+            return `
+                <span class="px-2 py-1 text-xs font-medium rounded ${levelColor}">
+                    WCAG ${wcag.criteria} (Level ${wcag.level})
+                </span>
+            `;
+        }
+    }
+    
+    return '<span class="px-2 py-1 text-xs font-medium rounded bg-gray-100 text-gray-600">WCAG Guideline</span>';
+};
+
+const getRealWorldImpact = (violation) => {
+    const impacts = {
+        'image-alt': 'A blind student using a screen reader will hear "image" instead of understanding what the image shows.',
+        'button-name': 'Users with motor disabilities using voice control cannot activate buttons without proper names.',
+        'color-contrast': 'Students with dyslexia or low vision may struggle to read low-contrast text, especially in bright environments.',
+        'heading-order': 'Screen reader users rely on proper heading structure to quickly navigate and understand page content.',
+        'link-name': 'Students using screen readers often navigate by links, so "click here" provides no context about the destination.',
+        'label': 'Users with cognitive disabilities need clear labels to understand what information to provide in forms.',
+        'form-field-multiple-labels': 'Multiple labels can confuse assistive technology and users about which label applies to which field.',
+        'region': 'Screen reader users rely on landmarks to quickly navigate to different sections of a page.',
+        'duplicate-id': 'Assistive technologies may behave unpredictably when encountering duplicate IDs, breaking functionality.',
+        'meta-viewport': 'Users with low vision who need to zoom content may find text becomes unusable without proper viewport settings.'
+    };
+
+    for (const [key, impact] of Object.entries(impacts)) {
+        if (violation.id.includes(key)) {
+            return impact;
+        }
+    }
+    
+    return 'This creates barriers for users with disabilities who rely on assistive technologies.';
 };
 
 const getViolationExplanation = (violation) => {
