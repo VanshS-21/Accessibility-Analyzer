@@ -59,7 +59,7 @@ class AccessiScan {
 
         if (clearBtn) {
             clearBtn.addEventListener('click', () => {
-                htmlInput.value = '';
+                this.clearTextarea();
                 this.hideError();
                 this.hideResults();
             });
@@ -68,6 +68,28 @@ class AccessiScan {
         if (sampleBtn) {
             sampleBtn.addEventListener('click', () => {
                 this.loadSampleHTML();
+            });
+        }
+
+        // New sample loading buttons
+        const sampleProblematicBtn = document.getElementById('sample-problematic-btn');
+        if (sampleProblematicBtn) {
+            sampleProblematicBtn.addEventListener('click', () => {
+                this.loadSampleHTML('problematic');
+            });
+        }
+
+        const sampleCleanBtn = document.getElementById('sample-clean-btn');
+        if (sampleCleanBtn) {
+            sampleCleanBtn.addEventListener('click', () => {
+                this.loadSampleHTML('clean');
+            });
+        }
+
+        const sampleEducationalBtn = document.getElementById('sample-educational-btn');
+        if (sampleEducationalBtn) {
+            sampleEducationalBtn.addEventListener('click', () => {
+                this.loadSampleHTML('educational');
             });
         }
 
@@ -88,24 +110,127 @@ class AccessiScan {
         }
     }
 
-    loadSampleHTML() {
-        const sampleHTML = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Sample Page with Accessibility Issues</title>
-</head>
+    // Sample HTML data for testing and demonstration
+    getSampleHTMLs() {
+        return {
+            problematic: `<!DOCTYPE html>
+<html>
+<head><title>Test Page with Issues</title></head>
 <body>
+    <!-- Multiple accessibility violations for demonstration -->
     <img src="test.jpg">
     <button>Click</button>
     <input type="text">
-    <div style="color: #ccc; background: #ddd;">Poor contrast text</div>
+    <div style="color: #ccc; background: #ddd;">Low contrast text</div>
     <h3>Wrong heading order</h3>
     <h1>This should be h2</h1>
-    <a href="#">Empty link text</a>
+    <a href="#">Empty link</a>
+    <table>
+        <tr><td>No headers</td><td>Bad table</td></tr>
+    </table>
+    <form>
+        <input type="password">
+        <button type="submit">Submit</button>
+    </form>
 </body>
-</html>`;
+</html>`,
+            
+            clean: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessible Page Example</title>
+</head>
+<body>
+    <h1>Main Heading</h1>
+    <img src="test.jpg" alt="Descriptive alt text for the image">
+    <button type="button">Accessible Button</button>
+    <label for="email">Email Address:</label>
+    <input type="email" id="email" name="email" required>
+    <a href="https://example.com">Visit Example Site</a>
+    <table>
+        <thead>
+            <tr><th>Name</th><th>Role</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>John Doe</td><td>Developer</td></tr>
+        </tbody>
+    </table>
+</body>
+</html>`,
+
+            educational: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Example - Mixed Issues</title>
+</head>
+<body>
+    <h1>Learning Web Accessibility</h1>
+    <h2>Common Issues to Fix</h2>
+    
+    <!-- Good examples -->
+    <img src="chart.png" alt="Sales increased 25% from Q1 to Q2">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username">
+    
+    <!-- Issues to demonstrate -->
+    <img src="logo.png">
+    <button>Submit</button>
+    <input type="password">
+    <div style="color: #aaa; background: #eee;">Poor contrast example</div>
+    
+    <h2>Navigation</h2>
+    <a href="#">Click here</a>
+    <a href="about.html">Learn more about our company</a>
+</body>
+</html>`
+        };
+    }
+
+    loadSampleHTML(type = 'problematic') {
+        const textarea = document.getElementById('html-input');
+        const samples = this.getSampleHTMLs();
         
-        document.getElementById('html-input').value = sampleHTML;
+        if (textarea && samples[type]) {
+            textarea.value = samples[type];
+            
+            // Show notification about which sample was loaded
+            const sampleNames = {
+                problematic: 'Sample with Issues',
+                clean: 'Clean Sample',
+                educational: 'Educational Sample'
+            };
+            
+            this.showNotification(`${sampleNames[type]} loaded successfully!`, 'info');
+            
+            // Update sample indicator
+            this.updateSampleIndicator(sampleNames[type]);
+        }
+    }
+
+    clearTextarea() {
+        const textarea = document.getElementById('html-input');
+        if (textarea) {
+            textarea.value = '';
+            this.showNotification('Textarea cleared!', 'info');
+            this.updateSampleIndicator('');
+        }
+    }
+
+    updateSampleIndicator(sampleName) {
+        const indicator = document.getElementById('sample-indicator');
+        if (indicator) {
+            if (sampleName) {
+                indicator.textContent = `Current: ${sampleName}`;
+                indicator.className = 'text-sm text-blue-600 font-medium';
+            } else {
+                indicator.textContent = '';
+                indicator.className = 'text-sm text-gray-500';
+            }
+        }
     }
 
     async analyzeHTML() {

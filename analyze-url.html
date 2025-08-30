@@ -133,9 +133,43 @@
             </div>
         </div>
 
+        <!-- Demo URLs for Testing -->
+        <div class="mt-12 bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6">
+            <h3 class="text-xl font-semibold text-green-900 mb-4">🌐 Demo URLs for Testing</h3>
+            <p class="text-green-700 mb-4">
+                Try these URLs that typically work well for cross-origin analysis:
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="space-y-2">
+                    <h4 class="font-semibold text-green-800">✅ Same-Origin URLs (Recommended)</h4>
+                    <ul class="text-sm text-green-700 space-y-1">
+                        <li>• <code class="bg-white px-2 py-1 rounded border">https://your-replit-domain.replit.dev</code></li>
+                        <li>• Local development servers</li>
+                        <li>• Your deployed applications</li>
+                    </ul>
+                </div>
+                
+                <div class="space-y-2">
+                    <h4 class="font-semibold text-green-800">🔗 Educational Links</h4>
+                    <ul class="text-sm text-green-700 space-y-1">
+                        <li>• <a href="https://www.w3.org/WAI/" target="_blank" class="underline hover:text-green-500">W3C Web Accessibility Initiative</a></li>
+                        <li>• <a href="https://webaim.org/resources/" target="_blank" class="underline hover:text-green-500">WebAIM Resources</a></li>
+                        <li>• <a href="https://wave.webaim.org/" target="_blank" class="underline hover:text-green-500">WAVE Web Accessibility Evaluator</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="p-3 bg-green-100 rounded border-l-4 border-green-400">
+                <p class="text-sm text-green-800">
+                    <strong>💡 Best Results:</strong> Use your own websites or applications for the most accurate testing. External sites often block cross-origin requests for security.
+                </p>
+            </div>
+        </div>
+
         <!-- Proxy Alternative -->
-        <div class="mt-12 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Alternative: Manual Analysis</h3>
+        <div class="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">🔧 Alternative: Manual Analysis</h3>
             <p class="text-gray-600 mb-4">
                 If the URL analysis doesn't work due to CORS restrictions, you can:
             </p>
@@ -147,19 +181,41 @@
             </ol>
             <a href="analyze-html.html" 
                class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors inline-block">
-                Go to HTML Analysis
+                🔍 Go to HTML Analysis
             </a>
         </div>
 
-        <!-- Tips -->
-        <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-blue-900 mb-3">Tips for URL Analysis</h3>
-            <ul class="text-sm text-blue-800 space-y-2">
-                <li>• Make sure to include the protocol (http:// or https://)</li>
-                <li>• Some websites may block cross-origin requests for security reasons</li>
-                <li>• Public websites and demo sites typically work better than private or secured sites</li>
-                <li>• If analysis fails, try the HTML analysis method described above</li>
-            </ul>
+        <!-- Testing Instructions -->
+        <div class="mt-8 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-blue-900 mb-4">🎯 URL Testing Instructions</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-semibold text-blue-800 mb-2">✅ Best Practices</h4>
+                    <ul class="text-sm text-blue-700 space-y-1">
+                        <li>• Always include the protocol (https:// or http://)</li>
+                        <li>• Test your own websites for best results</li>
+                        <li>• Use development/staging URLs when possible</li>
+                        <li>• Try public demo sites or educational resources</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-blue-800 mb-2">⚠️ Common Issues</h4>
+                    <ul class="text-sm text-blue-700 space-y-1">
+                        <li>• CORS restrictions block many external sites</li>
+                        <li>• Authentication-required sites won't work</li>
+                        <li>• Some CDNs and security services block requests</li>
+                        <li>• Use HTML analysis as a reliable alternative</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-4 p-3 bg-blue-100 rounded border-l-4 border-blue-400">
+                <p class="text-sm text-blue-800">
+                    <strong>🔍 Pro Tip:</strong> For the most reliable testing, use the HTML Analysis tool with copied page source code. This bypasses all security restrictions!
+                </p>
+            </div>
         </div>
     </main>
 
