@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Analysis - AccessiScan</title>
+    <title>URL Analysis - Symphony</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.7.2/axe.min.js"></script>
     <link rel="stylesheet" href="css/styles.css">
@@ -31,13 +31,13 @@
     <nav class="fixed top-0 left-0 right-0 z-50 bg-gray-950/80 backdrop-blur-md border-b border-gray-800/30">
         <div class="w-full px-4 sm:px-6 lg:px-8">
             <div class="flex items-center h-16">
-                <div class="flex items-center space-x-2 w-80">
+                <div class="flex items-center space-x-2">
                     <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-md flex items-center justify-center">
                         <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" />
                         </svg>
                     </div>
-                    <a href="index.html" class="text-xl font-semibold text-white whitespace-nowrap hover:text-purple-300 transition-colors">AccessiScan</a>
+                    <a href="index.html" class="text-xl font-semibold text-white hover:text-purple-300 transition-colors">Symphony</a>
                 </div>
 
                 <div class="hidden md:flex flex-1 justify-center">
@@ -45,10 +45,11 @@
                         <a href="index.html" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">Home</a>
                         <a href="analyze-html.html" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">HTML Analysis</a>
                         <span class="text-white font-medium text-sm px-3 py-2 rounded-md bg-blue-500/20">URL Analysis</span>
+                        <a href="dashboard.html" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">Dashboard</a>
                     </div>
                 </div>
                 
-                <div class="hidden md:flex items-center justify-end space-x-4 w-80">
+                <div class="hidden md:flex items-center justify-end space-x-4">
                     <a href="results.html" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">View Results</a>
                 </div>
             </div>
@@ -70,7 +71,7 @@
             </div>
 
             <!-- URL Input Form -->
-            <div class="analysis-form glass-card mb-8">
+            <div class="analysis-form symphony-card mb-8">
                 <form id="url-analysis-form">
                     <div class="mb-8">
                         <label for="url-input" class="block text-lg font-medium text-white mb-3">
@@ -86,13 +87,13 @@
                                 type="url" 
                                 id="url-input" 
                                 name="url-input"
-                                class="input-dark w-full pl-10 pr-32 py-4 text-lg"
+                                class="input-dark w-full pl-10 pr-32 py-4 text-lg rounded-xl"
                                 placeholder="https://example.com"
                                 required>
                             <button 
                                 type="submit" 
                                 id="url-analyze-btn"
-                                class="absolute right-2 top-2 bottom-2 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-6 rounded-md font-medium transition-all duration-200 hover:scale-105 flex items-center">
+                                class="absolute right-2 top-2 bottom-2 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-6 rounded-lg font-medium transition-all duration-200 hover:scale-105 flex items-center">
                                 <span id="url-analyze-btn-text">Analyze</span>
                                 <div id="url-analyze-spinner" class="hidden loading-spinner ml-2"></div>
                             </button>
@@ -121,7 +122,7 @@
             </div>
 
             <!-- CORS Warning -->
-            <div class="bg-yellow-500/20 border border-yellow-500/50 rounded-lg p-6 mb-8">
+            <div class="bg-yellow-500/20 border border-yellow-500/50 rounded-xl p-6 mb-8">
                 <div class="flex items-start">
                     <svg class="w-6 h-6 text-yellow-400 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -146,7 +147,7 @@
             </div>
 
             <!-- Results Preview -->
-            <div id="url-results-preview" class="hidden glass-card p-8">
+            <div id="url-results-preview" class="hidden symphony-card">
                 <h3 class="text-2xl font-bold text-white mb-6">
                     <svg class="w-6 h-6 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -168,71 +169,8 @@
                 </div>
             </div>
 
-            <!-- Demo URLs Section -->
-            <section class="mt-12 glass-card p-8">
-                <h3 class="text-2xl font-bold text-white mb-6">
-                    <svg class="w-6 h-6 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9m0 9a9 9 0 01-9-9m9 9c0 5-4 9-9 9s-9-4-9-9m9 9c0-5 4-9 9-9s9 4 9 9" />
-                    </svg>
-                    Demo URLs for Testing
-                </h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                    <div>
-                        <h4 class="text-lg font-semibold text-green-300 mb-4">✅ Recommended URLs</h4>
-                        <ul class="text-gray-300 space-y-3">
-                            <li class="flex items-start">
-                                <span class="text-green-400 mr-3 mt-1">•</span>
-                                <div>
-                                    <code class="bg-gray-800 px-2 py-1 rounded text-sm">https://your-replit-domain.replit.dev</code>
-                                    <p class="text-sm text-gray-400 mt-1">Your own Replit applications</p>
-                                </div>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-green-400 mr-3 mt-1">•</span>
-                                <div>
-                                    <span class="text-gray-300">Local development servers</span>
-                                    <p class="text-sm text-gray-400 mt-1">Localhost and development environments</p>
-                                </div>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-green-400 mr-3 mt-1">•</span>
-                                <div>
-                                    <span class="text-gray-300">Your deployed applications</span>
-                                    <p class="text-sm text-gray-400 mt-1">Apps you own and control</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4 class="text-lg font-semibold text-blue-300 mb-4">📚 Educational Resources</h4>
-                        <ul class="text-gray-300 space-y-3">
-                            <li class="flex items-start">
-                                <span class="text-blue-400 mr-3 mt-1">•</span>
-                                <a href="https://www.w3.org/WAI/" target="_blank" class="text-blue-300 hover:text-blue-200 underline">W3C Web Accessibility Initiative</a>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-blue-400 mr-3 mt-1">•</span>
-                                <a href="https://webaim.org/resources/" target="_blank" class="text-blue-300 hover:text-blue-200 underline">WebAIM Resources</a>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-blue-400 mr-3 mt-1">•</span>
-                                <a href="https://wave.webaim.org/" target="_blank" class="text-blue-300 hover:text-blue-200 underline">WAVE Web Accessibility Evaluator</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="p-4 bg-blue-500/20 border border-blue-500/50 rounded-lg">
-                    <p class="text-blue-200">
-                        <strong>💡 Best Results:</strong> Use your own websites or applications for the most accurate testing. External sites often block cross-origin requests for security.
-                    </p>
-                </div>
-            </section>
-
             <!-- Alternative Method -->
-            <section class="mt-8 glass-card p-8">
+            <section class="mt-8 symphony-card">
                 <h3 class="text-2xl font-bold text-white mb-6">
                     <svg class="w-6 h-6 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />

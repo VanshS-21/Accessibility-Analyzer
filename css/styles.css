@@ -45,33 +45,43 @@
     animation: spotlightPulse 8s ease-in-out infinite;
 }
 
-/* Mesh SVG Animations */
-.mesh-svg {
-    animation: meshFlow 25s linear infinite;
+/* ===================================
+   SYMPHONY CARD COMPONENT
+=================================== */
+
+.symphony-card {
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
 }
 
-.curve-line-1 {
-    animation: pathDraw 20s linear infinite;
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
+.symphony-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(147, 51, 234, 0.5), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-.curve-line-2 {
-    animation: pathDraw 25s linear infinite 5s;
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
+.symphony-card:hover {
+    background: rgba(51, 65, 85, 0.7);
+    border-color: rgba(100, 116, 139, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
-.curve-line-3 {
-    animation: pathDraw 22s linear infinite 10s;
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
-}
-
-.curve-line-4 {
-    animation: pathDraw 18s linear infinite 15s;
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
+.symphony-card:hover::before {
+    opacity: 1;
 }
 
 /* ===================================
@@ -98,40 +108,6 @@
     50% { opacity: 0.6; transform: scale(1.2); }
 }
 
-@keyframes meshFlow {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100px); }
-}
-
-@keyframes pathDraw {
-    0% { stroke-dashoffset: 1000; opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { stroke-dashoffset: 0; opacity: 0; }
-}
-
-@keyframes diagonalMove {
-    0% { transform: translate(-50px, -50px); }
-    100% { transform: translate(50px, 50px); }
-}
-
-@keyframes horizontalMove {
-    0% { transform: translateX(-100%); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translateX(200%); opacity: 0; }
-}
-
-@keyframes verticalMove {
-    0% { transform: translateY(-100%); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translateY(200%); opacity: 0; }
-}
-
-@keyframes pointPulse {
-    0%, 100% { opacity: 0.3; transform: scale(1); }
-    50% { opacity: 0.8; transform: scale(1.5); }
-}
-
 /* ===================================
    NAVIGATION STYLES
 =================================== */
@@ -152,26 +128,10 @@ nav {
 }
 
 /* ===================================
-   COMPONENT STYLES
+   BUTTON STYLES
 =================================== */
 
-/* Glass Card Effect */
-.glass-card {
-    background: rgba(31, 41, 55, 0.8);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(75, 85, 99, 0.3);
-}
-
-/* Gradient Text */
-.gradient-text {
-    background: linear-gradient(135deg, rgb(147, 51, 234), rgb(59, 130, 246));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* Button Animations */
+/* Gradient Button */
 .btn-gradient {
     background: linear-gradient(135deg, rgb(147, 51, 234), rgb(59, 130, 246));
     position: relative;
@@ -235,222 +195,6 @@ nav {
     color: rgba(156, 163, 175, 0.7);
 }
 
-/* ===================================
-   LOADING ANIMATIONS
-=================================== */
-
-.loading-spinner {
-    border: 2px solid rgba(147, 51, 234, 0.2);
-    border-left: 2px solid rgb(147, 51, 234);
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Loading Shimmer Effect */
-.loading-shimmer {
-    position: relative;
-    overflow: hidden;
-}
-
-.loading-shimmer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(147, 51, 234, 0.2), transparent);
-    animation: shimmer 2s infinite;
-    z-index: 1;
-}
-
-@keyframes shimmer {
-    0% { left: -100%; }
-    100% { left: 100%; }
-}
-
-/* ===================================
-   ANALYSIS RESULTS STYLES
-=================================== */
-
-/* Score Card */
-.score-card {
-    background: linear-gradient(135deg, rgba(31, 41, 55, 0.9), rgba(55, 65, 81, 0.8));
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(75, 85, 99, 0.3);
-}
-
-/* Grade Badge */
-.grade-badge {
-    background: linear-gradient(135deg, rgb(251, 191, 36), rgb(245, 158, 11));
-    color: white;
-    font-weight: bold;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.grade-badge.grade-a {
-    background: linear-gradient(135deg, rgb(34, 197, 94), rgb(22, 163, 74));
-}
-
-.grade-badge.grade-b {
-    background: linear-gradient(135deg, rgb(251, 191, 36), rgb(245, 158, 11));
-}
-
-.grade-badge.grade-c {
-    background: linear-gradient(135deg, rgb(249, 115, 22), rgb(234, 88, 12));
-}
-
-.grade-badge.grade-d {
-    background: linear-gradient(135deg, rgb(239, 68, 68), rgb(220, 38, 38));
-}
-
-/* Progress Bar */
-.progress-bar {
-    background: rgba(31, 41, 55, 0.8);
-    height: 8px;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, rgb(147, 51, 234), rgb(59, 130, 246));
-    border-radius: 4px;
-    transition: width 1s ease-out;
-}
-
-/* Category Cards */
-.category-card {
-    background: rgba(31, 41, 55, 0.6);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(75, 85, 99, 0.3);
-    border-radius: 12px;
-    padding: 24px;
-    transition: all 0.3s ease;
-}
-
-.category-card:hover {
-    background: rgba(55, 65, 81, 0.7);
-    border-color: rgba(107, 114, 128, 0.5);
-    transform: translateY(-2px);
-}
-
-/* Issue Severity Colors */
-.severity-critical {
-    color: rgb(239, 68, 68);
-    background: rgba(239, 68, 68, 0.1);
-}
-
-.severity-serious {
-    color: rgb(249, 115, 22);
-    background: rgba(249, 115, 22, 0.1);
-}
-
-.severity-moderate {
-    color: rgb(251, 191, 36);
-    background: rgba(251, 191, 36, 0.1);
-}
-
-.severity-minor {
-    color: rgb(59, 130, 246);
-    background: rgba(59, 130, 246, 0.1);
-}
-
-/* ===================================
-   ACCESSIBILITY FEATURES
-=================================== */
-
-/* Screen reader only content */
-.sr-only {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    padding: 0 !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    white-space: nowrap !important;
-    border: 0 !important;
-}
-
-/* Skip link for keyboard navigation */
-.skip-link {
-    position: absolute;
-    top: -40px;
-    left: 6px;
-    background: #6366f1;
-    color: white;
-    padding: 8px;
-    text-decoration: none;
-    border-radius: 4px;
-    z-index: 9999;
-    transition: top 0.2s ease;
-}
-
-.skip-link:focus {
-    top: 6px;
-}
-
-/* Focus Indicators */
-button:focus,
-input:focus,
-textarea:focus,
-a:focus {
-    outline: 2px solid rgb(147, 51, 234);
-    outline-offset: 2px;
-}
-
-/* ===================================
-   RESPONSIVE DESIGN
-=================================== */
-
-/* Mobile Optimizations */
-@media (max-width: 768px) {
-    .spotlight-main {
-        width: 400px;
-        height: 400px;
-    }
-    
-    .spotlight-secondary {
-        width: 300px;
-        height: 300px;
-    }
-    
-    .spotlight-focus {
-        width: 200px;
-        height: 200px;
-    }
-    
-    .glass-card {
-        margin: 16px;
-        padding: 20px;
-    }
-}
-
-/* ===================================
-   FORM STYLES
-=================================== */
-
-/* Analysis Form */
-.analysis-form {
-    background: rgba(31, 41, 55, 0.8);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(75, 85, 99, 0.3);
-    border-radius: 16px;
-    padding: 32px;
-}
-
 /* Textarea Dark */
 .textarea-dark {
     background: rgba(17, 24, 39, 0.8);
@@ -473,6 +217,37 @@ a:focus {
 
 .textarea-dark::placeholder {
     color: rgba(156, 163, 175, 0.5);
+}
+
+/* ===================================
+   LOADING ANIMATIONS
+=================================== */
+
+.loading-spinner {
+    border: 2px solid rgba(147, 51, 234, 0.2);
+    border-left: 2px solid rgb(147, 51, 234);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===================================
+   ANALYSIS FORM STYLES
+=================================== */
+
+/* Analysis Form */
+.analysis-form {
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    border-radius: 16px;
+    padding: 32px;
 }
 
 /* ===================================
@@ -511,7 +286,7 @@ a:focus {
 }
 
 /* ===================================
-   RESULTS PAGE STYLES
+   RESULTS STYLES
 =================================== */
 
 /* Dashboard Layout */
@@ -519,22 +294,6 @@ a:focus {
     background: rgba(17, 24, 39, 0.95);
     backdrop-filter: blur(12px);
     min-height: 100vh;
-}
-
-/* Metric Cards */
-.metric-card {
-    background: rgba(31, 41, 55, 0.8);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(75, 85, 99, 0.3);
-    border-radius: 12px;
-    padding: 24px;
-    transition: all 0.3s ease;
-}
-
-.metric-card:hover {
-    background: rgba(55, 65, 81, 0.9);
-    border-color: rgba(107, 114, 128, 0.5);
-    transform: translateY(-2px);
 }
 
 /* Score Display */
@@ -559,6 +318,74 @@ a:focus {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+/* Progress Bar */
+.progress-bar {
+    background: rgba(31, 41, 55, 0.8);
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, rgb(147, 51, 234), rgb(59, 130, 246));
+    border-radius: 4px;
+    transition: width 1s ease-out;
+}
+
+/* ===================================
+   ACCESSIBILITY FEATURES
+=================================== */
+
+/* Screen reader only content */
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* Focus Indicators */
+button:focus,
+input:focus,
+textarea:focus,
+a:focus {
+    outline: 2px solid rgb(147, 51, 234);
+    outline-offset: 2px;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+=================================== */
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .spotlight-main {
+        width: 400px;
+        height: 400px;
+    }
+    
+    .spotlight-secondary {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .spotlight-focus {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .symphony-card {
+        margin: 16px;
+        padding: 20px;
+    }
 }
 
 /* ===================================
@@ -612,14 +439,6 @@ html {
     .grid-pattern {
         animation: none;
     }
-    
-    .mesh-svg,
-    .curve-line-1,
-    .curve-line-2,
-    .curve-line-3,
-    .curve-line-4 {
-        animation: none;
-    }
 }
 
 /* High contrast mode support */
@@ -628,9 +447,7 @@ html {
         border-width: 2px;
     }
     
-    .glass-card,
-    .metric-card,
-    .category-card {
+    .symphony-card {
         border-width: 2px;
         border-color: rgba(156, 163, 175, 0.8);
     }
@@ -658,8 +475,7 @@ html {
         color: black !important;
     }
     
-    .glass-card,
-    .metric-card {
+    .symphony-card {
         background: white !important;
         border: 1px solid #ccc !important;
     }

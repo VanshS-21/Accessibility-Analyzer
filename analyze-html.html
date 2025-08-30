@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Analysis - AccessiScan</title>
+    <title>HTML Analysis - Symphony</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.7.2/axe.min.js"></script>
     <link rel="stylesheet" href="css/styles.css">
@@ -31,13 +31,13 @@
     <nav class="fixed top-0 left-0 right-0 z-50 bg-gray-950/80 backdrop-blur-md border-b border-gray-800/30">
         <div class="w-full px-4 sm:px-6 lg:px-8">
             <div class="flex items-center h-16">
-                <div class="flex items-center space-x-2 w-80">
+                <div class="flex items-center space-x-2">
                     <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-md flex items-center justify-center">
                         <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" />
                         </svg>
                     </div>
-                    <a href="index.html" class="text-xl font-semibold text-white whitespace-nowrap hover:text-purple-300 transition-colors">AccessiScan</a>
+                    <a href="index.html" class="text-xl font-semibold text-white hover:text-purple-300 transition-colors">Symphony</a>
                 </div>
 
                 <div class="hidden md:flex flex-1 justify-center">
@@ -45,10 +45,11 @@
                         <a href="index.html" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">Home</a>
                         <span class="text-white font-medium text-sm px-3 py-2 rounded-md bg-purple-500/20">HTML Analysis</span>
                         <a href="analyze-url.html" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">URL Analysis</a>
+                        <a href="dashboard.html" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">Dashboard</a>
                     </div>
                 </div>
                 
-                <div class="hidden md:flex items-center justify-end space-x-4 w-80">
+                <div class="hidden md:flex items-center justify-end space-x-4">
                     <a href="results.html" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">View Results</a>
                 </div>
             </div>
@@ -70,7 +71,7 @@
             </div>
 
             <!-- Analysis Form -->
-            <div class="analysis-form glass-card mb-8">
+            <div class="analysis-form symphony-card mb-8">
                 <form id="html-analysis-form">
                     <div class="mb-6">
                         <label for="html-input" class="block text-lg font-medium text-white mb-3">
@@ -88,7 +89,7 @@
 
 Example:
 <!DOCTYPE html>
-<html lang=&quot;en&quot;>
+<html lang='en'>
   <head>
     <title>My Page</title>
   </head>
@@ -196,7 +197,7 @@ Example:
             </div>
 
             <!-- Results Preview -->
-            <div id="results-preview" class="hidden glass-card p-8">
+            <div id="results-preview" class="hidden symphony-card">
                 <h3 class="text-2xl font-bold text-white mb-6">
                     <svg class="w-6 h-6 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -219,7 +220,7 @@ Example:
             </div>
 
             <!-- Instructions Section -->
-            <section class="mt-12 glass-card p-8">
+            <section class="mt-12 symphony-card">
                 <h3 class="text-2xl font-bold text-white mb-6">
                     <svg class="w-6 h-6 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
