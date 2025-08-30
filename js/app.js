@@ -113,7 +113,7 @@ class AccessiScan {
         const htmlContent = htmlInput.value.trim();
 
         if (!htmlContent) {
-            this.showError('Please enter some HTML code to analyze.');
+            this.showNotification('Please enter some HTML code to analyze.', 'warning');
             return;
         }
 
@@ -124,7 +124,7 @@ class AccessiScan {
             await this.analyzeHTMLCode(htmlContent);
         } catch (error) {
             console.error('Analysis error:', error);
-            this.showError('Analysis failed: ' + error.message);
+            this.showNotification('Analysis failed: ' + error.message, 'error');
         } finally {
             this.hideLoading('analyze-btn', 'analyze-btn-text', 'analyze-spinner');
         }
@@ -134,6 +134,11 @@ class AccessiScan {
         try {
             console.log('Starting HTML analysis...');
             
+            // Show progress feedback
+            setTimeout(() => {
+                this.showProgressMessage('Parsing HTML structure...');
+            }, 300);
+            
             // Parse HTML into proper DOM structure
             const parser = new DOMParser();
             const doc = parser.parseFromString(htmlString, 'text/html');
@@ -142,6 +147,11 @@ class AccessiScan {
             const options = this.getAnalysisOptions();
             
             console.log('Running axe-core analysis with options:', options);
+            
+            // Update progress
+            setTimeout(() => {
+                this.showProgressMessage('Running accessibility tests...');
+            }, 600);
             
             // Run axe-core analysis on the parsed document
             const results = await axe.run(doc, options);
@@ -168,8 +178,18 @@ class AccessiScan {
             
             console.log('Results stored, redirecting to results page...');
             
-            // Redirect to results page
-            window.location.href = 'results.html';
+            // Show success message
+            const violationsCount = results.violations.length;
+            const successMsg = violationsCount === 0 
+                ? 'Perfect! No accessibility issues found.' 
+                : `Analysis complete! Found ${violationsCount} issue${violationsCount !== 1 ? 's' : ''} to review.`;
+            
+            this.showSuccessMessage(successMsg);
+            
+            // Redirect to results page with a slight delay
+            setTimeout(() => {
+                window.location.href = 'results.html';
+            }, 1500);
             
         } catch (error) {
             console.error('Analysis error:', error);
@@ -324,12 +344,12 @@ class AccessiScan {
         const url = urlInput.value.trim();
 
         if (!url) {
-            this.showURLError('Please enter a valid URL.');
+            this.showNotification('Please enter a valid URL.', 'warning');
             return;
         }
 
         if (!this.isValidURL(url)) {
-            this.showURLError('Please enter a valid URL (including http:// or https://).');
+            this.showNotification('Please enter a valid URL (including http:// or https://).', 'warning');
             return;
         }
 
@@ -341,6 +361,11 @@ class AccessiScan {
             this.hideURLError();
             
             try {
+                // Show progress feedback
+                setTimeout(() => {
+                    this.showProgressMessage('Connecting to website...');
+                }, 300);
+                
                 // Attempt to fetch URL (will likely fail due to CORS)
                 const response = await fetch(url, { 
                     mode: 'cors',
@@ -352,6 +377,9 @@ class AccessiScan {
                 }
                 
                 const html = await response.text();
+                
+                // Update progress
+                this.showProgressMessage('Running accessibility tests...');
                 
                 // If successful, analyze the HTML
                 const parser = new DOMParser();
@@ -367,7 +395,17 @@ class AccessiScan {
                     timestamp: new Date().toISOString()
                 }));
                 
-                window.location.href = 'results.html';
+                // Show success message
+                const violationsCount = results.violations.length;
+                const successMsg = violationsCount === 0 
+                    ? `Perfect! ${url} has no accessibility issues.` 
+                    : `Analysis complete! Found ${violationsCount} issue${violationsCount !== 1 ? 's' : ''} on ${url}.`;
+                
+                this.showSuccessMessage(successMsg);
+                
+                setTimeout(() => {
+                    window.location.href = 'results.html';
+                }, 1500);
                 
             } catch (fetchError) {
                 // Handle CORS/fetch errors gracefully
@@ -376,7 +414,16 @@ class AccessiScan {
             
         } catch (error) {
             console.error('URL analysis error:', error);
-            this.showURLError('Analysis failed: ' + error.message);
+            
+            // Provide helpful error messages based on error type
+            let errorMessage = 'Analysis failed: ' + error.message;
+            if (error.message.includes('Failed to fetch') || error.message.includes('CORS')) {
+                errorMessage = 'Cannot access this website due to security restrictions. Try analyzing your own website or use the HTML analysis instead.';
+            } else if (error.message.includes('network')) {
+                errorMessage = 'Network error. Please check your connection and try again.';
+            }
+            
+            this.showNotification(errorMessage, 'error');
         } finally {
             // Reset button state
             this.hideLoading('url-analyze-btn', 'url-analyze-btn-text', 'url-analyze-spinner');
@@ -493,9 +540,19 @@ class AccessiScan {
         const text = document.getElementById(textId);
         const spinner = document.getElementById(spinnerId);
 
-        if (btn) btn.disabled = true;
+        if (btn) {
+            btn.disabled = true;
+            btn.classList.add('opacity-75', 'cursor-not-allowed', 'loading-disabled');
+            // Add haptic feedback on mobile devices
+            if ('vibrate' in navigator) {
+                navigator.vibrate(50);
+            }
+        }
         if (text) text.textContent = 'Analyzing...';
         if (spinner) spinner.classList.remove('hidden');
+        
+        // Add progress feedback
+        this.showProgressMessage(btnId.includes('url') ? 'Fetching website content...' : 'Parsing HTML content...');
     }
 
     hideLoading(btnId, textId, spinnerId) {
@@ -503,9 +560,15 @@ class AccessiScan {
         const text = document.getElementById(textId);
         const spinner = document.getElementById(spinnerId);
 
-        if (btn) btn.disabled = false;
+        if (btn) {
+            btn.disabled = false;
+            btn.classList.remove('opacity-75', 'cursor-not-allowed', 'loading-disabled');
+        }
         if (text) text.textContent = btnId.includes('url') ? 'Analyze Website' : 'Analyze HTML';
         if (spinner) spinner.classList.add('hidden');
+        
+        // Hide progress message
+        this.hideProgressMessage();
     }
 
     showError(message) {
@@ -542,6 +605,116 @@ class AccessiScan {
         }
     }
 
+    showProgressMessage(message) {
+        // Create or update progress message element
+        let progressDiv = document.getElementById('progress-message');
+        if (!progressDiv) {
+            progressDiv = document.createElement('div');
+            progressDiv.id = 'progress-message';
+            progressDiv.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 sm:right-4 sm:left-auto sm:translate-x-0 bg-blue-600 text-white px-4 py-3 sm:px-6 rounded-lg shadow-lg flex items-center space-x-2 sm:space-x-3 transition-all duration-300 translate-y-full z-50 max-w-xs sm:max-w-sm';
+            progressDiv.innerHTML = `
+                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span id="progress-text">${message}</span>
+            `;
+            document.body.appendChild(progressDiv);
+            
+            // Animate in
+            setTimeout(() => {
+                progressDiv.classList.remove('translate-y-full');
+            }, 100);
+        } else {
+            document.getElementById('progress-text').textContent = message;
+        }
+    }
+
+    hideProgressMessage() {
+        const progressDiv = document.getElementById('progress-message');
+        if (progressDiv) {
+            progressDiv.classList.add('translate-y-full');
+            setTimeout(() => {
+                progressDiv.remove();
+            }, 300);
+        }
+    }
+
+    showNotification(message, type = 'info') {
+        // Create notification element
+        const notificationDiv = document.createElement('div');
+        notificationDiv.className = 'fixed top-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-sm bg-white border border-gray-200 rounded-lg shadow-lg p-4 transition-all duration-300 transform -translate-y-full z-50';
+        
+        const colors = {
+            success: { bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700', icon: 'text-green-400' },
+            error: { bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-700', icon: 'text-red-400' },
+            warning: { bg: 'bg-yellow-50', border: 'border-yellow-200', text: 'text-yellow-700', icon: 'text-yellow-400' },
+            info: { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', icon: 'text-blue-400' }
+        };
+        
+        const color = colors[type] || colors.info;
+        notificationDiv.className = `fixed top-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-sm ${color.bg} ${color.border} border rounded-lg shadow-lg p-4 transition-all duration-300 transform -translate-y-full z-50`;
+        
+        const icons = {
+            success: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>`,
+            error: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>`,
+            warning: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>`,
+            info: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>`
+        };
+        
+        notificationDiv.innerHTML = `
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 ${color.icon}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        ${icons[type] || icons.info}
+                    </svg>
+                </div>
+                <div class="ml-3 w-0 flex-1">
+                    <p class="text-sm font-medium ${color.text} break-words">${message}</p>
+                </div>
+                <div class="ml-4 flex-shrink-0 flex">
+                    <button class="inline-flex ${color.text} hover:${color.text.replace('700', '500')} focus:outline-none" onclick="this.parentElement.parentElement.parentElement.remove()">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(notificationDiv);
+        
+        // Animate in
+        setTimeout(() => {
+            notificationDiv.classList.remove('-translate-y-full');
+        }, 100);
+        
+        // Auto-hide after 5 seconds (longer on mobile for easier reading)
+        const hideDelay = window.innerWidth <= 768 ? 7000 : 5000;
+        setTimeout(() => {
+            if (document.body.contains(notificationDiv)) {
+                notificationDiv.classList.add('-translate-y-full');
+                setTimeout(() => {
+                    if (document.body.contains(notificationDiv)) {
+                        notificationDiv.remove();
+                    }
+                }, 300);
+            }
+        }, hideDelay);
+    }
+
+    showSuccessMessage(message, details) {
+        this.showNotification(message, 'success');
+        
+        // Update progress message to show completion
+        this.showProgressMessage('Analysis complete! Preparing results...');
+        
+        // Hide progress after a short delay
+        setTimeout(() => {
+            this.hideProgressMessage();
+        }, 1500);
+    }
+
     hideResults() {
         const resultsPreview = document.getElementById('results-preview');
         const urlResultsPreview = document.getElementById('url-results-preview');
@@ -552,7 +725,7 @@ class AccessiScan {
 
     exportResults() {
         if (!this.currentResults) {
-            alert('No results to export. Please run an analysis first.');
+            this.showNotification('No results to export. Please run an analysis first.', 'warning');
             return;
         }
 
