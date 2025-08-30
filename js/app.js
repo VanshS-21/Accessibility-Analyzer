@@ -143,20 +143,48 @@ class AccessiScan {
     <title>Accessible Page Example</title>
 </head>
 <body>
-    <h1>Main Heading</h1>
-    <img src="test.jpg" alt="Descriptive alt text for the image">
-    <button type="button">Accessible Button</button>
-    <label for="email">Email Address:</label>
-    <input type="email" id="email" name="email" required>
-    <a href="https://example.com">Visit Example Site</a>
-    <table>
-        <thead>
-            <tr><th>Name</th><th>Role</th></tr>
-        </thead>
-        <tbody>
-            <tr><td>John Doe</td><td>Developer</td></tr>
-        </tbody>
-    </table>
+    <header>
+        <nav aria-label="Main navigation">
+            <ul>
+                <li><a href="#main">Skip to main content</a></li>
+                <li><a href="https://example.com">Home</a></li>
+                <li><a href="https://example.com/about">About</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main id="main">
+        <h1>Main Heading</h1>
+        <p>This is a fully accessible page example with proper semantic structure.</p>
+        
+        <section aria-labelledby="content-heading">
+            <h2 id="content-heading">Content Section</h2>
+            <img src="test.jpg" alt="Descriptive alt text for the image">
+            <button type="button">Accessible Button</button>
+            
+            <form>
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" required>
+                <button type="submit">Submit Form</button>
+            </form>
+            
+            <a href="https://example.com">Visit Example Site</a>
+            
+            <table>
+                <caption>Team Members</caption>
+                <thead>
+                    <tr><th>Name</th><th>Role</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>John Doe</td><td>Developer</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 Accessible Page Example</p>
+    </footer>
 </body>
 </html>`,
 
