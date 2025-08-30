@@ -121,29 +121,68 @@ class AccessiScan {
         this.hideError();
 
         try {
-            const results = await this.runAxeAnalysis(htmlContent);
-            this.currentResults = {
-                type: 'html',
-                content: htmlContent,
-                results: results,
-                timestamp: new Date().toISOString()
-            };
-
-            // Store results in sessionStorage for results page
-            sessionStorage.setItem('accessiscan-results', JSON.stringify(this.currentResults));
-            
-            this.showHTMLResults(results);
+            await this.analyzeHTMLCode(htmlContent);
         } catch (error) {
             console.error('Analysis error:', error);
-            this.showError('An error occurred during analysis. Please check your HTML and try again.');
+            this.showError('Analysis failed: ' + error.message);
         } finally {
             this.hideLoading('analyze-btn', 'analyze-btn-text', 'analyze-spinner');
         }
     }
 
+    async analyzeHTMLCode(htmlString) {
+        try {
+            console.log('Starting HTML analysis...');
+            
+            // Parse HTML into proper DOM structure
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlString, 'text/html');
+            
+            // Configure axe based on selected options
+            const options = this.getAnalysisOptions();
+            
+            console.log('Running axe-core analysis with options:', options);
+            
+            // Run axe-core analysis on the parsed document
+            const results = await axe.run(doc, options);
+            
+            console.log('Analysis complete. Violations found:', results.violations.length);
+            console.log('Incomplete tests:', results.incomplete.length);
+            console.log('Passed tests:', results.passes.length);
+            
+            // Store results for display
+            sessionStorage.setItem('analysisResults', JSON.stringify({
+                type: 'html',
+                results: results,
+                analyzedContent: htmlString.substring(0, 200) + '...',
+                timestamp: new Date().toISOString()
+            }));
+            
+            // Also store in the format expected by results page
+            sessionStorage.setItem('accessiscan-results', JSON.stringify({
+                type: 'html',
+                content: htmlString,
+                results: results,
+                timestamp: new Date().toISOString()
+            }));
+            
+            console.log('Results stored, redirecting to results page...');
+            
+            // Redirect to results page
+            window.location.href = 'results.html';
+            
+        } catch (error) {
+            console.error('Analysis error:', error);
+            throw new Error('Analysis failed: ' + error.message);
+        }
+    }
+
     async runAxeAnalysis(htmlContent) {
+        // This method is now replaced by analyzeHTMLCode using DOMParser
+        // Keeping for backward compatibility if needed elsewhere
         return new Promise((resolve, reject) => {
             try {
+                console.log('Running legacy iframe analysis...');
                 // Create a temporary iframe to analyze the HTML
                 const iframe = document.createElement('iframe');
                 iframe.style.display = 'none';
