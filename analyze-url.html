@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Analysis - AccessiScan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.7.2/axe.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-6">
+                <div class="flex items-center">
+                    <h1 class="text-3xl font-bold text-indigo-600">AccessiScan</h1>
+                    <span class="ml-2 text-gray-500 text-sm">Web Accessibility Analyzer</span>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-indigo-600 transition-colors">Home</a>
+                    <a href="analyze-html.html" class="text-gray-700 hover:text-indigo-600 transition-colors">HTML Analysis</a>
+                    <a href="analyze-url.html" class="text-indigo-600 font-medium">URL Analysis</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Live Website Analysis</h2>
+            <p class="text-lg text-gray-600">
+                Enter a website URL to analyze its accessibility. Due to browser security restrictions, 
+                this feature works with websites that allow cross-origin requests.
+            </p>
+        </div>
+
+        <!-- URL Input Form -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+            <form id="url-analysis-form">
+                <div class="mb-4">
+                    <label for="url-input" class="block text-sm font-medium text-gray-700 mb-2">
+                        Website URL
+                    </label>
+                    <div class="flex">
+                        <input 
+                            type="url" 
+                            id="url-input" 
+                            name="url-input"
+                            class="flex-1 p-3 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            placeholder="https://example.com"
+                            required>
+                        <button 
+                            type="submit" 
+                            id="url-analyze-btn"
+                            class="bg-indigo-600 text-white px-6 py-3 rounded-r-lg font-medium hover:bg-indigo-700 transition-colors flex items-center">
+                            <span id="url-analyze-btn-text">Analyze</span>
+                            <svg id="url-analyze-spinner" class="hidden animate-spin ml-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Analysis Options -->
+                <div class="mb-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">Analysis Options</h3>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" id="url-check-wcag-a" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
+                            <span class="ml-2 text-sm text-gray-700">WCAG 2.1 Level A</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" id="url-check-wcag-aa" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
+                            <span class="ml-2 text-sm text-gray-700">WCAG 2.1 Level AA</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" id="url-check-best-practices" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
+                            <span class="ml-2 text-sm text-gray-700">Best Practices</span>
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- CORS Warning -->
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-yellow-800">CORS Limitation Notice</h3>
+                    <div class="mt-1 text-sm text-yellow-700">
+                        <p>Due to browser security restrictions, this feature may not work with all websites. 
+                        Some websites block cross-origin requests. For comprehensive testing, consider using the HTML analysis feature instead.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Display -->
+        <div id="url-error-message" class="hidden bg-red-50 border-l-4 border-red-400 p-4 mb-6">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-red-700" id="url-error-text"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Preview -->
+        <div id="url-results-preview" class="hidden bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Analysis Complete</h3>
+            <div id="url-results-summary" class="mb-4"></div>
+            <div class="flex gap-4">
+                <button 
+                    id="url-view-results-btn"
+                    class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                    View Detailed Results
+                </button>
+                <button 
+                    id="url-analyze-another-btn"
+                    class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors">
+                    Analyze Another URL
+                </button>
+            </div>
+        </div>
+
+        <!-- Proxy Alternative -->
+        <div class="mt-12 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Alternative: Manual Analysis</h3>
+            <p class="text-gray-600 mb-4">
+                If the URL analysis doesn't work due to CORS restrictions, you can:
+            </p>
+            <ol class="list-decimal list-inside text-gray-600 space-y-2 mb-6">
+                <li>Visit the website you want to analyze</li>
+                <li>Right-click and select "View Page Source" or press Ctrl+U (Cmd+U on Mac)</li>
+                <li>Copy the HTML source code</li>
+                <li>Use our HTML Analysis feature to paste and analyze the code</li>
+            </ol>
+            <a href="analyze-html.html" 
+               class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors inline-block">
+                Go to HTML Analysis
+            </a>
+        </div>
+
+        <!-- Tips -->
+        <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-blue-900 mb-3">Tips for URL Analysis</h3>
+            <ul class="text-sm text-blue-800 space-y-2">
+                <li>• Make sure to include the protocol (http:// or https://)</li>
+                <li>• Some websites may block cross-origin requests for security reasons</li>
+                <li>• Public websites and demo sites typically work better than private or secured sites</li>
+                <li>• If analysis fails, try the HTML analysis method described above</li>
+            </ul>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
