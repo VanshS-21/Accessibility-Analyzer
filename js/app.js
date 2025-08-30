@@ -92,20 +92,16 @@ class AccessiScan {
         const sampleHTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Sample Page for Testing</title>
+    <title>Sample Page with Accessibility Issues</title>
 </head>
 <body>
-    <h1>Welcome to My Website</h1>
-    <img src="image.jpg" alt="">
-    <p>This is a paragraph with some text.</p>
-    <button onclick="doSomething()">Click me</button>
-    <div style="color: #ccc; background-color: #ddd;">
-        Low contrast text that might be hard to read
-    </div>
-    <form>
-        <input type="text" placeholder="Enter your name">
-        <input type="submit" value="Submit">
-    </form>
+    <img src="test.jpg">
+    <button>Click</button>
+    <input type="text">
+    <div style="color: #ccc; background: #ddd;">Poor contrast text</div>
+    <h3>Wrong heading order</h3>
+    <h1>This should be h2</h1>
+    <a href="#">Empty link text</a>
 </body>
 </html>`;
         
