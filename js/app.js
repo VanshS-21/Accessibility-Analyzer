@@ -24,6 +24,20 @@ class AccessiScan {
         this.errorCount = 0;
         this.maxRetries = 3;
         
+        // Configuration constants
+        this.WCAG_LEVELS = {
+            A: 'wcag2a',
+            AA: 'wcag2aa',
+            BEST_PRACTICES: 'best-practice'
+        };
+        
+        this.SEVERITY_COLORS = {
+            critical: { bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-500' },
+            serious: { bg: 'bg-orange-100', text: 'text-orange-800', border: 'border-orange-500' },
+            moderate: { bg: 'bg-yellow-100', text: 'text-yellow-800', border: 'border-yellow-500' },
+            minor: { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-500' }
+        };
+        
         // Set up global error handling
         this.setupGlobalErrorHandling();
         
@@ -987,35 +1001,29 @@ class AccessiScan {
     }
 
     getAnalysisOptions() {
-        const options = {
-            tags: []
-        };
-
-        // Check which standards to test against
-        if (document.getElementById('check-wcag-a')?.checked) {
-            options.tags.push('wcag2a');
-        }
-        if (document.getElementById('check-wcag-aa')?.checked) {
-            options.tags.push('wcag2aa');
-        }
-        if (document.getElementById('check-best-practices')?.checked) {
-            options.tags.push('best-practice');
-        }
-
-        // URL analysis has different checkbox IDs
-        if (document.getElementById('url-check-wcag-a')?.checked) {
-            options.tags.push('wcag2a');
-        }
-        if (document.getElementById('url-check-wcag-aa')?.checked) {
-            options.tags.push('wcag2aa');
-        }
-        if (document.getElementById('url-check-best-practices')?.checked) {
-            options.tags.push('best-practice');
-        }
+        const options = { tags: [] };
+        
+        // Define checkbox mappings to avoid repetition
+        const checkboxMappings = [
+            { id: 'check-wcag-a', tag: this.WCAG_LEVELS.A },
+            { id: 'check-wcag-aa', tag: this.WCAG_LEVELS.AA },
+            { id: 'check-best-practices', tag: this.WCAG_LEVELS.BEST_PRACTICES },
+            { id: 'url-check-wcag-a', tag: this.WCAG_LEVELS.A },
+            { id: 'url-check-wcag-aa', tag: this.WCAG_LEVELS.AA },
+            { id: 'url-check-best-practices', tag: this.WCAG_LEVELS.BEST_PRACTICES }
+        ];
+        
+        // Check all possible checkboxes
+        checkboxMappings.forEach(mapping => {
+            const checkbox = document.getElementById(mapping.id);
+            if (checkbox?.checked && !options.tags.includes(mapping.tag)) {
+                options.tags.push(mapping.tag);
+            }
+        });
 
         // Default to WCAG 2.1 AA if no tags selected
         if (options.tags.length === 0) {
-            options.tags = ['wcag2aa'];
+            options.tags = [this.WCAG_LEVELS.AA];
         }
 
         return options;
@@ -1041,35 +1049,13 @@ class AccessiScan {
                 return;
             }
 
-            const violationsCount = results.violations?.length || 0;
-            const incompleteCount = results.incomplete?.length || 0;
-            const passesCount = results.passes?.length || 0;
-            const inapplicableCount = results.inapplicable?.length || 0;
-
-            resultsSummary.innerHTML = `
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                    <div class="bg-red-50 p-3 rounded-lg border border-red-200">
-                        <div class="text-2xl font-bold text-red-600" aria-label="${violationsCount} accessibility violations">${violationsCount}</div>
-                        <div class="text-sm text-red-600">Violations</div>
-                    </div>
-                    <div class="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
-                        <div class="text-2xl font-bold text-yellow-600" aria-label="${incompleteCount} incomplete tests">${incompleteCount}</div>
-                        <div class="text-sm text-yellow-600">Incomplete</div>
-                    </div>
-                    <div class="bg-green-50 p-3 rounded-lg border border-green-200">
-                        <div class="text-2xl font-bold text-green-600" aria-label="${passesCount} passed tests">${passesCount}</div>
-                        <div class="text-sm text-green-600">Passes</div>
-                    </div>
-                    <div class="bg-blue-50 p-3 rounded-lg border border-blue-200">
-                        <div class="text-2xl font-bold text-blue-600" aria-label="${inapplicableCount} inapplicable tests">${inapplicableCount}</div>
-                        <div class="text-sm text-blue-600">Inapplicable</div>
-                    </div>
-                </div>
-            `;
-
+            // Use the refactored summary HTML generator
+            resultsSummary.innerHTML = this.createResultsSummaryHTML(results);
             resultsPreview.classList.remove('hidden');
             
             // Announce results to screen readers
+            const violationsCount = results.violations?.length || 0;
+            const passesCount = results.passes?.length || 0;
             this.announceToScreenReader(`Analysis complete. Found ${violationsCount} violations, ${passesCount} passed tests.`);
             
         } catch (error) {
@@ -1248,11 +1234,8 @@ class AccessiScan {
     }
 
     getSelectedTags() {
-        const tags = [];
-        if (document.getElementById('url-check-wcag-a')?.checked) tags.push('wcag2a');
-        if (document.getElementById('url-check-wcag-aa')?.checked) tags.push('wcag2aa');
-        if (document.getElementById('url-check-best-practices')?.checked) tags.push('best-practice');
-        return tags.length > 0 ? tags : ['wcag2a', 'wcag2aa', 'best-practice'];
+        const options = this.getAnalysisOptions();
+        return options.tags.length > 0 ? options.tags : [this.WCAG_LEVELS.A, this.WCAG_LEVELS.AA, this.WCAG_LEVELS.BEST_PRACTICES];
     }
 
     isValidURL(string) {
@@ -1269,33 +1252,34 @@ class AccessiScan {
         const resultsSummary = document.getElementById('url-results-summary');
 
         if (resultsPreview && resultsSummary) {
-            const violationsCount = results.violations.length;
-            const incompleteCount = results.incomplete.length;
-            const passesCount = results.passes.length;
-
-            resultsSummary.innerHTML = `
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                    <div class="bg-red-50 p-3 rounded-lg">
-                        <div class="text-2xl font-bold text-red-600">${violationsCount}</div>
-                        <div class="text-sm text-red-600">Violations</div>
-                    </div>
-                    <div class="bg-yellow-50 p-3 rounded-lg">
-                        <div class="text-2xl font-bold text-yellow-600">${incompleteCount}</div>
-                        <div class="text-sm text-yellow-600">Incomplete</div>
-                    </div>
-                    <div class="bg-green-50 p-3 rounded-lg">
-                        <div class="text-2xl font-bold text-green-600">${passesCount}</div>
-                        <div class="text-sm text-green-600">Passes</div>
-                    </div>
-                    <div class="bg-blue-50 p-3 rounded-lg">
-                        <div class="text-2xl font-bold text-blue-600">${results.inapplicable.length}</div>
-                        <div class="text-sm text-blue-600">Inapplicable</div>
-                    </div>
-                </div>
-            `;
-
+            resultsSummary.innerHTML = this.createResultsSummaryHTML(results);
             resultsPreview.classList.remove('hidden');
         }
+    }
+    
+    /**
+     * Create reusable results summary HTML
+     * @param {Object} results - Analysis results
+     * @returns {string} HTML string for results summary
+     */
+    createResultsSummaryHTML(results) {
+        const stats = [
+            { label: 'Violations', count: results.violations?.length || 0, color: 'red' },
+            { label: 'Incomplete', count: results.incomplete?.length || 0, color: 'yellow' },
+            { label: 'Passes', count: results.passes?.length || 0, color: 'green' },
+            { label: 'Inapplicable', count: results.inapplicable?.length || 0, color: 'blue' }
+        ];
+        
+        return `
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                ${stats.map(stat => `
+                    <div class="bg-${stat.color}-50 p-3 rounded-lg border border-${stat.color}-200">
+                        <div class="text-2xl font-bold text-${stat.color}-600" aria-label="${stat.count} ${stat.label.toLowerCase()}">${stat.count}</div>
+                        <div class="text-sm text-${stat.color}-600">${stat.label}</div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
     }
 
     resetURLForm() {
@@ -1743,94 +1727,140 @@ class AccessiScan {
 const displayResults = () => {
     const resultsData = sessionStorage.getItem('analysisResults');
     const container = document.getElementById('resultsContainer');
+    const successState = document.getElementById('success-state');
+    const issuesState = document.getElementById('issues-state');
+    const overallScore = document.getElementById('overall-score');
     
     if (!resultsData) {
-        container.innerHTML = `
-            <div class="text-center py-8">
-                <p class="text-gray-600">No analysis results found.</p>
-                <a href="index.html" class="text-blue-600 hover:underline">Go back to homepage</a>
-            </div>
-        `;
+        if (container) {
+            container.innerHTML = `
+                <div class="text-center py-8 glass-card">
+                    <p class="text-gray-300 mb-4">No analysis results found.</p>
+                    <a href="index.html" class="bg-gradient-to-r from-violet-500 to-blue-500 hover:from-violet-600 hover:to-blue-600 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105">
+                        Go back to homepage
+                    </a>
+                </div>
+            `;
+        }
         return;
     }
     
     const data = JSON.parse(resultsData);
-    
     console.log('Displaying results:', data);
     
     // Update timestamp
     const timestampEl = document.getElementById('analysis-timestamp');
     if (timestampEl) {
         const date = new Date(data.timestamp);
-        timestampEl.textContent = `Analyzed on ${date.toLocaleDateString()} at ${date.toLocaleTimeString()}`;
+        timestampEl.innerHTML = `
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Analyzed on ${date.toLocaleDateString()} at ${date.toLocaleTimeString()}
+        `;
     }
     
-    // Handle CORS error case - turn it into an educational opportunity
+    // Handle CORS error case
     if (data.corsError) {
+        handleCORSErrorDisplay(data, container);
+        return;
+    }
+    
+    const violations = data.results.violations || [];
+    console.log('Violations found:', violations.length);
+    
+    // Update overall score display
+    if (overallScore) {
+        overallScore.textContent = violations.length;
+        if (violations.length === 0) {
+            overallScore.className = "text-6xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent mb-4";
+        } else {
+            overallScore.className = "text-6xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent mb-4";
+        }
+    }
+    
+    // Show appropriate state based on results
+    if (violations.length === 0) {
+        showSuccessState(successState, issuesState);
+    } else {
+        showIssuesState(violations, data, successState, issuesState);
+    }
+};
+
+const handleCORSErrorDisplay = (data, container) => {
+    if (container) {
         container.innerHTML = `
-            <div class="space-y-6">
-                <div class="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0">
-                            <svg class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <div class="ml-3">
-                            <h3 class="text-lg font-medium text-blue-800">Learning Opportunity: Understanding Web Security (CORS)</h3>
-                            <div class="mt-3 text-blue-700">
-                                <p class="mb-3">The website <strong>${data.url}</strong> could not be analyzed due to Cross-Origin Resource Sharing (CORS) restrictions.</p>
-                                
-                                <h4 class="font-semibold mb-2">What is CORS?</h4>
-                                <p class="mb-3">CORS is a browser security feature that prevents websites from making requests to other domains without permission. This protects users from malicious websites trying to access their data on other sites.</p>
-                                
-                                <h4 class="font-semibold mb-2">Why does this happen?</h4>
-                                <p class="mb-3">External websites typically don't allow cross-origin requests for security reasons. This is normal and expected behavior - it means the website is properly secured!</p>
-                                
-                                <h4 class="font-semibold mb-2">Alternative approaches:</h4>
-                                <ul class="list-disc list-inside space-y-1 mb-4">
-                                    <li>Use browser developer tools to view the page source, then copy the HTML and use our "Analyze HTML Code" feature</li>
-                                    <li>Use browser extensions like axe DevTools for direct website analysis</li>
-                                    <li>For your own websites, configure CORS headers to allow cross-origin requests</li>
-                                    <li>Use server-side analysis tools if you need automated website scanning</li>
-                                </ul>
+            <div class="glass-card bg-blue-500/10 border-blue-500/20">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <svg class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-lg font-medium text-blue-300 mb-3">Understanding Web Security (CORS)</h3>
+                        <div class="text-blue-200">
+                            <p class="mb-3">The website <strong class="text-white">${data.url}</strong> could not be analyzed due to browser security restrictions.</p>
+                            
+                            <div class="bg-white/5 rounded-lg p-4 mb-4">
+                                <h4 class="font-semibold text-white mb-2">💡 Why This Happens</h4>
+                                <p class="text-gray-300 text-sm">Browsers prevent cross-origin requests for security. This protects users from malicious websites.</p>
+                            </div>
+                            
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <a href="analyze-html.html" class="bg-gradient-to-r from-violet-500 to-blue-500 hover:from-violet-600 hover:to-blue-600 text-white px-4 py-2 rounded-xl font-medium transition-all duration-300 hover:scale-105 text-center">
+                                    Try HTML Analysis
+                                </a>
+                                <a href="analyze-url.html" class="glass-card bg-white/5 hover:bg-white/10 text-white px-4 py-2 rounded-xl font-medium transition-all duration-300 hover:scale-105 text-center">
+                                    Try Another URL
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="bg-green-50 border border-green-200 rounded-lg p-6">
-                    <h4 class="text-lg font-semibold text-green-800 mb-3">This isn't a failure - it's web security working as intended!</h4>
-                    <p class="text-green-700 mb-4">Understanding CORS limitations is an important part of web development and security awareness.</p>
-                    
-                    <div class="flex space-x-4">
-                        <a href="analyze-html.html" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
-                            Try HTML Analysis Instead
-                        </a>
-                        <a href="analyze-url.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                            Try Another URL
-                        </a>
-                    </div>
-                </div>
             </div>
         `;
-        return;
+    }
+};
+
+const showSuccessState = (successState, issuesState) => {
+    if (successState) {
+        successState.classList.remove('hidden');
+    }
+    if (issuesState) {
+        issuesState.classList.add('hidden');
+    }
+};
+
+const showIssuesState = (violations, data, successState, issuesState) => {
+    if (successState) {
+        successState.classList.add('hidden');
+    }
+    if (issuesState) {
+        issuesState.classList.remove('hidden');
     }
     
-    const violations = data.results.violations;
-    console.log('Violations found:', violations.length);
+    // Update quick stats
+    updateQuickStats(violations);
     
-    if (violations.length === 0) {
-        container.innerHTML = `
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
-                <h3 class="font-bold text-lg">Excellent! 🎉</h3>
-                <p>No accessibility violations found in your ${data.type === 'url' ? 'website' : 'HTML code'}.</p>
-            </div>
-        `;
-        return;
-    }
-    
+    // Display violations with improved styling
     displayViolations(violations, data);
+};
+
+const updateQuickStats = (violations) => {
+    const counts = {
+        critical: violations.filter(v => v.impact === 'critical').length,
+        serious: violations.filter(v => v.impact === 'serious').length,
+        moderate: violations.filter(v => v.impact === 'moderate').length,
+        minor: violations.filter(v => v.impact === 'minor').length
+    };
+    
+    Object.entries(counts).forEach(([severity, count]) => {
+        const element = document.getElementById(`${severity}-count`);
+        if (element) {
+            element.textContent = count;
+        }
+    });
 };
 
 const displayViolations = (violations, data) => {
@@ -1945,42 +1975,38 @@ const groupViolationsBySeverity = (violations) => {
 
 const createSeveritySection = (severity, violations) => {
     const severityConfig = {
-        critical: { 
-            color: 'red', 
-            bgColor: 'bg-red-50', 
-            borderColor: 'border-red-500', 
-            textColor: 'text-red-800',
-            badgeColor: 'bg-red-100 text-red-800',
+        critical: {
+            bgColor: 'bg-red-500/10',
+            borderColor: 'border-red-500/30',
+            textColor: 'text-red-300',
+            badgeColor: 'bg-red-500/20 text-red-300 border border-red-500/30',
             title: 'Critical Issues',
             icon: '🔴',
             description: 'These issues completely block accessibility for some users. Fix immediately.'
         },
-        serious: { 
-            color: 'orange', 
-            bgColor: 'bg-orange-50', 
-            borderColor: 'border-orange-500', 
-            textColor: 'text-orange-800',
-            badgeColor: 'bg-orange-100 text-orange-800',
+        serious: {
+            bgColor: 'bg-orange-500/10',
+            borderColor: 'border-orange-500/30',
+            textColor: 'text-orange-300',
+            badgeColor: 'bg-orange-500/20 text-orange-300 border border-orange-500/30',
             title: 'Serious Issues',
             icon: '🟠',
             description: 'These issues cause significant accessibility barriers. Address soon.'
         },
-        moderate: { 
-            color: 'yellow', 
-            bgColor: 'bg-yellow-50', 
-            borderColor: 'border-yellow-500', 
-            textColor: 'text-yellow-800',
-            badgeColor: 'bg-yellow-100 text-yellow-800',
+        moderate: {
+            bgColor: 'bg-yellow-500/10',
+            borderColor: 'border-yellow-500/30',
+            textColor: 'text-yellow-300',
+            badgeColor: 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30',
             title: 'Moderate Issues',
             icon: '🟡',
             description: 'These issues may cause difficulties for some users.'
         },
-        minor: { 
-            color: 'green', 
-            bgColor: 'bg-green-50', 
-            borderColor: 'border-green-500', 
-            textColor: 'text-green-800',
-            badgeColor: 'bg-green-100 text-green-800',
+        minor: {
+            bgColor: 'bg-blue-500/10',
+            borderColor: 'border-blue-500/30',
+            textColor: 'text-blue-300',
+            badgeColor: 'bg-blue-500/20 text-blue-300 border border-blue-500/30',
             title: 'Minor Issues',
             icon: '🟢',
             description: 'These are accessibility enhancements that improve user experience.'
@@ -1992,19 +2018,19 @@ const createSeveritySection = (severity, violations) => {
     
     return `
         <div class="mb-8">
-            <div class="${config.bgColor} ${config.borderColor} border-l-4 rounded-r-lg p-6 mb-6">
+            <div class="glass-card ${config.bgColor} ${config.borderColor} border-l-4 mb-6">
                 <h3 class="text-2xl font-bold ${config.textColor} mb-2 flex items-center">
                     <span class="mr-3">${config.icon}</span>
                     ${config.title} (${violations.length})
                 </h3>
-                <p class="text-sm ${config.textColor} opacity-90">${config.description}</p>
+                <p class="text-sm text-gray-300">${config.description}</p>
             </div>
             
             <div class="space-y-6">
                 ${violations.map((violation, index) => `
-                    <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                    <div class="glass-card">
                         <div class="flex justify-between items-start mb-4">
-                            <h4 class="text-lg font-semibold text-gray-900">${violation.help}</h4>
+                            <h4 class="text-lg font-semibold text-white">${violation.help}</h4>
                             <div class="flex flex-col items-end space-y-2">
                                 <span class="px-3 py-1 text-xs font-semibold rounded-full ${config.badgeColor}">
                                     ${violation.impact || severity}
@@ -2013,53 +2039,53 @@ const createSeveritySection = (severity, violations) => {
                             </div>
                         </div>
                         
-                        <p class="text-gray-700 mb-4">${violation.description}</p>
+                        <p class="text-gray-300 mb-4">${violation.description}</p>
                         
-                        <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                            <h5 class="font-semibold text-blue-800 mb-2 flex items-center">
+                        <div class="mb-4 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                            <h5 class="font-semibold text-blue-300 mb-2 flex items-center">
                                 <span class="mr-2">🤔</span>
                                 Why this matters for accessibility:
                             </h5>
-                            <p class="text-blue-700 text-sm mb-3">${getViolationExplanation(violation)}</p>
-                            <div class="text-blue-600 text-xs">
+                            <p class="text-blue-200 text-sm mb-3">${getViolationExplanation(violation)}</p>
+                            <div class="text-blue-100 text-xs">
                                 <strong>Real-world impact:</strong> ${getRealWorldImpact(violation)}
                             </div>
                         </div>
                         
                         <div class="mb-4">
-                            <h5 class="font-semibold text-gray-800 mb-2 flex items-center">
+                            <h5 class="font-semibold text-white mb-2 flex items-center">
                                 <span class="mr-2">📍</span>
-                                <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-sm mr-2">
+                                <span class="bg-white/10 text-white px-2 py-1 rounded-full text-sm mr-2">
                                     ${violation.nodes.length} element${violation.nodes.length !== 1 ? 's' : ''}
                                 </span>
                                 affected by this issue
                             </h5>
                             ${violation.nodes.slice(0, 2).map(node => `
-                                <div class="bg-gray-50 border border-gray-200 rounded p-3 mb-2 font-mono text-sm">
-                                    <div class="text-gray-600 mb-1"><strong>Target:</strong> ${node.target.join(', ')}</div>
-                                    <div class="text-gray-800"><strong>HTML:</strong></div>
-                                    <code class="block mt-1 p-2 bg-white rounded text-xs overflow-x-auto">${escapeHtml(node.html.substring(0, 200))}${node.html.length > 200 ? '...' : ''}</code>
+                                <div class="bg-black/20 border border-white/10 rounded p-3 mb-2 font-mono text-sm">
+                                    <div class="text-gray-300 mb-1"><strong>Target:</strong> ${node.target.join(', ')}</div>
+                                    <div class="text-white"><strong>HTML:</strong></div>
+                                    <code class="block mt-1 p-2 bg-black/30 rounded text-xs overflow-x-auto text-gray-200">${escapeHtml(node.html.substring(0, 200))}${node.html.length > 200 ? '...' : ''}</code>
                                 </div>
                             `).join('')}
-                            ${violation.nodes.length > 2 ? `<p class="text-sm text-gray-500 mt-2">... and ${violation.nodes.length - 2} more elements</p>` : ''}
+                            ${violation.nodes.length > 2 ? `<p class="text-sm text-gray-400 mt-2">... and ${violation.nodes.length - 2} more elements</p>` : ''}
                         </div>
                         
-                        <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
-                            <h5 class="font-semibold text-green-800 mb-2 flex items-center">
+                        <div class="p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+                            <h5 class="font-semibold text-green-300 mb-2 flex items-center">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                                 </svg>
                                 How to fix this:
                             </h5>
-                            <div class="text-green-700 text-sm">
+                            <div class="text-green-200 text-sm">
                                 ${getFixGuidance(violation)}
                                 ${violation.helpUrl ? `
-                                    <div class="mt-4 pt-3 border-t border-green-200">
-                                        <a href="${violation.helpUrl}" target="_blank" class="inline-flex items-center bg-blue-100 text-blue-700 px-3 py-2 rounded-lg hover:bg-blue-200 transition-colors text-sm font-medium">
+                                    <div class="mt-4 pt-3 border-t border-green-500/20">
+                                        <a href="${violation.helpUrl}" target="_blank" class="inline-flex items-center bg-violet-500/20 text-violet-300 px-3 py-2 rounded-lg hover:bg-violet-500/30 transition-colors text-sm font-medium border border-violet-500/30">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                                             </svg>
-                                            📖 Study the official WCAG guidelines
+                                            📖 WCAG Guidelines
                                         </a>
                                     </div>
                                 ` : ''}
@@ -2502,4 +2528,117 @@ function scrollToSection(sectionId) {
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
     window.accessiScan = new AccessiScan();
+    
+    // Initialize mobile menu functionality
+    initializeMobileMenu();
 });
+
+/**
+ * Initialize mobile menu toggle functionality
+ */
+function initializeMobileMenu() {
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', function() {
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+            
+            // Toggle menu visibility
+            if (isExpanded) {
+                mobileMenu.classList.add('hidden');
+                this.setAttribute('aria-expanded', 'false');
+                
+                // Change icon back to hamburger
+                this.innerHTML = `
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                `;
+            } else {
+                mobileMenu.classList.remove('hidden');
+                this.setAttribute('aria-expanded', 'true');
+                
+                // Change icon to X
+                this.innerHTML = `
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                `;
+            }
+        });
+        
+        // Close mobile menu when clicking on links
+        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                
+                // Reset icon
+                mobileMenuBtn.innerHTML = `
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                `;
+            });
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!mobileMenuBtn.contains(event.target) && !mobileMenu.contains(event.target)) {
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    
+                    // Reset icon
+                    mobileMenuBtn.innerHTML = `
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    `;
+                }
+            }
+        });
+        
+        // Close mobile menu on escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                mobileMenuBtn.focus();
+                
+                // Reset icon
+                mobileMenuBtn.innerHTML = `
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                `;
+            }
+        });
+    }
+    
+    // Handle mobile share and export buttons
+    const shareBtnMobile = document.getElementById('share-btn-mobile');
+    const exportBtnMobile = document.getElementById('export-pdf-btn-mobile');
+    
+    if (shareBtnMobile) {
+        shareBtnMobile.addEventListener('click', function() {
+            // Same functionality as desktop share button
+            const shareBtn = document.getElementById('share-btn');
+            if (shareBtn) {
+                shareBtn.click();
+            }
+        });
+    }
+    
+    if (exportBtnMobile) {
+        exportBtnMobile.addEventListener('click', function() {
+            // Same functionality as desktop export button
+            const exportBtn = document.getElementById('export-pdf-btn');
+            if (exportBtn) {
+                exportBtn.click();
+            }
+        });
+    }
+}

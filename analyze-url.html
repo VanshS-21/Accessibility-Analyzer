@@ -9,48 +9,57 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="bg-gray-950 min-h-screen">
-    <!-- Animated Background -->
-    <div class="background-container">
-        <div class="absolute inset-0 opacity-50 grid-pattern"
-             style="background-image: 
-                    linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
-                    background-size: 40px 40px;">
-        </div>
-        
-        <div class="absolute inset-0">
-            <div class="absolute pointer-events-none spotlight-secondary opacity-40"
-                 style="background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
-                        width: 500px; height: 500px; top: 20%; right: 10%;
-                        filter: blur(2px);">
-            </div>
-        </div>
+    <!-- Animated Gradient Mesh Background -->
+    <div class="gradient-mesh-bg">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+        <div class="gradient-orb orb-4"></div>
+        <div class="gradient-orb orb-5"></div>
+        <div class="spotlight spotlight-1"></div>
+        <div class="spotlight spotlight-2"></div>
+        <div class="spotlight spotlight-3"></div>
     </div>
 
     <!-- Navbar -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-gray-950/80 backdrop-blur-md border-b border-gray-800/30">
-        <div class="w-full px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center h-16">
-                <div class="flex items-center space-x-2">
-                    <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-md flex items-center justify-center">
-                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-gray-950/20 backdrop-blur-xl border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-violet-500 via-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" />
                         </svg>
                     </div>
-                    <a href="index.html" class="text-xl font-semibold text-white hover:text-purple-300 transition-colors">Symphony</a>
+                    <a href="index.html" class="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent hover:from-violet-300 hover:to-blue-300 transition-all duration-300">Symphony</a>
                 </div>
 
-                <div class="hidden md:flex flex-1 justify-center">
-                    <div class="flex items-center space-x-8">
-                        <a href="index.html" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">Home</a>
-                        <a href="analyze-html.html" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">HTML Analysis</a>
-                        <span class="text-white font-medium text-sm px-3 py-2 rounded-md bg-blue-500/20">URL Analysis</span>
-                        <a href="dashboard.html" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">Dashboard</a>
-                    </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium relative group">
+                        Home
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-violet-500 to-blue-500 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="analyze-html.html" class="text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium relative group">
+                        HTML Analysis
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-violet-500 to-blue-500 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <span class="text-white font-medium text-sm px-4 py-2 rounded-xl bg-blue-500/20 border border-blue-500/30">URL Analysis</span>
                 </div>
                 
-                <div class="hidden md:flex items-center justify-end space-x-4">
-                    <a href="results.html" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">View Results</a>
+                <!-- Mobile menu button -->
+                <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white" aria-label="Toggle mobile menu" aria-expanded="false">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden bg-gray-950/95 backdrop-blur-xl border-t border-white/10">
+                <div class="px-4 py-4 space-y-3">
+                    <a href="index.html" class="block text-gray-300 hover:text-white transition-all duration-300 text-lg font-medium">Home</a>
+                    <a href="analyze-html.html" class="block text-gray-300 hover:text-white transition-all duration-300 text-lg font-medium">HTML Analysis</a>
+                    <span class="block text-white font-medium text-lg px-4 py-2 rounded-xl bg-blue-500/20 border border-blue-500/30">URL Analysis</span>
                 </div>
             </div>
         </div>
@@ -62,16 +71,18 @@
             
             <!-- Page Header -->
             <div class="text-center mb-12">
-                <h1 class="text-4xl font-bold text-white mb-4">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                    <span class="bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
                     Website URL Analysis
+                    </span>
                 </h1>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                <p class="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
                     Enter a website URL to analyze for accessibility compliance and WCAG 2.1 violations
                 </p>
             </div>
 
             <!-- URL Input Form -->
-            <div class="analysis-form symphony-card mb-8">
+            <div class="analysis-form glass-card mb-8">
                 <form id="url-analysis-form">
                     <div class="mb-8">
                         <label for="url-input" class="block text-lg font-medium text-white mb-3">
@@ -87,13 +98,13 @@
                                 type="url" 
                                 id="url-input" 
                                 name="url-input"
-                                class="input-dark w-full pl-10 pr-32 py-4 text-lg rounded-xl"
+                                class="w-full pl-10 pr-32 py-5 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all duration-300 text-lg backdrop-blur-sm"
                                 placeholder="https://example.com"
                                 required>
                             <button 
                                 type="submit" 
                                 id="url-analyze-btn"
-                                class="absolute right-2 top-2 bottom-2 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-6 rounded-lg font-medium transition-all duration-200 hover:scale-105 flex items-center">
+                                class="absolute right-3 top-3 bottom-3 bg-gradient-to-r from-violet-500 to-blue-500 hover:from-violet-600 hover:to-blue-600 text-white px-8 rounded-xl font-semibold transition-all duration-300 hover:scale-105 flex items-center">
                                 <span id="url-analyze-btn-text">Analyze</span>
                                 <div id="url-analyze-spinner" class="hidden loading-spinner ml-2"></div>
                             </button>
@@ -122,7 +133,7 @@
             </div>
 
             <!-- CORS Warning -->
-            <div class="bg-yellow-500/20 border border-yellow-500/50 rounded-xl p-6 mb-8">
+            <div class="glass-card bg-yellow-500/10 border-yellow-500/30 p-8 mb-8">
                 <div class="flex items-start">
                     <svg class="w-6 h-6 text-yellow-400 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -147,7 +158,7 @@
             </div>
 
             <!-- Results Preview -->
-            <div id="url-results-preview" class="hidden symphony-card">
+            <div id="url-results-preview" class="hidden glass-card">
                 <h3 class="text-2xl font-bold text-white mb-6">
                     <svg class="w-6 h-6 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -158,19 +169,19 @@
                 <div class="flex flex-col sm:flex-row gap-4">
                     <button 
                         id="url-view-results-btn"
-                        class="btn-gradient text-white px-8 py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105">
+                        class="bg-gradient-to-r from-violet-500 to-blue-500 hover:from-violet-600 hover:to-blue-600 text-white px-8 py-3 rounded-2xl font-semibold transition-all duration-300 hover:scale-105">
                         View Detailed Results
                     </button>
                     <button 
                         id="url-analyze-another-btn"
-                        class="btn-secondary-dark text-white px-8 py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105">
+                        class="glass-card bg-white/5 hover:bg-white/10 text-white px-8 py-3 rounded-2xl font-semibold transition-all duration-300 hover:scale-105">
                         Analyze Another URL
                     </button>
                 </div>
             </div>
 
             <!-- Alternative Method -->
-            <section class="mt-8 symphony-card">
+            <section class="mt-8 glass-card">
                 <h3 class="text-2xl font-bold text-white mb-6">
                     <svg class="w-6 h-6 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
@@ -210,7 +221,7 @@
                 
                 <div class="text-center">
                     <a href="analyze-html.html" 
-                       class="btn-gradient text-white px-8 py-3 rounded-lg font-medium inline-flex items-center transition-all duration-200 hover:scale-105">
+                       class="bg-gradient-to-r from-violet-500 to-blue-500 hover:from-violet-600 hover:to-blue-600 text-white px-8 py-3 rounded-2xl font-semibold inline-flex items-center transition-all duration-300 hover:scale-105">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                         </svg>

@@ -8,489 +8,624 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.7.2/axe.min.js"></script>
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="bg-gray-950 min-h-screen">
-    <!-- Animated Background -->
-    <div class="background-container">
-        <div class="absolute inset-0 opacity-50 grid-pattern"
-             style="background-image: 
-                    linear-gradient(rgba(147, 51, 234, 0.05) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(147, 51, 234, 0.05) 1px, transparent 1px);
-                    background-size: 40px 40px;">
-        </div>
-        
-        <div class="absolute inset-0">
-            <div class="absolute pointer-events-none spotlight-main opacity-30"
-                 style="background: radial-gradient(circle, rgba(147, 51, 234, 0.3) 0%, transparent 70%);
-                        width: 600px; height: 600px; top: 10%; left: 60%;
-                        filter: blur(2px);">
-            </div>
-        </div>
+<body class="bg-gray-950 min-h-screen overflow-x-hidden">
+    <!-- Animated Gradient Mesh Background -->
+    <div class="gradient-mesh-bg">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+        <div class="gradient-orb orb-4"></div>
+        <div class="gradient-orb orb-5"></div>
+        <div class="spotlight spotlight-1"></div>
+        <div class="spotlight spotlight-2"></div>
+        <div class="spotlight spotlight-3"></div>
     </div>
 
     <!-- Navbar -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-gray-950/80 backdrop-blur-md border-b border-gray-800/30">
-        <div class="w-full px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center h-16">
-                <div class="flex items-center space-x-2">
-                    <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-md flex items-center justify-center">
-                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-gray-950/20 backdrop-blur-xl border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-violet-500 via-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" />
                         </svg>
                     </div>
-                    <span class="text-xl font-semibold text-white">Symphony</span>
+                    <span class="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Symphony</span>
                 </div>
 
-                <div class="hidden md:flex flex-1 justify-center">
-                    <div class="flex items-center space-x-8">
-                        <a href="#how-it-works" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">How It Works</a>
-                        <a href="#features" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">Features</a>
-                        <a href="#pricing" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">Pricing</a>
-                        <a href="dashboard.html" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">Dashboard</a>
-                    </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium relative group">
+                        Features
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-violet-500 to-blue-500 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#how-it-works" class="text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium relative group">
+                        How It Works
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-violet-500 to-blue-500 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="analyze-html.html" class="bg-gradient-to-r from-violet-500 to-blue-500 hover:from-violet-600 hover:to-blue-600 text-white px-6 py-2.5 rounded-xl font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-violet-500/25">
+                        Start Analysis
+                    </a>
                 </div>
-                
-                <div class="hidden md:flex items-center justify-end space-x-4">
-                    <button class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">Sign In</button>
-                    <button class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white text-sm font-medium px-6 py-2 rounded-md transition-all duration-200 shadow-lg hover:shadow-purple-500/25 hover:scale-105">Sign Up</button>
-                </div>
+
+                <!-- Mobile menu button -->
+                <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white" aria-label="Toggle mobile menu" aria-expanded="false">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-950/95 backdrop-blur-xl border-t border-white/10">
+            <div class="px-4 py-4 space-y-3">
+                <a href="#features" class="block text-gray-300 hover:text-white transition-all duration-300 text-lg font-medium">Features</a>
+                <a href="#how-it-works" class="block text-gray-300 hover:text-white transition-all duration-300 text-lg font-medium">How It Works</a>
+                <a href="analyze-html.html" class="block bg-gradient-to-r from-violet-500 to-blue-500 hover:from-violet-600 hover:to-blue-600 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 text-center">
+                    Start Analysis
+                </a>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="relative z-10 pt-24 pb-16" role="main">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <!-- Hero Section -->
-            <div class="text-center mb-20">
-                <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">
-                    Symphony
-                </h1>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-12">
-                    Where Every Voice is Heard - Advanced accessibility analysis for modern web applications
-                </p>
+    <main class="relative z-10 pt-20" role="main">
+        <!-- Hero Section -->
+        <section class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+            <div class="max-w-6xl mx-auto text-center">
+                <div class="mb-8">
+                    <h1 class="text-6xl md:text-8xl font-black mb-6">
+                        <span class="bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
+                            Symphony
+                        </span>
+                    </h1>
+                    <p class="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed">
+                        Where Every Voice is Heard — Comprehensive accessibility analysis for web content using industry-standard WCAG 2.1 guidelines
+                    </p>
+                </div>
                 
                 <!-- Quick Analysis Input -->
-                <div class="max-w-2xl mx-auto mb-8">
-                    <div class="relative">
-                        <input type="url" 
-                               id="quick-url-input"
-                               placeholder="Enter your website URL to get started..."
-                               class="w-full px-6 py-4 bg-gray-800/50 border border-gray-700/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-lg">
-                        <button onclick="quickAnalyze()" 
-                                class="absolute right-3 top-3 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-6 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105">
-                            Analyze
-                        </button>
+                <div class="max-w-3xl mx-auto mb-16">
+                    <div class="glass-card p-8">
+                        <div class="relative">
+                            <input type="url" 
+                                   id="hero-url-input"
+                                   placeholder="Enter your website URL to get started..."
+                                   class="w-full px-6 py-5 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all duration-300 text-lg backdrop-blur-sm">
+                            <button onclick="quickAnalyze()" 
+                                    class="absolute right-3 top-3 bottom-3 bg-gradient-to-r from-violet-500 to-blue-500 hover:from-violet-600 hover:to-blue-600 text-white px-8 rounded-xl font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-violet-500/25">
+                                Analyze Now
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-center mt-6 space-x-6 text-sm text-gray-400">
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Free Analysis
+                            </span>
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                No Signup Required
+                            </span>
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                WCAG 2.1 Compliant
+                            </span>
+                        </div>
                     </div>
-                    <p class="text-sm text-gray-400 mt-3">
-                        Free analysis • No signup required • WCAG 2.1 compliant
-                    </p>
                 </div>
-            </div>
 
-            <!-- How It Works Section -->
-            <section id="how-it-works" class="mb-20">
-                <div class="text-center mb-16">
-                    <h2 class="text-4xl font-bold text-white mb-4">
-                        Get Your Report in Three Simple Steps
-                    </h2>
-                    <p class="text-xl text-gray-300">
-                        Our streamlined process makes accessibility analysis quick and effortless
-                    </p>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Step 1 -->
-                    <div class="text-center">
-                        <div class="w-16 h-16 bg-gray-800/50 rounded-xl flex items-center justify-center mx-auto mb-6 border border-gray-700/50">
-                            <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- CTA Buttons -->
+                <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                    <a href="analyze-html.html" 
+                       class="glass-card px-10 py-4 bg-gradient-to-r from-violet-500/20 to-blue-500/20 border-violet-500/30 hover:from-violet-500/30 hover:to-blue-500/30 text-white font-semibold rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-violet-500/20 group">
+                        <span class="flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                            </svg>
+                            Analyze HTML Code
+                        </span>
+                    </a>
+                    <a href="analyze-url.html" 
+                       class="glass-card px-10 py-4 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-xl group">
+                        <span class="flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                             </svg>
-                        </div>
-                        <div class="text-6xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-4">1</div>
-                        <h3 class="text-2xl font-bold text-white mb-4">Paste Your URL</h3>
-                        <p class="text-gray-300">
-                            Simply enter your website URL into our analyzer and we'll handle the rest.
-                        </p>
-                    </div>
-                    
-                    <!-- Step 2 -->
-                    <div class="text-center">
-                        <div class="w-16 h-16 bg-gray-800/50 rounded-xl flex items-center justify-center mx-auto mb-6 border border-gray-700/50">
-                            <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </div>
-                        <div class="text-6xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-4">2</div>
-                        <h3 class="text-2xl font-bold text-white mb-4">Run Analysis</h3>
-                        <p class="text-gray-300">
-                            Our AI-powered engine scans your site against WCAG 2.1 AA guidelines in seconds.
-                        </p>
-                    </div>
-                    
-                    <!-- Step 3 -->
-                    <div class="text-center">
-                        <div class="w-16 h-16 bg-gray-800/50 rounded-xl flex items-center justify-center mx-auto mb-6 border border-gray-700/50">
-                            <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                        </div>
-                        <div class="text-6xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-4">3</div>
-                        <h3 class="text-2xl font-bold text-white mb-4">Receive Report</h3>
-                        <p class="text-gray-300">
-                            Get a comprehensive report with actionable insights to improve accessibility.
-                        </p>
-                    </div>
+                            Analyze Website URL
+                        </span>
+                    </a>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- Features Section -->
-            <section id="features" class="mb-20">
-                <div class="text-center mb-16">
-                    <h2 class="text-4xl font-bold text-white mb-4">
-                        Comprehensive Accessibility Analysis
+        <!-- Features Section -->
+        <section id="features" class="py-32 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-20">
+                    <h2 class="text-5xl md:text-6xl font-bold mb-6">
+                        <span class="bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
+                            Comprehensive Analysis
+                        </span>
                     </h2>
-                    <p class="text-xl text-gray-300">
-                        Advanced testing across all critical accessibility areas with actionable insights and detailed reporting
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                        Essential accessibility testing using axe-core library to identify WCAG violations in your HTML code
                     </p>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    
+                <!-- Masonry Grid -->
+                <div class="masonry-grid">
                     <!-- Color Contrast Analysis -->
-                    <div class="symphony-card">
-                        <div class="flex items-center mb-6">
-                            <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mr-4">
-                                <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM7 3H5a2 2 0 00-2 2v12a4 4 0 004 4h2M9 3h2a2 2 0 012 2v12a4 4 0 01-2 2H9m6 0a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4z" />
-                                </svg>
+                    <div class="masonry-item">
+                        <div class="glass-card h-full">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-14 h-14 bg-gradient-to-br from-violet-500/20 to-purple-500/20 rounded-2xl flex items-center justify-center border border-violet-500/30">
+                                    <svg class="w-7 h-7 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM7 3H5a2 2 0 00-2 2v12a4 4 0 004 4h2M9 3h2a2 2 0 012 2v12a4 4 0 01-2 2H9m6 0a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4z" />
+                                    </svg>
+                                </div>
+                                <span class="text-xs font-bold text-violet-400 bg-violet-500/20 px-3 py-1.5 rounded-full border border-violet-500/30">WCAG 2.1</span>
                             </div>
-                            <span class="text-xs font-semibold text-purple-400 bg-purple-500/20 px-2 py-1 rounded">WCAG 2.1</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-4">Color Contrast Analysis</h3>
-                        <p class="text-gray-300 mb-6">
-                            Automatically detects color contrast ratios across your entire website and identifies text that doesn't meet WCAG AA or AAA standards.
-                        </p>
-                        <ul class="space-y-2 text-sm text-gray-400 mb-6">
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                Tests against WCAG 2.1 AA & AAA standards
-                            </li>
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                Analyzes dynamic content and overlays
-                            </li>
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                Provides specific color recommendations
-                            </li>
-                        </ul>
-                        <div class="flex justify-between items-center pt-4 border-t border-gray-700/50">
-                            <span class="text-xs font-semibold text-gray-400">Real-time scanning</span>
-                            <span class="text-xs font-semibold text-green-400">Advanced analysis available</span>
+                            <h3 class="text-2xl font-bold text-white mb-4">Color Contrast Analysis</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                Detects color contrast issues in your HTML code and identifies text that doesn't meet WCAG AA standards using axe-core testing.
+                            </p>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-violet-400 rounded-full mr-3"></div>
+                                    Tests against WCAG 2.1 AA & AAA standards
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-violet-400 rounded-full mr-3"></div>
+                                    Analyzes static HTML content structure
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-violet-400 rounded-full mr-3"></div>
+                                    Identifies contrast ratio problems
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-4 border-t border-white/10">
+                                <span class="text-xs font-semibold text-gray-400">Real-time scanning</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                                    <span class="text-xs font-semibold text-green-400">Active</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- ARIA Validation -->
-                    <div class="symphony-card">
-                        <div class="flex items-center mb-6">
-                            <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mr-4">
-                                <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                                </svg>
+                    <div class="masonry-item">
+                        <div class="glass-card h-full">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-14 h-14 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-2xl flex items-center justify-center border border-blue-500/30">
+                                    <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                    </svg>
+                                </div>
+                                <span class="text-xs font-bold text-blue-400 bg-blue-500/20 px-3 py-1.5 rounded-full border border-blue-500/30">Semantic</span>
                             </div>
-                            <span class="text-xs font-semibold text-purple-400 bg-purple-500/20 px-2 py-1 rounded">Semantic</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-4">ARIA Validation</h3>
-                        <p class="text-gray-300 mb-6">
-                            Validates ARIA attributes and semantic HTML structure for optimal screen reader compatibility.
-                        </p>
-                        <ul class="space-y-2 text-sm text-gray-400 mb-6">
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                ARIA roles & properties
-                            </li>
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                Semantic HTML validation
-                            </li>
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                Screen reader testing
-                            </li>
-                        </ul>
-                        <div class="flex justify-between items-center pt-4 border-t border-gray-700/50">
-                            <span class="text-xs font-semibold text-gray-400">Automated validation</span>
+                            <h3 class="text-2xl font-bold text-white mb-4">ARIA Validation</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                Validates ARIA attributes and semantic HTML structure for optimal screen reader compatibility and assistive technology support.
+                            </p>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-blue-400 rounded-full mr-3"></div>
+                                    ARIA roles & properties validation
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-blue-400 rounded-full mr-3"></div>
+                                    Semantic HTML structure analysis
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-blue-400 rounded-full mr-3"></div>
+                                    Screen reader compatibility testing
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Keyboard Navigation -->
-                    <div class="symphony-card">
-                        <div class="flex items-center mb-6">
-                            <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mr-4">
-                                <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                                </svg>
+                    <div class="masonry-item">
+                        <div class="glass-card h-full">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-14 h-14 bg-gradient-to-br from-emerald-500/20 to-teal-500/20 rounded-2xl flex items-center justify-center border border-emerald-500/30">
+                                    <svg class="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                    </svg>
+                                </div>
+                                <span class="text-xs font-bold text-emerald-400 bg-emerald-500/20 px-3 py-1.5 rounded-full border border-emerald-500/30">Navigation</span>
                             </div>
-                            <span class="text-xs font-semibold text-purple-400 bg-purple-500/20 px-2 py-1 rounded">Navigation</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-4">Keyboard Navigation</h3>
-                        <p class="text-gray-300 mb-6">
-                            Comprehensive testing of tab order, focus indicators, and keyboard shortcuts to ensure complete keyboard accessibility.
-                        </p>
-                        <ul class="space-y-2 text-sm text-gray-400 mb-6">
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                Tab order validation
-                            </li>
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                Focus indicator testing
-                            </li>
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                Keyboard shortcut analysis
-                            </li>
-                        </ul>
-                        <div class="flex justify-between items-center pt-4 border-t border-gray-700/50">
-                            <span class="text-xs font-semibold text-gray-400">Interactive testing</span>
+                            <h3 class="text-2xl font-bold text-white mb-4">Keyboard Navigation</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                Comprehensive testing of tab order, focus indicators, and keyboard shortcuts to ensure complete keyboard accessibility for all users.
+                            </p>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-emerald-400 rounded-full mr-3"></div>
+                                    Tab order validation and optimization
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-emerald-400 rounded-full mr-3"></div>
+                                    Focus indicator visibility testing
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-emerald-400 rounded-full mr-3"></div>
+                                    Keyboard shortcut analysis
+                                </div>
+                            </div>
+                            <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-emerald-300">Interactive Testing</span>
+                                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Form Testing -->
-                    <div class="symphony-card">
-                        <div class="flex items-center mb-6">
-                            <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mr-4">
-                                <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
+                    <div class="masonry-item">
+                        <div class="glass-card h-full">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-14 h-14 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-2xl flex items-center justify-center border border-orange-500/30">
+                                    <svg class="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                </div>
+                                <span class="text-xs font-bold text-orange-400 bg-orange-500/20 px-3 py-1.5 rounded-full border border-orange-500/30">Forms</span>
                             </div>
-                            <span class="text-xs font-semibold text-purple-400 bg-purple-500/20 px-2 py-1 rounded">Forms</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-4">Form Testing</h3>
-                        <p class="text-gray-300 mb-6">
-                            Comprehensive evaluation of form accessibility including label associations, error handling mechanisms, and input validation feedback.
-                        </p>
-                        <ul class="space-y-2 text-sm text-gray-400 mb-6">
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                Label validation
-                            </li>
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                Error messaging
-                            </li>
-                        </ul>
-                        <div class="flex justify-between items-center pt-4 border-t border-gray-700/50">
-                            <span class="text-xs font-semibold text-gray-400">Form compliance</span>
+                            <h3 class="text-2xl font-bold text-white mb-4">Form Testing</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                Comprehensive evaluation of form accessibility including label associations, error handling mechanisms, and input validation feedback systems.
+                            </p>
+                            <div class="space-y-3">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
+                                    Label association validation
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
+                                    Error messaging accessibility
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
+                                    Input validation feedback
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Media Analysis -->
-                    <div class="symphony-card">
-                        <div class="flex items-center mb-6">
-                            <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mr-4">
-                                <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
+                    <div class="masonry-item">
+                        <div class="glass-card h-full">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-14 h-14 bg-gradient-to-br from-pink-500/20 to-rose-500/20 rounded-2xl flex items-center justify-center border border-pink-500/30">
+                                    <svg class="w-7 h-7 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <span class="text-xs font-bold text-pink-400 bg-pink-500/20 px-3 py-1.5 rounded-full border border-pink-500/30">Media</span>
                             </div>
-                            <span class="text-xs font-semibold text-purple-400 bg-purple-500/20 px-2 py-1 rounded">Media</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-4">Media Analysis</h3>
-                        <p class="text-gray-300 mb-6">
-                            Comprehensive analysis of images, videos, and multimedia content for accessibility compliance.
-                        </p>
-                        <ul class="space-y-2 text-sm text-gray-400 mb-6">
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                Alt text validation
-                            </li>
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                Video caption checking
-                            </li>
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-orange-400 rounded-full mr-3"></div>
-                                Audio transcription
-                            </li>
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-orange-400 rounded-full mr-3"></div>
-                                AI-powered suggestions
-                            </li>
-                        </ul>
-                        <div class="flex justify-between items-center pt-4 border-t border-gray-700/50">
-                            <span class="text-xs font-semibold text-gray-400">Advanced analysis available</span>
-                            <span class="text-xs font-semibold text-purple-400">AI-enhanced scanning</span>
+                            <h3 class="text-2xl font-bold text-white mb-4">Media Analysis</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                Basic analysis of images and multimedia content for accessibility compliance using standard axe-core rules.
+                            </p>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-pink-400 rounded-full mr-3"></div>
+                                    Alt text validation
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-pink-400 rounded-full mr-3"></div>
+                                    Image accessibility checking
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-pink-400 rounded-full mr-3"></div>
+                                    Media element validation
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Performance Impact -->
-                    <div class="symphony-card">
-                        <div class="flex items-center mb-6">
-                            <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mr-4">
-                                <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                </svg>
+                    <div class="masonry-item">
+                        <div class="glass-card h-full">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-14 h-14 bg-gradient-to-br from-yellow-500/20 to-amber-500/20 rounded-2xl flex items-center justify-center border border-yellow-500/30">
+                                    <svg class="w-7 h-7 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                </div>
+                                <span class="text-xs font-bold text-yellow-400 bg-yellow-500/20 px-3 py-1.5 rounded-full border border-yellow-500/30">Speed</span>
                             </div>
-                            <span class="text-xs font-semibold text-purple-400 bg-purple-500/20 px-2 py-1 rounded">Speed</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-4">Performance Impact</h3>
-                        <p class="text-gray-300 mb-6">
-                            Analyzes how accessibility features affect page performance and loading times. Evaluates the impact of screen reader compatibility.
-                        </p>
-                        <ul class="space-y-2 text-sm text-gray-400 mb-6">
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                Load time analysis
-                            </li>
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                Resource optimization
-                            </li>
-                        </ul>
-                        <div class="flex justify-between items-center pt-4 border-t border-gray-700/50">
-                            <span class="text-xs font-semibold text-gray-400">Performance metrics</span>
+                            <h3 class="text-2xl font-bold text-white mb-4">Accessibility Standards</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                Tests your HTML code against established WCAG 2.1 accessibility standards to ensure compliance and improve user experience.
+                            </p>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-yellow-400 rounded-full mr-3"></div>
+                                    WCAG 2.1 Level A testing
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-yellow-400 rounded-full mr-3"></div>
+                                    WCAG 2.1 Level AA validation
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-yellow-400 rounded-full mr-3"></div>
+                                    Best practices verification
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Custom Rules Engine -->
-                    <div class="symphony-card">
-                        <div class="flex items-center mb-6">
-                            <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mr-4">
-                                <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
-                                </svg>
+                    <div class="masonry-item">
+                        <div class="glass-card h-full">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-14 h-14 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-2xl flex items-center justify-center border border-indigo-500/30">
+                                    <svg class="w-7 h-7 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
+                                    </svg>
+                                </div>
+                                <span class="text-xs font-bold text-indigo-400 bg-indigo-500/20 px-3 py-1.5 rounded-full border border-indigo-500/30">Custom</span>
                             </div>
-                            <span class="text-xs font-semibold text-purple-400 bg-purple-500/20 px-2 py-1 rounded">Custom</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-4">Custom Rules Engine</h3>
-                        <p class="text-gray-300 mb-6">
-                            Configure organization-specific accessibility standards and create custom validation rules tailored to your industry requirements.
-                        </p>
-                        <ul class="space-y-2 text-sm text-gray-400 mb-6">
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                Industry-specific rules
-                            </li>
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                Custom test suites
-                            </li>
-                            <li class="flex items-center">
-                                <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                Workflow integration
-                            </li>
-                        </ul>
-                        <div class="flex justify-between items-center pt-4 border-t border-gray-700/50">
-                            <span class="text-xs font-semibold text-gray-400">Configurable rules</span>
-                            <span class="text-xs font-semibold text-purple-400">Enterprise ready</span>
+                            <h3 class="text-2xl font-bold text-white mb-4">Educational Resources</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                Learn about web accessibility best practices through detailed explanations and real-world examples of common accessibility issues.
+                            </p>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-indigo-400 rounded-full mr-3"></div>
+                                    WCAG guideline explanations
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-indigo-400 rounded-full mr-3"></div>
+                                    Step-by-step fix instructions
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-indigo-400 rounded-full mr-3"></div>
+                                    Real-world impact examples
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Compliance Reporting -->
-                    <div class="symphony-card md:col-span-2 lg:col-span-3">
-                        <div class="flex items-center mb-6">
-                            <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mr-4">
-                                <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                </svg>
-                            </div>
-                            <span class="text-xs font-semibold text-purple-400 bg-purple-500/20 px-2 py-1 rounded">Reports</span>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            <div>
-                                <h3 class="text-xl font-bold text-white mb-4">Compliance Reporting & Analytics</h3>
-                                <p class="text-gray-300 mb-6">
-                                    Generates comprehensive reports with actionable insights, priority recommendations, and detailed compliance scores across all WCAG guidelines. Export reports in multiple formats, track progress over time, and share results with stakeholders.
-                                </p>
-                                
-                                <div class="grid grid-cols-3 gap-4 mb-6">
-                                    <div class="text-center">
-                                        <div class="text-2xl font-bold text-white mb-1">98%</div>
-                                        <p class="text-xs text-gray-400">Accuracy Rate</p>
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="text-2xl font-bold text-white mb-1">15s</div>
-                                        <p class="text-xs text-gray-400">Avg Scan Time</p>
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="text-2xl font-bold text-white mb-1">50+</div>
-                                        <p class="text-xs text-gray-400">Test Categories</p>
-                                    </div>
+                    <div class="masonry-item masonry-item-large">
+                        <div class="glass-card h-full">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-14 h-14 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-2xl flex items-center justify-center border border-cyan-500/30">
+                                    <svg class="w-7 h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                    </svg>
                                 </div>
+                                <span class="text-xs font-bold text-cyan-400 bg-cyan-500/20 px-3 py-1.5 rounded-full border border-cyan-500/30">Reports</span>
                             </div>
                             
-                            <div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <ul class="space-y-2 text-sm text-gray-400">
-                                        <li class="flex items-center">
-                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-3"></div>
-                                            PDF & HTML exports
-                                        </li>
-                                        <li class="flex items-center">
-                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-3"></div>
-                                            Progress tracking
-                                        </li>
-                                        <li class="flex items-center">
-                                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-3"></div>
-                                            Advanced analysis available
-                                        </li>
-                                    </ul>
-                                    <ul class="space-y-2 text-sm text-gray-400">
-                                        <li class="flex items-center">
-                                            <div class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-3"></div>
-                                            Team collaboration
-                                        </li>
-                                        <li class="flex items-center">
-                                            <div class="w-1.5 h-1.5 bg-orange-400 rounded-full mr-3"></div>
-                                            Priority scoring
-                                        </li>
-                                    </ul>
+                            <h3 class="text-2xl font-bold text-white mb-4">Detailed Results & Reports</h3>
+                            <p class="text-gray-300 mb-8 leading-relaxed">
+                                Provides clear, detailed accessibility reports showing violations found in your HTML code with explanations and suggestions for fixes based on WCAG guidelines.
+                            </p>
+                            
+                            <div class="grid grid-cols-2 gap-6 mb-6">
+                                <div class="space-y-3">
+                                    <div class="flex items-center text-sm text-gray-400">
+                                        <div class="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
+                                        Text-based report export
+                                    </div>
+                                    <div class="flex items-center text-sm text-gray-400">
+                                        <div class="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
+                                        Issue severity classification
+                                    </div>
+                                    <div class="flex items-center text-sm text-gray-400">
+                                        <div class="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
+                                        Clear violation explanations
+                                    </div>
                                 </div>
-                                
-                                <div class="mt-6 pt-4 border-t border-gray-700/50 flex justify-between items-center">
-                                    <span class="text-xs font-semibold text-gray-400">Enterprise reporting</span>
+                                <div class="space-y-3">
+                                    <div class="flex items-center text-sm text-gray-400">
+                                        <div class="w-2 h-2 bg-cyan-400 rounded-full mr-3"></div>
+                                        WCAG success criteria mapping
+                                    </div>
+                                    <div class="flex items-center text-sm text-gray-400">
+                                        <div class="w-2 h-2 bg-cyan-400 rounded-full mr-3"></div>
+                                        Fix recommendations
+                                    </div>
+                                    <div class="flex items-center text-sm text-gray-400">
+                                        <div class="w-2 h-2 bg-cyan-400 rounded-full mr-3"></div>
+                                        Real-world impact examples
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Real-time Monitoring -->
+                    <div class="masonry-item">
+                        <div class="glass-card h-full">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-14 h-14 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-2xl flex items-center justify-center border border-green-500/30">
+                                    <svg class="w-7 h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                </div>
+                                <span class="text-xs font-bold text-green-400 bg-green-500/20 px-3 py-1.5 rounded-full border border-green-500/30">Live</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-4">Sample Testing</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                Includes pre-loaded sample HTML codes with various accessibility issues to help you understand common problems and learn how to fix them.
+                            </p>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
+                                    Sample with accessibility issues
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
+                                    Clean, accessible sample code
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
+                                    Educational mixed examples
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- API Integration -->
+                    <div class="masonry-item">
+                        <div class="glass-card h-full">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-14 h-14 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl flex items-center justify-center border border-purple-500/30">
+                                    <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <span class="text-xs font-bold text-purple-400 bg-purple-500/20 px-3 py-1.5 rounded-full border border-purple-500/30">API</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-4">Easy to Use</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                Simple, user-friendly interface that makes accessibility testing accessible to developers of all skill levels without complex setup.
+                            </p>
+                            <div class="space-y-3">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
+                                    No installation required
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
+                                    Instant results display
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <div class="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
+                                    Clear, beginner-friendly interface
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Bottom Note -->
-                <div class="text-center mt-12">
-                    <p class="text-gray-400 text-sm">
-                        Each analysis provides actionable recommendations with code examples and priority levels to help you fix accessibility issues efficiently.
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section id="how-it-works" class="py-32 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-20">
+                    <h2 class="text-5xl md:text-6xl font-bold mb-6">
+                        <span class="bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
+                            How It Works
+                        </span>
+                    </h2>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                        Our streamlined process makes accessibility analysis quick and effortless
                     </p>
-                    <div class="mt-4 flex justify-center space-x-4">
-                        <a href="#" class="text-blue-400 hover:text-blue-300 text-sm underline">WCAG 2.1 Guidelines</a>
-                        <span class="text-gray-600">•</span>
-                        <a href="#" class="text-blue-400 hover:text-blue-300 text-sm underline">ARIA Authoring Practices</a>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                    <!-- Step 1 -->
+                    <div class="text-center group">
+                        <div class="glass-card p-8 mb-6 group-hover:scale-105 transition-all duration-500">
+                            <div class="w-20 h-20 bg-gradient-to-br from-violet-500/20 to-purple-500/20 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-violet-500/30 group-hover:border-violet-400/50 transition-all duration-300">
+                                <svg class="w-10 h-10 text-violet-400 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                </svg>
+                            </div>
+                            <div class="text-7xl font-black bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent mb-4 group-hover:scale-110 transition-transform duration-300">1</div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Submit Your Content</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Enter your website URL or paste HTML code directly into our analyzer. We support both live websites and static code analysis.
+                        </p>
+                    </div>
+                    
+                    <!-- Step 2 -->
+                    <div class="text-center group">
+                        <div class="glass-card p-8 mb-6 group-hover:scale-105 transition-all duration-500">
+                            <div class="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-blue-500/30 group-hover:border-blue-400/50 transition-all duration-300">
+                                <svg class="w-10 h-10 text-blue-400 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+                            <div class="text-7xl font-black bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-4 group-hover:scale-110 transition-transform duration-300">2</div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Automated Analysis</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Using axe-core library, we scan your HTML content against WCAG 2.1 guidelines and identify accessibility violations with clear explanations.
+                        </p>
+                    </div>
+                    
+                    <!-- Step 3 -->
+                    <div class="text-center group">
+                        <div class="glass-card p-8 mb-6 group-hover:scale-105 transition-all duration-500">
+                            <div class="w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-green-500/20 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-emerald-500/30 group-hover:border-emerald-400/50 transition-all duration-300">
+                                <svg class="w-10 h-10 text-emerald-400 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                            </div>
+                            <div class="text-7xl font-black bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent mb-4 group-hover:scale-110 transition-transform duration-300">3</div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Actionable Results</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Receive a comprehensive report with prioritized issues, code examples, and step-by-step fixes to improve accessibility.
+                        </p>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- CTA Section -->
-            <section id="get-started" class="text-center">
-                <h2 class="text-4xl font-bold text-white mb-6">
-                    Ready to Make Your Website Accessible?
-                </h2>
-                <p class="text-xl text-gray-300 mb-12">
-                    Join thousands of developers creating more inclusive web experiences
-                </p>
-                
-                <div class="flex flex-col sm:flex-row gap-6 justify-center">
-                    <a href="analyze-url.html" 
-                       class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-medium px-10 py-4 rounded-lg transition-all duration-200 shadow-lg hover:shadow-purple-500/25 hover:scale-105">
-                        Start Free Analysis
-                    </a>
-                    <a href="analyze-html.html" 
-                       class="bg-gray-800/50 hover:bg-gray-700/50 border border-gray-600/50 hover:border-gray-500/50 text-white font-medium px-10 py-4 rounded-lg transition-all duration-200 hover:scale-105">
-                        Analyze HTML Code
-                    </a>
+        <!-- Final CTA Section -->
+        <section class="py-32 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="glass-card p-12">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+                        Ready to Make Your Website Accessible?
+                    </h2>
+                    <p class="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+                        Start creating more inclusive web experiences by learning about accessibility through practical testing and analysis
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                        <a href="analyze-html.html" 
+                           class="bg-gradient-to-r from-violet-500 to-blue-500 hover:from-violet-600 hover:to-blue-600 text-white font-semibold px-12 py-4 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-violet-500/25 group">
+                            <span class="flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                                </svg>
+                                Start Free Analysis
+                            </span>
+                        </a>
+                        <a href="analyze-url.html" 
+                           class="glass-card bg-white/5 hover:bg-white/10 text-white font-semibold px-12 py-4 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-2xl group">
+                            <span class="flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                </svg>
+                                Analyze Website
+                            </span>
+                        </a>
+                    </div>
+                    
+                    <div class="mt-8 flex justify-center space-x-8 text-sm text-gray-400">
+                        <a href="#" class="hover:text-violet-400 transition-colors duration-300 underline">WCAG 2.1 Guidelines</a>
+                        <span>•</span>
+                        <a href="#" class="hover:text-violet-400 transition-colors duration-300 underline">ARIA Best Practices</a>
+                        <span>•</span>
+                        <a href="#" class="hover:text-violet-400 transition-colors duration-300 underline">Documentation</a>
+                    </div>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
     </main>
     
     <script src="js/app.js"></script>
