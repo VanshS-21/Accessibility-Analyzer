@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Accessibility Scanner - Coming Soon | AccessScan</title>
+    <meta name="description" content="URL accessibility scanner coming soon. Scan live websites directly for WCAG compliance. Get notified when this feature launches.">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1><a href="index.html">AccessScan</a></h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="analyzer.html" class="nav-link">Analyzer</a>
+                <a href="results.html" class="nav-link">Results</a>
+                <a href="url-analyzer.html" class="nav-link active">URL Scanner</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Coming Soon Container -->
+    <main class="coming-soon-main">
+        <div class="container">
+            <div class="coming-soon-container">
+                <div class="icon-wrapper">
+                    <svg class="coming-soon-icon" viewBox="0 0 100 100" fill="none">
+                        <circle cx="50" cy="50" r="40" stroke="var(--primary)" stroke-width="3" fill="none"/>
+                        <path d="M30 50 L45 65 L70 35" stroke="var(--primary)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="50" cy="25" r="8" fill="var(--secondary)"/>
+                        <rect x="46" y="15" width="8" height="20" fill="var(--secondary)" rx="4"/>
+                    </svg>
+                </div>
+                
+                <h1>URL Analysis Coming Soon</h1>
+                <p class="coming-soon-subtitle">
+                    Scan live websites directly by entering their URL
+                </p>
+                
+                <!-- Progress Indicator -->
+                <div class="development-progress">
+                    <div class="progress-header">
+                        <span>Development Progress</span>
+                        <span class="progress-percentage">75%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: 75%"></div>
+                    </div>
+                    <div class="eta-info">
+                        <span>Expected Launch: Q1 2025</span>
+                    </div>
+                </div>
+                
+                <!-- Features Preview -->
+                <div class="features-preview">
+                    <h3>Upcoming Features:</h3>
+                    <div class="features-grid">
+                        <div class="feature-preview-item">
+                            <div class="feature-icon">🌐</div>
+                            <h4>Direct Website URL Scanning</h4>
+                            <p>Enter any website URL and get instant accessibility analysis</p>
+                        </div>
+                        
+                        <div class="feature-preview-item">
+                            <div class="feature-icon">📊</div>
+                            <h4>Multi-page Accessibility Audits</h4>
+                            <p>Scan entire websites with comprehensive page-by-page analysis</p>
+                        </div>
+                        
+                        <div class="feature-preview-item">
+                            <div class="feature-icon">📈</div>
+                            <h4>Site-wide Accessibility Reports</h4>
+                            <p>Get detailed reports covering your entire website's accessibility</p>
+                        </div>
+                        
+                        <div class="feature-preview-item">
+                            <div class="feature-icon">⏰</div>
+                            <h4>Scheduled Accessibility Monitoring</h4>
+                            <p>Set up automated scans to monitor accessibility over time</p>
+                        </div>
+                        
+                        <div class="feature-preview-item">
+                            <div class="feature-icon">🔍</div>
+                            <h4>Deep Page Analysis</h4>
+                            <p>Analyze dynamic content, forms, and interactive elements</p>
+                        </div>
+                        
+                        <div class="feature-preview-item">
+                            <div class="feature-icon">📱</div>
+                            <h4>Mobile Accessibility Testing</h4>
+                            <p>Test accessibility across different devices and screen sizes</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Beta Signup -->
+                <div class="notify-signup">
+                    <h3>Get Early Access</h3>
+                    <p>Be the first to know when URL scanning launches and get exclusive beta access.</p>
+                    
+                    <form class="signup-form" id="notify-form">
+                        <div class="input-group">
+                            <input 
+                                type="email" 
+                                id="notify-email" 
+                                placeholder="Enter your email address" 
+                                required
+                                class="notify-input"
+                            >
+                            <button type="submit" class="notify-btn">Notify Me</button>
+                        </div>
+                        <div class="signup-benefits">
+                            <div class="benefit-item">✓ Early beta access</div>
+                            <div class="benefit-item">✓ Launch notifications</div>
+                            <div class="benefit-item">✓ Exclusive features preview</div>
+                        </div>
+                    </form>
+                    
+                    <div class="signup-success" id="signup-success" style="display: none;">
+                        <div class="success-icon">✅</div>
+                        <h4>Thank you for signing up!</h4>
+                        <p>We'll notify you as soon as URL scanning is available.</p>
+                    </div>
+                </div>
+                
+                <!-- Current Alternative -->
+                <div class="current-alternative">
+                    <h3>Available Now: HTML Code Analysis</h3>
+                    <p>While we're working on URL scanning, you can still analyze your HTML code directly.</p>
+                    <div class="alternative-actions">
+                        <a href="analyzer.html" class="btn btn-primary">Analyze HTML Code</a>
+                        <a href="results.html" class="btn btn-secondary">View Saved Reports</a>
+                    </div>
+                </div>
+                
+                <!-- FAQ Section -->
+                <div class="coming-soon-faq">
+                    <h3>Frequently Asked Questions</h3>
+                    <div class="faq-grid">
+                        <div class="faq-item">
+                            <h4>When will URL scanning be available?</h4>
+                            <p>We're targeting Q1 2025 for the initial release. Sign up above to get notified when it launches.</p>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <h4>Will URL scanning be free?</h4>
+                            <p>Yes! Just like our HTML analyzer, URL scanning will be completely free with no registration required.</p>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <h4>What websites can I scan?</h4>
+                            <p>You'll be able to scan any publicly accessible website. Private or password-protected sites will require special configuration.</p>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <h4>How is this different from the HTML analyzer?</h4>
+                            <p>URL scanning will analyze live websites directly, including dynamic content, while the HTML analyzer works with static code.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>AccessScan</h3>
+                    <p>Making the web accessible for everyone</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="analyzer.html">Analyzer</a></li>
+                        <li><a href="results.html">Results</a></li>
+                        <li><a href="url-analyzer.html">URL Scanner</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="#terms">Terms of Service</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 AccessScan. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/coming-soon.js"></script>
+</body>
+</html>

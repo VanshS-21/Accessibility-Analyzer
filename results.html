@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Accessibility Reports | AccessScan</title>
+    <meta name="description" content="View and manage your saved accessibility analysis reports. Download, share, and track your WCAG compliance progress.">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1><a href="index.html">AccessScan</a></h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="analyzer.html" class="nav-link">Analyzer</a>
+                <a href="results.html" class="nav-link active">Results</a>
+                <a href="url-analyzer.html" class="nav-link">URL Scanner</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <nav class="breadcrumb">
+                <a href="index.html">Home</a> / <span>Saved Reports</span>
+            </nav>
+            <h1>Accessibility Reports</h1>
+            <p>Manage your saved accessibility analysis reports</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="results-main">
+        <div class="container">
+            <!-- Statistics Dashboard -->
+            <div class="stats-dashboard" id="stats-dashboard">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-reports">0</div>
+                    <div class="stat-label">Total Reports</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="total-issues">0</div>
+                    <div class="stat-label">Total Issues Found</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="avg-issues">0</div>
+                    <div class="stat-label">Average Issues</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="recent-activity">0</div>
+                    <div class="stat-label">Reports This Week</div>
+                </div>
+            </div>
+
+            <!-- Storage Usage -->
+            <div class="storage-info" id="storage-info">
+                <div class="storage-bar">
+                    <div class="storage-fill" id="storage-fill"></div>
+                </div>
+                <div class="storage-text">
+                    <span id="storage-used">0 MB</span> / <span id="storage-max">5 MB</span> used
+                </div>
+            </div>
+
+            <!-- Results Manager -->
+            <div class="results-manager">
+                <!-- Filters and Actions Bar -->
+                <div class="filters-bar">
+                    <div class="search-section">
+                        <input type="search" id="search-input" placeholder="Search reports..." class="search-input">
+                        <select id="date-filter" class="date-filter">
+                            <option value="all">All Time</option>
+                            <option value="7">Last 7 Days</option>
+                            <option value="30">Last 30 Days</option>
+                            <option value="90">Last 3 Months</option>
+                        </select>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button id="export-all" class="btn btn-secondary">Export All</button>
+                        <button id="import-reports" class="btn btn-secondary">Import</button>
+                        <button id="clear-all" class="btn btn-destructive">Clear All</button>
+                    </div>
+                </div>
+
+                <!-- Reports Grid -->
+                <div class="reports-grid" id="reports-grid">
+                    <!-- Report cards will be populated here -->
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-reports" id="empty-reports" style="display: none;">
+                    <div class="empty-icon">📊</div>
+                    <h3>No Reports Found</h3>
+                    <p>You haven't saved any accessibility reports yet.</p>
+                    <a href="analyzer.html" class="btn btn-primary">Start Analyzing</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Report Detail Modal -->
+    <div class="modal" id="report-modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="report-modal-title">Report Details</h3>
+                <button class="modal-close" id="report-modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="report-modal-body">
+                <!-- Report details will be populated here -->
+            </div>
+            <div class="modal-footer">
+                <button id="download-report-pdf" class="btn btn-primary">Download PDF</button>
+                <button id="delete-report" class="btn btn-destructive">Delete Report</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import File Input -->
+    <input type="file" id="import-file-input" accept=".json" style="display: none;">
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirm-modal">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h3 id="confirm-title">Confirm Action</h3>
+                <button class="modal-close" id="confirm-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message">Are you sure you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-cancel" class="btn btn-secondary">Cancel</button>
+                <button id="confirm-ok" class="btn btn-destructive">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="assets/js/storage.js"></script>
+    <script src="assets/js/pdf-generator.js"></script>
+    <script src="assets/js/results.js"></script>
+</body>
+</html>

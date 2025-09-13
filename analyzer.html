@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML Accessibility Analyzer | Free WCAG 2.1 Scanner</title>
+    <meta
+      name="description"
+      content="Analyze HTML code for accessibility issues with our free WCAG 2.1 AA compliance scanner. Get instant results and detailed fix suggestions."
+    />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <link rel="stylesheet" href="assets/css/components.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="container">
+        <div class="nav-brand">
+          <h1><a href="index.html">AccessScan</a></h1>
+        </div>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="analyzer.html" class="nav-link active">Analyzer</a>
+          <a href="results.html" class="nav-link">Results</a>
+          <a href="url-analyzer.html" class="nav-link">URL Scanner</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+      <div class="container">
+        <nav class="breadcrumb">
+          <a href="index.html">Home</a> /
+          <span>HTML Accessibility Analyzer</span>
+        </nav>
+        <h1>HTML Accessibility Analyzer</h1>
+        <p>Scan completed in real-time</p>
+      </div>
+    </section>
+
+    <!-- Main Analyzer Interface -->
+    <main class="analyzer-main">
+      <div class="container">
+        <div class="analyzer-container">
+          <!-- Left Panel: Input -->
+          <div class="input-panel">
+            <div class="panel-header">
+              <h2>HTML Input</h2>
+              <div class="character-count">
+                <span id="char-count">0</span> characters
+              </div>
+            </div>
+
+            <div class="tabs">
+              <button class="tab-btn active" data-tab="paste">
+                Paste Code
+              </button>
+              <button class="tab-btn" data-tab="upload">Upload File</button>
+              <button class="tab-btn" data-tab="samples">Sample Code</button>
+            </div>
+
+            <!-- Paste Code Tab -->
+            <div class="tab-content active" id="paste-tab">
+              <textarea
+                id="html-input"
+                placeholder="Paste your HTML code here..."
+                rows="30"
+              ></textarea>
+              <div class="input-actions">
+                <button id="clear-input" class="btn btn-secondary">
+                  Clear
+                </button>
+                <button id="analyze-btn" class="btn btn-primary">
+                  Analyze HTML
+                </button>
+              </div>
+            </div>
+
+            <!-- Upload File Tab -->
+            <div class="tab-content" id="upload-tab">
+              <div class="upload-area" id="upload-area">
+                <div class="upload-icon">📁</div>
+                <p>Drop HTML file here or click to browse</p>
+                <p class="upload-note">Supports .html, .htm files up to 1MB</p>
+                <input type="file" id="file-input" accept=".html,.htm" hidden />
+              </div>
+            </div>
+
+            <!-- Sample Code Tab -->
+            <div class="tab-content" id="samples-tab">
+              <div class="samples-grid">
+                <button class="sample-btn" data-sample="form">
+                  Contact Form
+                </button>
+                <button class="sample-btn" data-sample="navigation">
+                  Navigation Menu
+                </button>
+                <button class="sample-btn" data-sample="article">
+                  Article Page
+                </button>
+                <button class="sample-btn" data-sample="landing">
+                  Landing Page
+                </button>
+              </div>
+            </div>
+
+            <!-- Progress Indicator -->
+            <div
+              class="progress-container"
+              id="progress-container"
+              style="display: none"
+            >
+              <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+              </div>
+              <p class="progress-text">Analyzing accessibility...</p>
+            </div>
+          </div>
+
+          <!-- Right Panel: Results -->
+          <div class="results-panel">
+            <div class="panel-header">
+              <h2>Analysis Results</h2>
+              <div
+                class="results-actions"
+                id="results-actions"
+                style="display: none"
+              >
+                <button id="save-report" class="btn btn-secondary">
+                  Save Report
+                </button>
+                <button id="download-pdf" class="btn btn-primary">
+                  Download Report
+                </button>
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="empty-state">
+              <div class="empty-icon">🔍</div>
+              <h3>Ready to Analyze</h3>
+              <p>
+                Paste your HTML code or upload a file to get started with
+                accessibility analysis.
+              </p>
+            </div>
+
+            <!-- Results Content -->
+            <div
+              class="results-content"
+              id="results-content"
+              style="display: none"
+            >
+              <!-- Summary Dashboard -->
+              <div class="summary-dashboard">
+                <div class="summary-card critical">
+                  <div class="summary-number" id="critical-count">0</div>
+                  <div class="summary-label">Critical</div>
+                </div>
+                <div class="summary-card serious">
+                  <div class="summary-number" id="serious-count">0</div>
+                  <div class="summary-label">Serious</div>
+                </div>
+                <div class="summary-card moderate">
+                  <div class="summary-number" id="moderate-count">0</div>
+                  <div class="summary-label">Moderate</div>
+                </div>
+                <div class="summary-card minor">
+                  <div class="summary-number" id="minor-count">0</div>
+                  <div class="summary-label">Minor</div>
+                </div>
+              </div>
+
+              <!-- Filters -->
+              <div class="results-filters">
+                <select id="severity-filter">
+                  <option value="all">All Severities</option>
+                  <option value="critical">Critical</option>
+                  <option value="serious">Serious</option>
+                  <option value="moderate">Moderate</option>
+                  <option value="minor">Minor</option>
+                </select>
+                <select id="rule-filter">
+                  <option value="all">All Rules</option>
+                </select>
+              </div>
+
+              <!-- Issues List -->
+              <div class="issues-list" id="issues-list">
+                <!-- Issues will be populated here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Issue Detail Modal -->
+    <div class="modal" id="issue-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modal-title">Issue Details</h3>
+          <button class="modal-close" id="modal-close">&times;</button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          <!-- Issue details will be populated here -->
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.8.2/axe.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+      // Ensure jsPDF is available globally
+      window.addEventListener("load", function () {
+        if (typeof window.jsPDF !== "undefined") {
+          console.log("jsPDF loaded successfully");
+        } else {
+          console.error("jsPDF failed to load");
+        }
+      });
+    </script>
+    <script src="assets/js/analyzer.js"></script>
+    <script src="assets/js/storage.js"></script>
+    <script src="assets/js/pdf-generator.js"></script>
+  </body>
+</html>
