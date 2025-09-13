@@ -101,11 +101,11 @@ class AccessibilityAnalyzer {
     });
 
     document.getElementById("download-pdf").addEventListener("click", (e) => {
-      console.log('Download PDF button clicked');
+      console.log("Download PDF button clicked");
       e.preventDefault();
       this.downloadPDF();
     });
-    
+
     // Add test download for debugging (temporary)
     if (document.getElementById("test-download")) {
       document.getElementById("test-download").addEventListener("click", () => {
@@ -248,8 +248,8 @@ class AccessibilityAnalyzer {
         // Run all available rules without specifying individual ones to avoid errors
         runOnly: {
           type: "tag",
-          values: ["wcag2a", "wcag2aa", "wcag21aa", "best-practice"]
-        }
+          values: ["wcag2a", "wcag2aa", "wcag21aa", "best-practice"],
+        },
       };
 
       // Run axe-core analysis with enhanced configuration
@@ -599,75 +599,78 @@ class AccessibilityAnalyzer {
   }
 
   downloadPDF() {
-    console.log('Download PDF clicked');
-    
+    console.log("Download PDF clicked");
+
     if (!this.currentResults) {
-      alert('No analysis results available. Please run an analysis first.');
+      alert("No analysis results available. Please run an analysis first.");
       return;
     }
 
-    console.log('Current results:', this.currentResults);
+    console.log("Current results:", this.currentResults);
 
     // Simple fallback - generate text report directly
     try {
       this.generateSimpleReport();
     } catch (error) {
-      console.error('Report generation failed:', error);
-      alert('Failed to generate report: ' + error.message);
+      console.error("Report generation failed:", error);
+      alert("Failed to generate report: " + error.message);
     }
   }
-  
+
   generateSimpleReport() {
-    console.log('Generating simple report...');
-    
+    console.log("Generating simple report...");
+
     const violations = this.currentResults.violations || [];
     const timestamp = new Date().toLocaleString();
-    
+
     // Calculate summary
     const summary = {
       critical: 0,
       serious: 0,
       moderate: 0,
       minor: 0,
-      total: 0
+      total: 0,
     };
-    
-    violations.forEach(violation => {
-      const impact = violation.impact || 'minor';
+
+    violations.forEach((violation) => {
+      const impact = violation.impact || "minor";
       const count = violation.nodes ? violation.nodes.length : 1;
       summary[impact] += count;
       summary.total += count;
     });
-    
+
     // Generate report content
     let report = `ACCESSIBILITY ANALYSIS REPORT\n`;
     report += `Generated: ${timestamp}\n`;
-    report += `${'='.repeat(50)}\n\n`;
-    
+    report += `${"=".repeat(50)}\n\n`;
+
     report += `SUMMARY\n`;
     report += `Total Issues: ${summary.total}\n`;
     report += `Critical: ${summary.critical}\n`;
     report += `Serious: ${summary.serious}\n`;
     report += `Moderate: ${summary.moderate}\n`;
     report += `Minor: ${summary.minor}\n\n`;
-    
+
     if (violations.length > 0) {
       report += `DETAILED ISSUES\n`;
-      report += `${'='.repeat(20)}\n\n`;
-      
+      report += `${"=".repeat(20)}\n\n`;
+
       violations.forEach((violation, index) => {
         report += `${index + 1}. ${violation.description}\n`;
-        report += `   Severity: ${violation.impact || 'minor'}\n`;
+        report += `   Severity: ${violation.impact || "minor"}\n`;
         report += `   Rule: ${violation.id}\n`;
         report += `   Help: ${violation.help}\n`;
         if (violation.helpUrl) {
           report += `   More info: ${violation.helpUrl}\n`;
         }
-        
+
         if (violation.nodes && violation.nodes.length > 0) {
           report += `   Affected elements (${violation.nodes.length}):\n`;
           violation.nodes.slice(0, 3).forEach((node, nodeIndex) => {
-            const html = node.html.length > 100 ? node.html.substring(0, 100) + '...' : node.html;
+            const html =
+              node.html.length > 100
+                ? node.html.substring(0, 100) + "..."
+                : node.html;
             report += `     ${nodeIndex + 1}. ${html}\n`;
           });
           if (violation.nodes.length > 3) {
@@ -679,49 +682,51 @@ class AccessibilityAnalyzer {
     } else {
       report += `No accessibility issues found! Your HTML code passes all WCAG 2.1 AA checks.\n`;
     }
-    
+
     // Create and download file
-    console.log('Creating download...');
-    const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+    console.log("Creating download...");
+    const blob = new Blob([report], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `accessibility-report-${new Date().toISOString().split('T')[0]}.txt`;
-    a.style.display = 'none';
-    
+    a.download = `accessibility-report-${
+      new Date().toISOString().split("T")[0]
+    }.txt`;
+    a.style.display = "none";
+
     document.body.appendChild(a);
-    console.log('Triggering download...');
+    console.log("Triggering download...");
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
+
     // Show success message
-    const downloadBtn = document.getElementById('download-pdf');
+    const downloadBtn = document.getElementById("download-pdf");
     if (downloadBtn) {
       const originalText = downloadBtn.textContent;
-      downloadBtn.textContent = 'Downloaded!';
+      downloadBtn.textContent = "Downloaded!";
       setTimeout(() => {
         downloadBtn.textContent = originalText;
       }, 2000);
     }
-    
-    console.log('Report generated successfully');
+
+    console.log("Report generated successfully");
   }
-  
+
   // Test function to verify downloads work
   testDownload() {
-    console.log('Testing download functionality...');
-    const testContent = 'This is a test file to verify downloads work.';
-    const blob = new Blob([testContent], { type: 'text/plain' });
+    console.log("Testing download functionality...");
+    const testContent = "This is a test file to verify downloads work.";
+    const blob = new Blob([testContent], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = 'test-download.txt';
+    a.download = "test-download.txt";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    console.log('Test download triggered');
+    console.log("Test download triggered");
   }
 
   generateSummary() {

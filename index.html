@@ -14,6 +14,20 @@
       name="keywords"
       content="accessibility scanner, WCAG checker, HTML accessibility, web accessibility, disability compliance"
     />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://accessscan.com/">
+    
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="assets/css/styles.css" as="style">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 
     <!-- Open Graph -->
     <meta
@@ -25,11 +39,14 @@
       content="Ensure your HTML meets accessibility standards with our free scanner"
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://yoursite.com" />
+    <meta property="og:url" content="https://accessscan.com/" />
     <meta
       property="og:image"
-      content="https://yoursite.com/assets/images/og-image.jpg"
+      content="https://accessscan.com/assets/images/og-image.jpg"
     />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="AccessScan" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -38,17 +55,79 @@
       name="twitter:description"
       content="WCAG 2.1 AA compliance checker with instant results"
     />
+    <meta name="twitter:image" content="https://accessscan.com/assets/images/og-image.jpg" />
+    <meta name="twitter:site" content="@accessscan" />
 
     <!-- Schema.org Structured Data -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "HTML Accessibility Scanner",
-        "description": "Free tool to scan HTML code for accessibility issues",
-        "url": "https://yoursite.com",
+        "@type": "SoftwareApplication",
+        "name": "AccessScan - HTML Accessibility Scanner",
+        "description": "Free tool to scan HTML code for accessibility issues and ensure WCAG 2.1 AA compliance",
+        "url": "https://accessscan.com",
         "applicationCategory": "DeveloperApplication",
-        "operatingSystem": "Web Browser"
+        "operatingSystem": "Web Browser",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock"
+        },
+        "creator": {
+          "@type": "Organization",
+          "name": "AccessScan"
+        },
+        "featureList": [
+          "WCAG 2.1 AA Compliance Checking",
+          "Real-time HTML Analysis",
+          "Detailed Fix Suggestions",
+          "PDF Report Generation",
+          "Local Storage Management"
+        ],
+        "screenshot": "https://accessscan.com/assets/images/app-screenshot.jpg"
+      }
+    </script>
+    
+    <!-- FAQ Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is WCAG 2.1 AA?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "WCAG 2.1 AA is the internationally recognized standard for web accessibility, ensuring websites are usable by people with disabilities. It includes guidelines for making content perceivable, operable, understandable, and robust."
+            }
+          },
+          {
+            "@type": "Question", 
+            "name": "Is this accessibility scanner free to use?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, AccessScan is completely free to use with no registration required. You can analyze unlimited HTML code and download comprehensive accessibility reports."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How accurate are the accessibility results?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Our scanner uses industry-standard accessibility testing libraries including axe-core plus custom checks to provide highly accurate WCAG 2.1 AA compliance reports with detailed fix suggestions."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I integrate this with my development workflow?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, you can save reports locally, export them as PDF or text files, and use the detailed fix suggestions to implement accessibility improvements in your development process."
+            }
+          }
+        ]
       }
     </script>
 
@@ -59,6 +138,24 @@
       href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
       rel="stylesheet"
     />
+    
+    <!-- Performance Optimization -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.8.2/axe.min.js" as="script">
+    
+    <!-- Google Analytics 4 (Replace GA_MEASUREMENT_ID with actual ID) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_MEASUREMENT_ID', {
+        page_title: 'AccessScan - Free HTML Accessibility Scanner',
+        page_location: window.location.href
+      });
+    </script>
+    
+    <!-- Google Search Console Verification (Replace with actual verification code) -->
+    <meta name="google-site-verification" content="GOOGLE_VERIFICATION_CODE">
   </head>
   <body>
     <!-- Navigation -->

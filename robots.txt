@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://yoursite.com/sitemap.xml
+Sitemap: https://accessscan.com/sitemap.xml
 
 # Crawl-delay for respectful crawling
 Crawl-delay: 1
@@ -16,3 +16,30 @@ Allow: /analyzer.html
 Allow: /results.html
 Allow: /url-analyzer.html
 Allow: /assets/
+
+# Disallow temporary or development files
+Disallow: /*.tmp
+Disallow: /*.log
+Disallow: /test/
+Disallow: /dev/
+
+# Allow important files
+Allow: /site.webmanifest
+Allow: /favicon.ico
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.svg
+
+# Specific bot instructions
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Block bad bots (optional)
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /

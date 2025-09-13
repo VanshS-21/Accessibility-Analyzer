@@ -1,0 +1,43 @@
+{
+    "name": "AccessScan - HTML Accessibility Scanner",
+    "short_name": "AccessScan",
+    "description": "Free WCAG 2.1 AA compliance checker for HTML accessibility analysis",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f5f7fa",
+    "theme_color": "#3a5ba0",
+    "orientation": "portrait-primary",
+    "categories": ["developer", "accessibility", "productivity"],
+    "lang": "en",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "/apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "/assets/images/app-screenshot-wide.jpg",
+            "sizes": "1280x720",
+            "type": "image/jpeg",
+            "form_factor": "wide"
+        },
+        {
+            "src": "/assets/images/app-screenshot-narrow.jpg", 
+            "sizes": "640x1136",
+            "type": "image/jpeg",
+            "form_factor": "narrow"
+        }
+    ]
+}
