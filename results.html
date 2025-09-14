@@ -127,8 +127,6 @@
                     </div>
                     
                     <div class="action-buttons">
-                        <button id="export-all" class="btn btn-secondary">Export All</button>
-                        <button id="import-reports" class="btn btn-secondary">Import</button>
                         <button id="clear-all" class="btn btn-destructive">Clear All</button>
                     </div>
                 </div>
@@ -160,14 +158,13 @@
                 <!-- Report details will be populated here -->
             </div>
             <div class="modal-footer">
-                <button id="download-report-pdf" class="btn btn-primary">Download PDF</button>
+                <button id="download-report-text" class="btn btn-primary">Download Report</button>
                 <button id="delete-report" class="btn btn-destructive">Delete Report</button>
             </div>
         </div>
     </div>
 
-    <!-- Import File Input -->
-    <input type="file" id="import-file-input" accept=".json" style="display: none;">
+
 
     <!-- Confirmation Modal -->
     <div class="modal" id="confirm-modal">
@@ -186,9 +183,9 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <script src="assets/js/storage.js"></script>
-    <script src="assets/js/pdf-generator.js"></script>
+    <script src="assets/js/text-generator.js"></script>
     <script src="assets/js/results.js"></script>
 </body>
 </html>

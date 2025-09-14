@@ -334,6 +334,11 @@ style.textContent = `
         opacity: 0;
         transform: translateY(20px);
         transition: all 0.6s ease;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        text-align: center;
     }
     
     .feature-preview-item.animate-in {
@@ -344,6 +349,7 @@ style.textContent = `
     .feature-icon {
         font-size: 2.5rem;
         margin-bottom: 1rem;
+        text-align: center;
     }
     
     .feature-preview-item h4 {
@@ -351,6 +357,9 @@ style.textContent = `
         font-weight: 600;
         margin-bottom: 1rem;
         color: var(--foreground);
+        line-height: 1.3;
+        min-height: 3.25rem;
+        text-align: center;
     }
     
     .feature-preview-item p {

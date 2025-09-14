@@ -100,10 +100,10 @@ class AccessibilityAnalyzer {
       this.saveReport();
     });
 
-    document.getElementById("download-pdf").addEventListener("click", (e) => {
-      console.log("Download PDF button clicked");
+    document.getElementById("download-text").addEventListener("click", (e) => {
+      console.log("Download Text button clicked");
       e.preventDefault();
-      this.downloadPDF();
+      this.downloadText();
     });
 
     // Add test download for debugging (temporary)
@@ -385,8 +385,8 @@ class AccessibilityAnalyzer {
       return;
     }
 
-    // Show first 5 issues initially
-    const issuesToShow = Math.min(5, violations.length);
+    // Show first 2 issues initially
+    const issuesToShow = Math.min(2, violations.length);
     let issueCount = 0;
 
     for (let i = 0; i < violations.length && issueCount < issuesToShow; i++) {
@@ -409,12 +409,12 @@ class AccessibilityAnalyzer {
       (sum, v) => sum + (v.nodes ? v.nodes.length : 1),
       0
     );
-    if (totalIssues > 5) {
+    if (totalIssues > 2) {
       const viewAllButton = document.createElement("div");
       viewAllButton.className = "view-all-issues";
       viewAllButton.innerHTML = `
                 <button class="btn btn-primary view-all-btn">
-                    View All ${totalIssues} Issues
+                    View More Issues (${totalIssues - 2} remaining)
                 </button>
             `;
 
@@ -473,11 +473,6 @@ class AccessibilityAnalyzer {
                   violation.helpUrl || "#"
                 }', '_blank')">
                     📖 Learn More
-                </button>
-                <button class="issue-action-btn" onclick="event.stopPropagation(); navigator.clipboard?.writeText('${this.escapeHtml(
-                  node.html
-                )}')">
-                    📋 Copy Element
                 </button>
             </div>
         `;
@@ -598,8 +593,8 @@ class AccessibilityAnalyzer {
     }, 2000);
   }
 
-  downloadPDF() {
-    console.log("Download PDF clicked");
+  downloadText() {
+    console.log("Download Text clicked");
 
     if (!this.currentResults) {
       alert("No analysis results available. Please run an analysis first.");
@@ -701,7 +696,7 @@ class AccessibilityAnalyzer {
     URL.revokeObjectURL(url);
 
     // Show success message
-    const downloadBtn = document.getElementById("download-pdf");
+    const downloadBtn = document.getElementById("download-text");
     if (downloadBtn) {
       const originalText = downloadBtn.textContent;
       downloadBtn.textContent = "Downloaded!";
@@ -989,7 +984,7 @@ class AccessibilityAnalyzer {
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="export-all-issues" class="btn btn-secondary">Export Issues</button>
+
                     <button id="close-all-issues" class="btn btn-primary">Close</button>
                 </div>
             </div>
@@ -1013,11 +1008,7 @@ class AccessibilityAnalyzer {
         this.closeAllIssuesModal();
       });
 
-    document
-      .getElementById("export-all-issues")
-      .addEventListener("click", () => {
-        this.exportAllIssues();
-      });
+
 
     document
       .getElementById("all-issues-severity-filter")
@@ -1130,73 +1121,7 @@ class AccessibilityAnalyzer {
     }
   }
 
-  exportAllIssues() {
-    const violations = this.currentResults.violations;
-    const exportData = {
-      timestamp: new Date().toISOString(),
-      totalIssues: violations.reduce(
-        (sum, v) => sum + (v.nodes ? v.nodes.length : 1),
-        0
-      ),
-      issues: [],
-    };
 
-    violations.forEach((violation) => {
-      violation.nodes.forEach((node) => {
-        exportData.issues.push({
-          rule: violation.id,
-          description: violation.description,
-          severity: violation.impact || "minor",
-          wcagTags: violation.tags.filter((tag) => tag.startsWith("wcag")),
-          element: node.html,
-          help: violation.help,
-          helpUrl: violation.helpUrl,
-        });
-      });
-    });
-
-    // Create and download CSV
-    const csvContent = this.convertToCSV(exportData.issues);
-    const blob = new Blob([csvContent], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `accessibility-issues-${
-      new Date().toISOString().split("T")[0]
-    }.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    URL.revokeObjectURL(url);
-  }
-
-  convertToCSV(issues) {
-    const headers = [
-      "Rule",
-      "Description",
-      "Severity",
-      "WCAG Tags",
-      "Element",
-      "Help",
-    ];
-    const csvRows = [headers.join(",")];
-
-    issues.forEach((issue) => {
-      const row = [
-        `"${issue.rule}"`,
-        `"${issue.description.replace(/"/g, '""')}"`,
-        `"${issue.severity}"`,
-        `"${issue.wcagTags.join(", ")}"`,
-        `"${issue.element.replace(/"/g, '""')}"`,
-        `"${issue.help.replace(/"/g, '""')}"`,
-      ];
-      csvRows.push(row.join(","));
-    });
-
-    return csvRows.join("\n");
-  }
 
   escapeHtml(text) {
     const div = document.createElement("div");

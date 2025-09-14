@@ -197,7 +197,7 @@
                 <button id="save-report" class="btn btn-secondary">
                   Save Report
                 </button>
-                <button id="download-pdf" class="btn btn-primary">
+                <button id="download-text" class="btn btn-primary">
                   Download Report
                 </button>
               </div>
@@ -231,7 +231,7 @@
                 </div>
                 <div class="summary-card moderate">
                   <div class="summary-number" id="moderate-count">0</div>
-                  <div class="summary-label">Moderate</div>
+                  <div class="summary-label">Medium</div>
                 </div>
                 <div class="summary-card minor">
                   <div class="summary-number" id="minor-count">0</div>
@@ -245,7 +245,7 @@
                   <option value="all">All Severities</option>
                   <option value="critical">Critical</option>
                   <option value="serious">Serious</option>
-                  <option value="moderate">Moderate</option>
+                  <option value="moderate">Medium</option>
                   <option value="minor">Minor</option>
                 </select>
                 <select id="rule-filter">
@@ -277,19 +277,9 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.8.2/axe.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script>
-      // Ensure jsPDF is available globally
-      window.addEventListener("load", function () {
-        if (typeof window.jsPDF !== "undefined") {
-          console.log("jsPDF loaded successfully");
-        } else {
-          console.error("jsPDF failed to load");
-        }
-      });
-    </script>
+
     <script src="assets/js/analyzer.js"></script>
     <script src="assets/js/storage.js"></script>
-    <script src="assets/js/pdf-generator.js"></script>
+    <script src="assets/js/text-generator.js"></script>
   </body>
 </html>

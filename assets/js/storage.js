@@ -113,86 +113,7 @@ class StorageManager {
         }
     }
     
-    exportAllReports() {
-        try {
-            const reports = this.getAllReports();
-            const exportData = {
-                exportDate: new Date().toISOString(),
-                version: '1.0',
-                reports: reports
-            };
-            
-            const blob = new Blob([JSON.stringify(exportData, null, 2)], {
-                type: 'application/json'
-            });
-            
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `accessibility-reports-${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            return true;
-        } catch (error) {
-            console.error('Error exporting reports:', error);
-            return false;
-        }
-    }
-    
-    importReports(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            
-            reader.onload = (e) => {
-                try {
-                    const importData = JSON.parse(e.target.result);
-                    
-                    if (!importData.reports || !Array.isArray(importData.reports)) {
-                        throw new Error('Invalid import file format');
-                    }
-                    
-                    const existingReports = this.getAllReports();
-                    const existingIds = new Set(existingReports.map(r => r.id));
-                    
-                    // Filter out duplicates and add new reports
-                    const newReports = importData.reports.filter(report => 
-                        !existingIds.has(report.id)
-                    );
-                    
-                    const mergedReports = [...existingReports, ...newReports];
-                    
-                    // Sort by timestamp (newest first)
-                    mergedReports.sort((a, b) => 
-                        new Date(b.timestamp) - new Date(a.timestamp)
-                    );
-                    
-                    // Limit total reports
-                    if (mergedReports.length > this.maxReports) {
-                        mergedReports.splice(this.maxReports);
-                    }
-                    
-                    localStorage.setItem(this.storageKey, JSON.stringify(mergedReports));
-                    
-                    resolve({
-                        imported: newReports.length,
-                        skipped: importData.reports.length - newReports.length,
-                        total: mergedReports.length
-                    });
-                } catch (error) {
-                    reject(new Error('Failed to import reports: ' + error.message));
-                }
-            };
-            
-            reader.onerror = () => {
-                reject(new Error('Failed to read import file'));
-            };
-            
-            reader.readAsText(file);
-        });
-    }
+
     
     cleanupIfNeeded(reports) {
         const currentSize = new Blob([JSON.stringify(reports)]).size;
@@ -230,7 +151,7 @@ class StorageManager {
                 totalIssues: 0,
                 averageIssues: 0,
                 mostCommonIssues: [],
-                recentActivity: []
+                recentActivity: 0
             };
         }
         

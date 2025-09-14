@@ -5,7 +5,7 @@ class AccessScanApp {
   }
 
   init() {
-    this.setupThemeToggle();
+    this.cleanupThemeElements();
     this.setupMobileNavigation();
     this.setupScrollEffects();
     this.setupAnalytics();
@@ -14,52 +14,26 @@ class AccessScanApp {
     this.setupLoadingAnimations();
     this.setupCursorEffects();
   }
-
-  setupThemeToggle() {
-    // Check for saved theme preference or default to light mode
-    const savedTheme = localStorage.getItem("theme") || "light";
-    document.documentElement.setAttribute("data-theme", savedTheme);
-
-    // Create theme toggle button if it doesn't exist
-    if (!document.querySelector(".theme-toggle")) {
-      this.createThemeToggle();
-    }
-
-    // Add event listener for theme toggle
-    const themeToggle = document.querySelector(".theme-toggle");
-    if (themeToggle) {
-      themeToggle.addEventListener("click", () => {
-        this.toggleTheme();
-      });
-    }
+  
+  cleanupThemeElements() {
+    // Remove any existing theme toggle buttons
+    const existingThemeToggles = document.querySelectorAll('.theme-toggle');
+    existingThemeToggles.forEach(toggle => {
+      toggle.remove();
+    });
+    
+    // Remove data-theme attribute if it exists
+    document.documentElement.removeAttribute('data-theme');
+    
+    // Clear theme from localStorage
+    localStorage.removeItem('theme');
   }
 
-  createThemeToggle() {
-    const themeToggle = document.createElement("button");
-    themeToggle.className = "theme-toggle";
-    themeToggle.setAttribute("aria-label", "Toggle dark mode");
-    themeToggle.innerHTML = "🌙";
 
-    // Add to navigation
-    const navLinks = document.querySelector(".nav-links");
-    if (navLinks) {
-      navLinks.appendChild(themeToggle);
-    }
-  }
 
-  toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute("data-theme");
-    const newTheme = currentTheme === "dark" ? "light" : "dark";
 
-    document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
 
-    // Update toggle button
-    const themeToggle = document.querySelector(".theme-toggle");
-    if (themeToggle) {
-      themeToggle.innerHTML = newTheme === "dark" ? "☀️" : "🌙";
-    }
-  }
+
 
   setupMobileNavigation() {
     // Create mobile menu button if it doesn't exist
@@ -372,7 +346,7 @@ class AccessScanApp {
 
   addMagneticEffect() {
     const magneticElements = document.querySelectorAll(
-      ".btn-primary, .nav-brand"
+      ".btn-primary"
     );
 
     magneticElements.forEach((element) => {
@@ -401,9 +375,7 @@ class AccessScanApp {
     const featureIcons = document.querySelectorAll(".feature-icon");
 
     featureIcons.forEach((icon, index) => {
-      // Add staggered floating animation
-      icon.style.animation = `float 3s ease-in-out infinite`;
-      icon.style.animationDelay = `${index * 0.2}s`;
+      // Floating animation removed
     });
 
     // Add floating animation CSS
@@ -411,22 +383,10 @@ class AccessScanApp {
       const style = document.createElement("style");
       style.id = "floating-styles";
       style.textContent = `
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-10px);
-          }
-        }
+        /* Floating animation removed */
         
         .feature-icon {
-          transition: transform 0.3s ease;
-        }
-        
-        .feature-card:hover .feature-icon {
-          animation-play-state: paused;
-          transform: translateY(-5px) scale(1.2);
+          /* No animations */
         }
       `;
       document.head.appendChild(style);
@@ -483,20 +443,7 @@ class AccessScanApp {
 // Add CSS for mobile navigation and animations
 const appStyles = document.createElement("style");
 appStyles.textContent = `
-    /* Theme Toggle */
-    .theme-toggle {
-        background: none;
-        border: none;
-        font-size: 1.25rem;
-        cursor: pointer;
-        padding: 0.5rem;
-        border-radius: var(--radius);
-        transition: background-color 0.2s;
-    }
-    
-    .theme-toggle:hover {
-        background-color: var(--muted);
-    }
+
     
     /* Mobile Menu Toggle */
     .mobile-menu-toggle {
@@ -558,26 +505,7 @@ appStyles.textContent = `
         }
     }
     
-    /* Dark Theme */
-    [data-theme="dark"] {
-        --background: rgb(24, 26, 36);
-        --foreground: rgb(230, 234, 243);
-        --card: rgb(35, 36, 58);
-        --card-foreground: rgb(230, 234, 243);
-        --primary: rgb(58, 91, 160);
-        --primary-foreground: rgb(255, 224, 102);
-        --secondary: rgb(255, 224, 102);
-        --secondary-foreground: rgb(35, 36, 58);
-        --muted: rgb(35, 36, 58);
-        --muted-foreground: rgb(122, 136, 161);
-        --accent: rgb(188, 205, 240);
-        --accent-foreground: rgb(24, 26, 36);
-        --border: rgb(45, 46, 62);
-    }
-    
-    [data-theme="dark"] .navbar-scrolled {
-        background-color: rgba(35, 36, 58, 0.95);
-    }
+
     
     /* Mobile Responsive */
     @media (max-width: 768px) {

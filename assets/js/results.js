@@ -27,21 +27,8 @@ class ResultsManager {
         });
         
         // Action buttons
-        document.getElementById('export-all').addEventListener('click', () => {
-            this.exportAllReports();
-        });
-        
-        document.getElementById('import-reports').addEventListener('click', () => {
-            this.importReports();
-        });
-        
         document.getElementById('clear-all').addEventListener('click', () => {
             this.confirmClearAll();
-        });
-        
-        // Import file input
-        document.getElementById('import-file-input').addEventListener('change', (e) => {
-            this.handleImportFile(e.target.files[0]);
         });
         
         // Modal controls
@@ -49,8 +36,10 @@ class ResultsManager {
             this.closeReportModal();
         });
         
-        document.getElementById('download-report-pdf').addEventListener('click', () => {
-            this.downloadReportPDF();
+        document.getElementById('download-report-text').addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Modal download button clicked');
+            this.downloadReportText();
         });
         
         document.getElementById('delete-report').addEventListener('click', () => {
@@ -154,7 +143,7 @@ class ResultsManager {
             
             <div class="report-actions">
                 <button class="btn btn-sm btn-secondary view-report" data-id="${report.id}">View Details</button>
-                <button class="btn btn-sm btn-primary download-report" data-id="${report.id}">Download PDF</button>
+                <button class="btn btn-sm btn-primary download-report" data-id="${report.id}">Download Report</button>
                 <button class="btn btn-sm btn-destructive delete-report" data-id="${report.id}">Delete</button>
             </div>
         `;
@@ -164,7 +153,9 @@ class ResultsManager {
             this.viewReportDetails(report.id);
         });
         
-        card.querySelector('.download-report').addEventListener('click', () => {
+        card.querySelector('.download-report').addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Download button clicked for report:', report.id);
             this.downloadSingleReport(report.id);
         });
         
@@ -310,19 +301,36 @@ class ResultsManager {
         this.selectedReport = null;
     }
     
-    downloadReportPDF() {
-        if (!this.selectedReport || !this.selectedReport.results) return;
+    downloadReportText() {
+        if (!this.selectedReport) {
+            alert('No report selected. Please select a report first.');
+            return;
+        }
         
-        const pdfGenerator = new PDFGenerator(this.selectedReport.results);
-        pdfGenerator.generateAndDownload();
+        if (!this.selectedReport.results) {
+            alert('Report data is missing. Please try again.');
+            return;
+        }
+        
+        const textGenerator = new ReportGenerator(this.selectedReport.results);
+        textGenerator.generateTextReport();
     }
     
     downloadSingleReport(reportId) {
         const report = this.storageManager.getReport(reportId);
-        if (!report || !report.results) return;
         
-        const pdfGenerator = new PDFGenerator(report.results);
-        pdfGenerator.generateAndDownload();
+        if (!report) {
+            alert('Report not found. Please refresh the page and try again.');
+            return;
+        }
+        
+        if (!report.results) {
+            alert('Report data is corrupted. Please run the analysis again.');
+            return;
+        }
+        
+        const textGenerator = new ReportGenerator(report.results);
+        textGenerator.generateTextReport();
     }
     
     confirmDeleteReport() {
@@ -395,35 +403,7 @@ class ResultsManager {
         this.closeConfirmModal();
     }
     
-    exportAllReports() {
-        const success = this.storageManager.exportAllReports();
-        if (success) {
-            this.showNotification('Reports exported successfully!', 'success');
-        } else {
-            this.showNotification('Failed to export reports.', 'error');
-        }
-    }
-    
-    importReports() {
-        document.getElementById('import-file-input').click();
-    }
-    
-    async handleImportFile(file) {
-        if (!file) return;
-        
-        try {
-            const result = await this.storageManager.importReports(file);
-            this.showNotification(
-                `Import completed! ${result.imported} reports imported, ${result.skipped} skipped.`,
-                'success'
-            );
-            this.loadReports();
-            this.updateStatistics();
-            this.updateStorageInfo();
-        } catch (error) {
-            this.showNotification(`Import failed: ${error.message}`, 'error');
-        }
-    }
+
     
     updateStatistics() {
         const stats = this.storageManager.getStatistics();

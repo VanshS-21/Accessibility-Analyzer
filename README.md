@@ -5,18 +5,21 @@ A comprehensive web application for analyzing HTML code accessibility compliance
 ## Features
 
 ### 🔍 HTML Accessibility Analysis
+
 - **Instant Analysis**: Real-time accessibility scanning using axe-core
 - **WCAG 2.1 AA Compliance**: Industry-standard accessibility guidelines
 - **Detailed Reports**: Comprehensive issue breakdown with fix suggestions
 - **Multiple Input Methods**: Paste code, upload files, or use sample templates
 
 ### 📊 Results Management
+
 - **Local Storage**: Save and manage accessibility reports
-- **PDF Export**: Generate professional accessibility reports
+- **Text Export**: Generate professional accessibility reports
 - **Search & Filter**: Find specific reports and issues
 - **Statistics Dashboard**: Track accessibility progress over time
 
 ### 🌐 Coming Soon: URL Scanner
+
 - Direct website URL scanning
 - Multi-page accessibility audits
 - Site-wide accessibility reports
@@ -26,7 +29,7 @@ A comprehensive web application for analyzing HTML code accessibility compliance
 
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
 - **Accessibility Engine**: axe-core
-- **PDF Generation**: jsPDF
+- **Text Generation**: Native JavaScript
 - **Storage**: localStorage API
 - **Styling**: Custom CSS with CSS Custom Properties
 - **Typography**: Libre Baskerville font
@@ -47,7 +50,7 @@ accessibility-scanner/
 │   │   ├── app.js          # Main application logic
 │   │   ├── analyzer.js     # Analysis functionality
 │   │   ├── storage.js      # Local storage management
-│   │   ├── pdf-generator.js # PDF report generation
+│   │   ├── text-generator.js # Text report generation
 │   │   ├── results.js      # Results page management
 │   │   └── coming-soon.js  # Coming soon page functionality
 ├── sitemap.xml             # SEO sitemap
@@ -66,6 +69,7 @@ accessibility-scanner/
 ## Usage
 
 ### HTML Analysis
+
 1. Go to the Analyzer page
 2. Choose input method:
    - **Paste Code**: Copy and paste HTML directly
@@ -73,18 +77,20 @@ accessibility-scanner/
    - **Sample Code**: Use pre-built templates
 3. Click "Analyze HTML"
 4. Review results and fix suggestions
-5. Save or download PDF reports
+5. Save or download text reports
 
 ### Results Management
+
 1. Go to the Results page
 2. View saved accessibility reports
 3. Search and filter reports
-4. Download PDF reports
-5. Export/import report data
+4. Download text reports
+
 
 ## Accessibility Features
 
 This application follows WCAG 2.1 AA guidelines:
+
 - ✅ Semantic HTML structure
 - ✅ Keyboard navigation support
 - ✅ Screen reader compatibility
@@ -131,6 +137,7 @@ This project is open source and available under the [MIT License](LICENSE).
 ## Support
 
 For questions, issues, or feature requests:
+
 - Create an issue on GitHub
 - Contact: support@accessscan.com
 - Documentation: [Project Wiki](wiki)
@@ -138,18 +145,21 @@ For questions, issues, or feature requests:
 ## Roadmap
 
 ### Phase 1 (Current)
+
 - ✅ HTML code analysis
 - ✅ Local report storage
 - ✅ PDF export
 - ✅ Responsive design
 
 ### Phase 2 (Q1 2025)
+
 - 🔄 URL scanning capability
 - 🔄 Multi-page analysis
 - 🔄 Scheduled monitoring
 - 🔄 API integration
 
 ### Phase 3 (Future)
+
 - 📋 Team collaboration features
 - 📋 Advanced reporting
 - 📋 Integration plugins
@@ -158,7 +168,7 @@ For questions, issues, or feature requests:
 ## Acknowledgments
 
 - [axe-core](https://github.com/dequelabs/axe-core) - Accessibility testing engine
-- [jsPDF](https://github.com/parallax/jsPDF) - PDF generation
+- [Blob API](https://developer.mozilla.org/en-US/docs/Web/API/Blob) - Text file generation
 - [WCAG Guidelines](https://www.w3.org/WAI/WCAG21/quickref/) - Accessibility standards
 - [WebAIM](https://webaim.org/) - Accessibility resources
 
