@@ -870,9 +870,9 @@ results.incomplete.forEach((item) => {
 
 ---
 
-## Real-World Examples from AccessScan Codebase
+## Real-World Examples from AccessiScan Codebase
 
-Here are actual examples of how axe-core is implemented in the AccessScan project:
+Here are actual examples of how axe-core is implemented in the AccessiScan project:
 
 ### Example 1: Script Inclusion (analyzer.html, line 279)
 
@@ -965,7 +965,7 @@ report += `${"=".repeat(50)}\n\n`;
 
 **Usage**: Documenting axe-core as the core accessibility testing engine in project documentation.
 
-These examples show how axe-core is integrated throughout the AccessScan application, from basic script inclusion to advanced configuration and result processing.
+These examples show how axe-core is integrated throughout the AccessiScan application, from basic script inclusion to advanced configuration and result processing.
 
 ---
 

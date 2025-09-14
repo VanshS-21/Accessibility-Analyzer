@@ -1,4 +1,4 @@
-# AccessScan - HTML Accessibility Scanner
+# AccessiScan - HTML Accessibility Scanner
 
 A comprehensive web application for analyzing HTML code accessibility compliance with WCAG 2.1 AA guidelines.
 
@@ -139,7 +139,7 @@ This project is open source and available under the [MIT License](LICENSE).
 For questions, issues, or feature requests:
 
 - Create an issue on GitHub
-- Contact: support@accessscan.com
+- Contact: support@accessiscan.com
 - Documentation: [Project Wiki](wiki)
 
 ## Roadmap

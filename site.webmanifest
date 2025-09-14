@@ -1,6 +1,6 @@
 {
-    "name": "AccessScan - HTML Accessibility Scanner",
-    "short_name": "AccessScan",
+    "name": "AccessiScan - HTML Accessibility Scanner",
+    "short_name": "AccessiScan",
     "description": "Free WCAG 2.1 AA compliance checker for HTML accessibility analysis",
     "start_url": "/",
     "display": "standalone",
