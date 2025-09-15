@@ -5,36 +5,14 @@ class AccessScanApp {
   }
 
   init() {
-    this.cleanupThemeElements();
     this.setupMobileNavigation();
     this.setupScrollEffects();
-    this.setupAnalytics();
     this.setupEnhancedHoverEffects();
     this.setupSmoothScroll();
     this.setupLoadingAnimations();
-    this.setupCursorEffects();
   }
   
-  cleanupThemeElements() {
-    // Remove any existing theme toggle buttons
-    const existingThemeToggles = document.querySelectorAll('.theme-toggle');
-    existingThemeToggles.forEach(toggle => {
-      toggle.remove();
-    });
-    
-    // Remove data-theme attribute if it exists
-    document.documentElement.removeAttribute('data-theme');
-    
-    // Clear theme from localStorage
-    localStorage.removeItem('theme');
-  }
-
-
-
-
-
-
-
+  
   setupMobileNavigation() {
     // Create mobile menu button if it doesn't exist
     if (!document.querySelector(".mobile-menu-toggle")) {
@@ -124,25 +102,6 @@ class AccessScanApp {
 
       lastScrollY = currentScrollY;
     });
-  }
-
-  setupAnalytics() {
-    // Track page views and user interactions
-    this.trackPageView();
-    this.setupEventTracking();
-  }
-
-  trackPageView() {
-    // Track page view (replace with your analytics service)
-    const page = window.location.pathname;
-    console.log("Page view:", page);
-
-    // Example for Google Analytics
-    if (typeof gtag !== "undefined") {
-      gtag("config", "GA_MEASUREMENT_ID", {
-        page_path: page,
-      });
-    }
   }
 
   setupEventTracking() {
@@ -259,39 +218,10 @@ class AccessScanApp {
     document.head.appendChild(style);
   }
 
-  // Performance monitoring
-  measurePerformance() {
-    if ("performance" in window) {
-      window.addEventListener("load", () => {
-        setTimeout(() => {
-          const perfData = performance.getEntriesByType("navigation")[0];
-          const loadTime = perfData.loadEventEnd - perfData.loadEventStart;
-
-          console.log("Page load time:", loadTime + "ms");
-
-          // Track performance metrics
-          this.trackEvent("performance", {
-            load_time: Math.round(loadTime),
-            page: window.location.pathname,
-          });
-        }, 0);
-      });
-    }
-  }
-
   // Enhanced hover effects and interactions
   setupEnhancedHoverEffects() {
     // Add ripple effect to buttons
     this.addRippleEffect();
-
-    // Add magnetic effect to important buttons
-    this.addMagneticEffect();
-
-    // Add parallax effect to hero section
-    this.addParallaxEffect();
-
-    // Add floating animation to feature icons
-    this.addFloatingAnimation();
   }
 
   addRippleEffect() {
@@ -344,55 +274,6 @@ class AccessScanApp {
     }
   }
 
-  addMagneticEffect() {
-    const magneticElements = document.querySelectorAll(
-      ".btn-primary"
-    );
-
-    magneticElements.forEach((element) => {
-      element.addEventListener("mousemove", (e) => {
-        const rect = element.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-
-        const moveX = x * 0.1;
-        const moveY = y * 0.1;
-
-        element.style.transform = `translate(${moveX}px, ${moveY}px)`;
-      });
-
-      element.addEventListener("mouseleave", () => {
-        element.style.transform = "translate(0, 0)";
-      });
-    });
-  }
-
-  addParallaxEffect() {
-    // Parallax effect removed for better performance and less distraction
-  }
-
-  addFloatingAnimation() {
-    const featureIcons = document.querySelectorAll(".feature-icon");
-
-    featureIcons.forEach((icon, index) => {
-      // Floating animation removed
-    });
-
-    // Add floating animation CSS
-    if (!document.querySelector("#floating-styles")) {
-      const style = document.createElement("style");
-      style.id = "floating-styles";
-      style.textContent = `
-        /* Floating animation removed */
-        
-        .feature-icon {
-          /* No animations */
-        }
-      `;
-      document.head.appendChild(style);
-    }
-  }
-
   // Add smooth scroll behavior for anchor links
   setupSmoothScroll() {
     const anchorLinks = document.querySelectorAll('a[href^="#"]');
@@ -433,11 +314,6 @@ class AccessScanApp {
       });
     });
   }
-
-  // Add interactive cursor effects
-  setupCursorEffects() {
-    // Custom cursor effects removed for better usability
-  }
 }
 
 // Add CSS for mobile navigation and animations
@@ -449,30 +325,37 @@ appStyles.textContent = `
     .mobile-menu-toggle {
         display: none;
         flex-direction: column;
+        justify-content: center;
+        align-items: center;
         background: none;
         border: none;
         cursor: pointer;
-        padding: 0.5rem;
-        gap: 3px;
+        padding: 0.75rem;
+        gap: 4px;
+        width: 44px;
+        height: 44px;
+        position: relative;
     }
     
     .mobile-menu-toggle span {
-        width: 20px;
+        width: 22px;
         height: 2px;
         background-color: var(--foreground);
         transition: all 0.3s ease;
+        display: block;
     }
     
     .mobile-menu-toggle.active span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
+        transform: rotate(45deg) translate(7px, 7px);
     }
     
     .mobile-menu-toggle.active span:nth-child(2) {
         opacity: 0;
+        transform: scale(0);
     }
     
     .mobile-menu-toggle.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -6px);
+        transform: rotate(-45deg) translate(7px, -7px);
     }
     
     /* Navbar Effects */

@@ -6,24 +6,69 @@ class ComingSoonManager {
     }
     
     init() {
+        this.setupMobileNavigation();
         this.setupEventListeners();
         this.animateProgressBar();
         this.setupIntersectionObserver();
     }
     
+    setupMobileNavigation() {
+        // Create mobile menu button if it doesn't exist
+        if (!document.querySelector(".mobile-menu-toggle")) {
+            this.createMobileMenuToggle();
+        }
+
+        const mobileToggle = document.querySelector(".mobile-menu-toggle");
+        const navLinks = document.querySelector(".nav-links");
+
+        if (mobileToggle && navLinks) {
+            mobileToggle.addEventListener("click", () => {
+                navLinks.classList.toggle("mobile-open");
+                mobileToggle.classList.toggle("active");
+            });
+
+            // Close mobile menu when clicking on a link
+            navLinks.querySelectorAll(".nav-link").forEach((link) => {
+                link.addEventListener("click", () => {
+                    navLinks.classList.remove("mobile-open");
+                    mobileToggle.classList.remove("active");
+                });
+            });
+        }
+    }
+
+    createMobileMenuToggle() {
+        const mobileToggle = document.createElement("button");
+        mobileToggle.className = "mobile-menu-toggle";
+        mobileToggle.setAttribute("aria-label", "Toggle mobile menu");
+        mobileToggle.innerHTML = `
+            <span></span>
+            <span></span>
+            <span></span>
+        `;
+
+        // Add to navbar
+        const navbar = document.querySelector(".navbar .container");
+        if (navbar) {
+            navbar.appendChild(mobileToggle);
+        }
+    }
+
     setupEventListeners() {
         const form = document.getElementById('notify-form');
         const emailInput = document.getElementById('notify-email');
         
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.handleEmailSignup(emailInput.value);
-        });
-        
-        // Real-time email validation
-        emailInput.addEventListener('input', (e) => {
-            this.validateEmail(e.target.value);
-        });
+        if (form && emailInput) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleEmailSignup(emailInput.value);
+            });
+            
+            // Real-time email validation
+            emailInput.addEventListener('input', (e) => {
+                this.validateEmail(e.target.value);
+            });
+        }
     }
     
     handleEmailSignup(email) {
@@ -600,6 +645,85 @@ style.textContent = `
         
         .faq-grid {
             grid-template-columns: 1fr;
+        }
+    }
+    
+    /* Mobile Navigation Styles */
+    .mobile-menu-toggle {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.75rem;
+        gap: 4px;
+        width: 44px;
+        height: 44px;
+        position: relative;
+    }
+    
+    .mobile-menu-toggle span {
+        width: 22px;
+        height: 2px;
+        background-color: var(--foreground);
+        transition: all 0.3s ease;
+        display: block;
+    }
+    
+    .mobile-menu-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(7px, 7px);
+    }
+    
+    .mobile-menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+        transform: scale(0);
+    }
+    
+    .mobile-menu-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+    }
+    
+    .navbar {
+        position: relative;
+    }
+    
+    @media (max-width: 768px) {
+        .mobile-menu-toggle {
+            display: flex;
+        }
+        
+        .nav-links {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--card);
+            border-top: 1px solid var(--border);
+            flex-direction: column;
+            padding: 1rem;
+            transform: translateY(-100%);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .nav-links.mobile-open {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .nav-link {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+        
+        .nav-link:last-child {
+            border-bottom: none;
         }
     }
 `;

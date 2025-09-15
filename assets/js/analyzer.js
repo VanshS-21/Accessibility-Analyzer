@@ -229,6 +229,12 @@ class AccessibilityAnalyzer {
       return;
     }
 
+    // Validate HTML before analysis
+    if (!this.isValidHTML(htmlCode)) {
+      alert("Please enter valid HTML code. The input should contain HTML tags like <html>, <div>, <p>, etc.");
+      return;
+    }
+
     this.showProgress();
 
     try {
@@ -239,7 +245,12 @@ class AccessibilityAnalyzer {
       // Check for parsing errors
       const parserError = doc.querySelector("parsererror");
       if (parserError) {
-        throw new Error("Invalid HTML syntax");
+        throw new Error("Invalid HTML syntax - please check your HTML code for errors");
+      }
+
+      // Additional validation - check if parsed document has meaningful content
+      if (!this.hasValidHTMLContent(doc, htmlCode)) {
+        throw new Error("The input doesn't appear to contain valid HTML elements for accessibility analysis");
       }
 
       // Configure axe-core with comprehensive rules using tags approach
@@ -1008,8 +1019,6 @@ class AccessibilityAnalyzer {
         this.closeAllIssuesModal();
       });
 
-
-
     document
       .getElementById("all-issues-severity-filter")
       .addEventListener("change", () => {
@@ -1121,12 +1130,78 @@ class AccessibilityAnalyzer {
     }
   }
 
-
-
   escapeHtml(text) {
     const div = document.createElement("div");
     div.textContent = text;
     return div.innerHTML;
+  }
+
+  isValidHTML(htmlCode) {
+    // Check if the input contains HTML tags
+    const htmlTagPattern = /<[^>]+>/;
+    if (!htmlTagPattern.test(htmlCode)) {
+      return false;
+    }
+
+    // Check for common HTML elements
+    const commonHTMLElements = [
+      'html', 'head', 'body', 'div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+      'a', 'img', 'ul', 'ol', 'li', 'table', 'tr', 'td', 'th', 'form', 'input', 
+      'button', 'nav', 'header', 'footer', 'main', 'section', 'article', 'aside'
+    ];
+
+    const hasValidElements = commonHTMLElements.some(element => {
+      const pattern = new RegExp(`<${element}[^>]*>`, 'i');
+      return pattern.test(htmlCode);
+    });
+
+    if (!hasValidElements) {
+      return false;
+    }
+
+    // Check if it's mostly text without proper HTML structure
+    const textContent = htmlCode.replace(/<[^>]+>/g, '').trim();
+    const htmlTags = htmlCode.match(/<[^>]+>/g) || [];
+    
+    // If there's a lot of text but very few HTML tags, it's probably not valid HTML
+    if (textContent.length > 100 && htmlTags.length < 3) {
+      return false;
+    }
+
+    return true;
+  }
+
+  hasValidHTMLContent(doc, originalCode) {
+    // Check if the document has a body with content
+    const body = doc.body;
+    if (!body) {
+      return false;
+    }
+
+    // Check if there are any HTML elements in the body
+    const elements = body.querySelectorAll('*');
+    if (elements.length === 0) {
+      return false;
+    }
+
+    // Check if the parsed content is significantly different from original
+    // This catches cases where nonsense text gets "parsed" into empty elements
+    const bodyHTML = body.innerHTML.trim();
+    if (bodyHTML.length < originalCode.length * 0.1) {
+      return false;
+    }
+
+    // Check for meaningful content - at least some text or attributes
+    let hasContent = false;
+    elements.forEach(element => {
+      if (element.textContent.trim().length > 0 || 
+          element.attributes.length > 0 ||
+          ['img', 'input', 'br', 'hr'].includes(element.tagName.toLowerCase())) {
+        hasContent = true;
+      }
+    });
+
+    return hasContent;
   }
 }
 

@@ -127,6 +127,20 @@
     box-shadow: 0 0 0 2px rgba(58, 91, 160, 0.2);
 }
 
+.input-note {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background-color: var(--muted);
+    border-radius: var(--radius);
+    border-left: 4px solid var(--primary);
+}
+
+.input-note p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+}
+
 .input-actions {
     display: flex;
     gap: 1rem;

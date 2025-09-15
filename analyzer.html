@@ -12,62 +12,86 @@
       name="keywords"
       content="HTML accessibility analyzer, WCAG 2.1 scanner, accessibility testing tool, web accessibility checker"
     />
-    
+
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://accessiscan.com/analyzer.html">
-    
+    <link rel="canonical" href="https://accessiscan.com/analyzer.html" />
+
     <!-- Favicon and Icons -->
     <link rel="icon" type="image/x-icon" href="assets/images/LogoT.ico" />
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/Logo.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/Logo.png" />
-    
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="assets/images/Logo.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="assets/images/Logo.png"
+    />
+
     <!-- Open Graph -->
-    <meta property="og:title" content="HTML Accessibility Analyzer | Free WCAG 2.1 Scanner">
-    <meta property="og:description" content="Analyze HTML code for accessibility issues with instant WCAG 2.1 AA compliance checking and detailed fix suggestions.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://accessiscan.com/analyzer.html">
-    <meta property="og:image" content="https://accessiscan.com/assets/images/analyzer-og.jpg">
-    <meta property="og:site_name" content="AccessiScan">
-    
+    <meta
+      property="og:title"
+      content="HTML Accessibility Analyzer | Free WCAG 2.1 Scanner"
+    />
+    <meta
+      property="og:description"
+      content="Analyze HTML code for accessibility issues with instant WCAG 2.1 AA compliance checking and detailed fix suggestions."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://accessiscan.com/analyzer.html" />
+    <meta
+      property="og:image"
+      content="https://accessiscan.com/assets/images/analyzer-og.jpg"
+    />
+    <meta property="og:site_name" content="AccessiScan" />
+
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="HTML Accessibility Analyzer">
-    <meta name="twitter:description" content="Free WCAG 2.1 AA compliance scanner with instant results">
-    <meta name="twitter:image" content="https://accessiscan.com/assets/images/analyzer-og.jpg">
-    
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="HTML Accessibility Analyzer" />
+    <meta
+      name="twitter:description"
+      content="Free WCAG 2.1 AA compliance scanner with instant results"
+    />
+    <meta
+      name="twitter:image"
+      content="https://accessiscan.com/assets/images/analyzer-og.jpg"
+    />
+
     <!-- Structured Data -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      "name": "HTML Accessibility Analyzer",
-      "description": "Analyze HTML code for accessibility issues with WCAG 2.1 AA compliance checking",
-      "url": "https://accessiscan.com/analyzer.html",
-      "isPartOf": {
-        "@type": "WebSite",
-        "name": "AccessiScan",
-        "url": "https://accessiscan.com"
-      },
-      "breadcrumb": {
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://accessiscan.com/"
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "HTML Analyzer",
-            "item": "https://accessiscan.com/analyzer.html"
-          }
-        ]
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "HTML Accessibility Analyzer",
+        "description": "Analyze HTML code for accessibility issues with WCAG 2.1 AA compliance checking",
+        "url": "https://accessiscan.com/analyzer.html",
+        "isPartOf": {
+          "@type": "WebSite",
+          "name": "AccessiScan",
+          "url": "https://accessiscan.com"
+        },
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://accessiscan.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "HTML Analyzer",
+              "item": "https://accessiscan.com/analyzer.html"
+            }
+          ]
+        }
       }
-    }
     </script>
-    
+
     <link rel="stylesheet" href="assets/css/styles.css" />
     <link rel="stylesheet" href="assets/css/components.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -83,7 +107,11 @@
       <div class="container">
         <div class="nav-brand">
           <a href="index.html" class="nav-brand-link">
-            <img src="assets/images/Logo.png" alt="AccessiScan Logo" class="nav-logo" />
+            <img
+              src="assets/images/Logo.png"
+              alt="AccessiScan Logo"
+              class="nav-logo"
+            />
             <h1>AccessiScan</h1>
           </a>
         </div>
@@ -133,9 +161,26 @@
             <div class="tab-content active" id="paste-tab">
               <textarea
                 id="html-input"
-                placeholder="Paste your HTML code here..."
+                placeholder="Paste your HTML code here... 
+
+Example:
+<html>
+  <head><title>My Page</title></head>
+  <body>
+    <h1>Welcome</h1>
+    <p>This is a paragraph.</p>
+  </body>
+</html>"
                 rows="30"
               ></textarea>
+              <div class="input-note">
+                <p>
+                  <strong>Note:</strong> Please enter valid HTML code with
+                  proper tags like &lt;html&gt;, &lt;body&gt;, &lt;div&gt;,
+                  &lt;p&gt;, etc. Plain text without HTML tags cannot be
+                  analyzed for accessibility.
+                </p>
+              </div>
               <div class="input-actions">
                 <button id="clear-input" class="btn btn-secondary">
                   Clear
